@@ -7,7 +7,7 @@
 
     
     
-    <title>Lab 1: Familiarizing yourself with the course AWS instance</title>
+    <title>Lab 1: …</title>
 
         <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -1635,18 +1635,14 @@ font-weight: bold
          
    
         
-      <h1 class="title">Lab 1: Familiarizing yourself with the course AWS instance</h1>
+      <h1 class="title">Lab 1: …</h1>
       
          <!-- readthedown authors -->
    <div id="sidebar">
-    <h2><a href="#content">Lab 1: Familiarizing yourself with the course AWS instance</a></h2>
+    <h2><a href="#content">Lab 1: …</a></h2>
     <div id="toc">
       <ul>
-      <li><a href="#rstudio">1. RStudio</a></li>
-      <li><a href="#connect-directly-to-aws">2. Connect directly to AWS</a></li>
-      <li><a href="#basic-commands-in-aws">3. Basic commands in AWS</a></li>
-      <li><a href="#single-cell-rna-seq-datasets">4. Single-cell RNA-seq datasets</a></li>
-      <li><a href="#bonus">5. Bonus</a></li>
+      <li><a href="#r-commands">R commands</a></li>
       </ul>
     </div>
     <div id="postamble" data-toggle="wy-nav-shift" class="status">
@@ -1659,186 +1655,20 @@ font-weight: bold
    
 <!-- Don't indent these lines or it will mess pre blocks indentation --> 
 <div id="main">
-<div id="rstudio" class="section level2">
-<h2>1. RStudio</h2>
-<p>Most of single-cell RNA-seq analysis takes place either in <code>python</code> or in <code>R</code>. Here, we focus on how to leverage <code>R</code> to investigate scRNAseq data. <code>RStudio</code> is an <code>IDE</code> (Integrated Development Environment, in other words: a nice graphical interface to run <code>R</code>-related commands).</p>
-<p>For this workshop, we have installed <code>R</code> and <code>RStudio</code> on AWS. We can directly use <code>RStudio</code> (actually, <code>RStudio-server</code> since it is installed on an AWS remote server). Simply open a browser and copy-paste <a href="https://%22$%7BIP%7D%22:8787">the following address</a>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ex">https</span>://<span class="st">&quot;</span><span class="va">${IP}</span><span class="st">&quot;</span>:8787</span></code></pre></div>
-<p>An <code>RStudio</code> log in page will appear; to log in, use your <code>user</code> ID for both ID and password.</p>
-<p>Notice how when you log in <code>Rstudio</code>, there are multiple panels. Familiarize yourself with the different panels.</p>
-<p>The interactive <code>R</code> console is generally found in the bottom left corner of <code>RStudio</code>(though it may be in another corner sometimes). All the rest (history panel, environment panel, directory explorer panel, editor panel) are extra features provided by <code>RStudio</code>.</p>
-<blockquote>
-<p>Some useful commands in <code>R</code>:</p>
-</blockquote>
-<p>Within the <code>R</code> console, you can safely use <code>R</code>-dedicated commands. Do you know the most common ones? The semantics are a different from the <code>terminal</code> commands you may be used to…</p>
+<div id="r-commands" class="section level2">
+<h2>R commands</h2>
 <details>
 <summary style="color: #ff7f00; font-weight: bold">
 Show code
 </summary>
 <p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">getwd</span>() <span class="co"># equivalent of `pwd` in terminal</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">setwd</span>(<span class="st">&quot;~/data/&quot;</span>) <span class="co"># equivalent of `cd ~/data/` in terminal</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="kw">list.files</span>(<span class="st">&quot;~/data/&quot;</span>) <span class="co"># equivalent of `ls` in terminal</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="kw">download.file</span>(<span class="st">&quot;...&quot;</span>) <span class="co"># equivalent of `wget ...` in terminal</span></span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">getwd</span>() <span class="co"># equivalent of `pwd` in terminal</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">setwd</span>(<span class="st">&quot;~/data/&quot;</span>) <span class="co"># equivalent of `cd ~/data/` in terminal</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">list.files</span>(<span class="st">&quot;~/data/&quot;</span>) <span class="co"># equivalent of `ls` in terminal</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a><span class="kw">download.file</span>(<span class="st">&quot;...&quot;</span>) <span class="co"># equivalent of `wget ...` in terminal</span></span></code></pre></div>
 </p>
 </details>
 <p><br></p>
-</div>
-<div id="connect-directly-to-aws" class="section level2">
-<h2>2. Connect directly to AWS</h2>
-<p>A general issue with bioinformatic analyses stems from the fact that nobody works in the same environment:</p>
-<ul>
-<li>Are you working on Mac? Linux? Windows?</li>
-<li>Do you have a lot of computational power? Perhaps a GPU card?</li>
-<li>Are you connected to the Internet? With a fast connection? Are you working behind a proxy?</li>
-</ul>
-<p>To ensure that we are all working in the same environment, we rely on AWS (Amazon Web Services) EC2 (Elastic Cloud 2) instances. EC2 instances are “virtual” computers to which you can connect remotely, from a local computer. Each one of you has been assigned a <code>user</code> ID (e.g. <code>user1</code>), along with a security “<code>key</code>” (e.g. <code>user1.pem</code>). Using these credentials, you can directly log in to the AWS instance dedicated for this course.</p>
-<p>The instance is common for everybody. We are thus all sharing the same “computer”; this means:</p>
-<ul>
-<li><strong>Shared resources</strong></li>
-<li><strong>Same access to shared files</strong></li>
-<li><strong>Same access to system-wide softwares and conda environments</strong></li>
-</ul>
-<blockquote>
-<p>Access to AWS terminal through <code>RStudio</code></p>
-</blockquote>
-<p>The easiest way to launch commands from a terminal in AWS is to do it through <code>RStudio</code>.</p>
-<p>You can open up a <code>terminal</code> directly from within <code>RStudio</code> as followd: go to <code>Tools</code> &gt; <code>Terminal</code> &gt; <code>New terminal</code>. This should open up a new tab in the bottom left corner (next to the <code>R</code> console).</p>
-<p><strong>WARNING: <code>R console</code> versus <code>terminal</code>:</strong></p>
-<p>From here onwards, be sure you completely understand the difference between “<code>R</code> console” and “<code>terminal</code>”. They are entirely different things, and can be both accessed within <code>RStudio</code>. It is crucial you understand the difference between the two to not get confused for the rest of the course.</p>
-<blockquote>
-<p>Directly connect to AWS with a pre-installed SSH client (<code>ssh ...</code> command line in Mac and Linux)?</p>
-</blockquote>
-<p>You will need your credentials (<code>user</code> ID), and you will also need to download the accompanying security <code>pem</code> file in your <code>Downloads</code> folder. Then, in your terminal, you can use the following snippet:</p>
-<details>
-<summary style="color: #ff7f00; font-weight: bold">
-Show code
-</summary>
-<p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="co">## Example</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="bu">cd</span> ~/Downloads/</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="fu">chmod</span> 600 <span class="st">&quot;</span><span class="va">${USER}</span><span class="st">&quot;</span>.pem</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="fu">ssh</span> -i <span class="st">&quot;</span><span class="va">${USER}</span><span class="st">&quot;</span>.pem <span class="st">&quot;</span><span class="va">${USER}</span><span class="st">&quot;</span>@<span class="st">&quot;</span><span class="va">${IP}</span><span class="st">&quot;</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="co">## Actual Command Example</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="bu">cd</span> ~/Downloads/</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a><span class="fu">chmod</span> 600 user45.pem</span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a><span class="fu">ssh</span> -i user45.pem user45@34.213.180.241</span></code></pre></div>
-</p>
-</details>
-<p><br></p>
-<blockquote>
-<p>Directly connect to AWS without pre-installed SSH client (generally for Windows users)?</p>
-</blockquote>
-<p>Things are a little bit more tedious for Windows users, but luckily not impossible! There is a nice breakdown from another Physalia course on instructions for different operating systems and accessing AWS. It is called <a href="https://gitlab.com/bfosso/metabarcoding_physalia/-/blob/master/unix_short_tutorial/how_to_connect.md">Connection to the Amazon EC2 service</a>. This will help with connecting to the AWS instance to run analyses.</p>
-</div>
-<div id="basic-commands-in-aws" class="section level2">
-<h2>3. Basic commands in AWS</h2>
-<p>The same <code>bash</code> commands are available in AWS <code>terminal</code>, regardless of whether you access the terminal from <code>RStudio</code> or through <code>ssh</code>.</p>
-<p>One can list files, download files, check help pages, …, just like in <code>R</code>.</p>
-<ul>
-<li>Check the your present directory</li>
-</ul>
-<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="bu">pwd</span></span></code></pre></div>
-<ul>
-<li>Check history</li>
-</ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="bu">history</span></span></code></pre></div>
-<ul>
-<li>put history into a <code>history.txt</code> file</li>
-</ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="bu">history</span> <span class="op">&gt;</span> history.txt</span></code></pre></div>
-<ul>
-<li>make a new folder called data</li>
-</ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="fu">mkdir</span> data</span></code></pre></div>
-<ul>
-<li>Go to the new <code>data</code> directory</li>
-</ul>
-<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="bu">cd</span> data</span></code></pre></div>
-<ul>
-<li>move <code>history.txt</code> file into <code>data</code> directory</li>
-</ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="fu">mv</span> ../history.txt ./</span></code></pre></div>
-<ul>
-<li>check manual page of <code>wget</code> command</li>
-</ul>
-<div class="sourceCode" id="cb10"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="fu">man</span> wget</span></code></pre></div>
-<ul>
-<li>check specific help for <code>cellranger</code> command and subcommands</li>
-</ul>
-<div class="sourceCode" id="cb11"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="ex">cellranger</span> --help</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="ex">cellranger</span> count --help</span></code></pre></div>
-<ul>
-<li>redirect wget help output into a file called <code>cellranger-help.txt</code></li>
-</ul>
-<div class="sourceCode" id="cb12"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="ex">cellranger</span> count --help <span class="op">&gt;</span> cellranger-help.txt</span></code></pre></div>
-<ul>
-<li>Download a file from Internet with <code>wget</code></li>
-</ul>
-<div class="sourceCode" id="cb13"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="fu">wget</span> https://cf.10xgenomics.com/supp/cell-exp/cellranger-tiny-bcl-1.2.0.tar.gz</span></code></pre></div>
-<ul>
-<li>List all files in a folder</li>
-</ul>
-<div class="sourceCode" id="cb14"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="fu">ls</span> -l ~/Share/</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a><span class="fu">ls</span> --color -Flh ~/Share/</span></code></pre></div>
-<ul>
-<li>Activate <code>conda</code> environment which unlocks the use of specific softwares such as <code>ffq</code>:</li>
-</ul>
-<div class="sourceCode" id="cb15"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="ex">conda</span> activate scRNAseq2021</span></code></pre></div>
-</div>
-<div id="single-cell-rna-seq-datasets" class="section level2">
-<h2>4. Single-cell RNA-seq datasets</h2>
-<p>“This is a course about single-cell RNA-seq analysis, after all, so where is my data?”</p>
-<p>Ok, <strong>“your”</strong> data is (most likely) yet to be sequenced! Or maybe you’re interested in digging already existing databases! I mean, who isn’t interested in <a href="https://www.10xgenomics.com/blog/our-13-million-single-cell-dataset-is-ready-to-download">this mind-blowing achievement from 10X Genomics</a>??</p>
-<p><a href="https://data.humancellatlas.org/explore/projects">Human Cell Atlas</a> is probably a good place to start digging, if you are interested in mammal-related studies. For instance, let’s say I want to check</p>
-<blockquote>
-<p>Download reads from <code>Leir ... Harris, Life Sci Alliance 2020</code> study (DOI: 10.26508/lsa.202000744)</p>
-</blockquote>
-<p>Here is the study:<br />
-<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7471510/">An atlas of human proximal epididymis reveals cell-specific functions and distinct roles for CFTR</a></p>
-<p>Can you find the raw data from this paper? Tip: try the <a href="https://github.com/pachterlab/ffq">brand new <code>ffq</code> tool</a>!</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="ex">ffq</span> --help</span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="ex">ffq</span> -t GSE GSE148963 <span class="op">&gt;</span> GSE148963_ffq.json</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a><span class="fu">cat</span> GSE148963_ffq.json</span></code></pre></div>
-<p>Can you find the links to raw data? You should use a <code>grep</code> command: <code>grep</code> returns the lines which match a given pattern (e.g. a link…)!</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="fu">grep</span> <span class="st">&#39;ftp://&#39;</span> GSE148963_ffq.json</span></code></pre></div>
-<p>And with a bit of magick…</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="fu">grep</span> <span class="st">&#39;ftp://&#39;</span> GSE148963_ffq.json <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s,.*ftp:,ftp:,&#39;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s,&quot;.*,,&#39;</span> <span class="op">&gt;</span> GSE148963_fastqlist.txt</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a><span class="co">#wget -i GSE148963_fastqlist.txt ## Do not run, it would take too long...</span></span></code></pre></div>
-<blockquote>
-<p>Check the content of the reads</p>
-</blockquote>
-<p>A subset of the reads has been downloaded and put in the <code>~/Share/</code> folder. Have a look at it!</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="fu">zcat</span> ~/Share/SRR11575369_1.fastq.gz <span class="kw">|</span> <span class="fu">head</span> -n 12</span></code></pre></div>
-<p>Try and understand the structure of the <code>fastq.gz</code> file. What is the meaning of each line?</p>
-<p>How many reads are there in the <code>fastq.gz</code> file? And how long are they? Can you get a summary of what is in this file? All of these questions can be quickly answered using the <a href="https://bioinf.shenwei.me/seqkit/usage/"><code>seqkit</code></a> tool:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="ex">seqkit</span> --help</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a><span class="ex">seqkit</span> stats --help</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a><span class="ex">seqkit</span> stat ~/Share/SRR11575369_1.fastq.gz</span></code></pre></div>
-<blockquote>
-<p>Download processed count matrices directly from the HCA portal</p>
-</blockquote>
-<p>You will learn in the next practical how to process raw data, from reads to count matrices. However, many times, researchers provide a filtered count matrix when they publish scRNAseq experiments. It’s way lighter than <code>fastq</code> reads, and you can go ahead with downstream analyses a lot quicker. But how do you get these matrices?</p>
-<ul>
-<li>Human Cell Atlas Consortium provides many processed datasets. For instance, in our case, the <code>Leir et al</code> study is available at the following link: [<a href="https://data.humancellatlas.org/explore/projects/842605c7-375a-47c5-9e2c-a71c2c00fcad" class="uri">https://data.humancellatlas.org/explore/projects/842605c7-375a-47c5-9e2c-a71c2c00fcad</a>].</li>
-<li>GEO also sometimes hosts processed files</li>
-</ul>
-<p>In this case, we have downloaded some of the processed files available in GEO, from <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE148963">the following webpage</a>.</p>
-<p>Check the content of the count matrix and the additional files. Can you understand what they contain? How are they structured?</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="fu">wc</span> -l ~/Share/GSM4486714_AXH009*</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a><span class="fu">head</span> ~/Share/GSM4486714_AXH009*</span></code></pre></div>
-<ul>
-<li>How many cells were sequenced? How many genes were counted?</li>
-<li>Is it easy to interpret the count matrix? Why is it in such format?</li>
-<li>Comment on the file sizes between processed count matrix files and raw reads.</li>
-</ul>
-<div class="sourceCode" id="cb23"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="fu">ls</span> -l ~/Share/GSM4486714_AXH009*</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a><span class="fu">ls</span> -l ~/Share/SRR11575369_1.fastq.gz</span></code></pre></div>
-</div>
-<div id="bonus" class="section level2">
-<h2>5. Bonus</h2>
-<p>For those of you who are already familiar with the basics, you can fast-forward through this lab and start working on scRNAseq data directly. The script in <code>bin/prepare_Ernst.R</code> is a template to process a publicly available scRNAseq dataset. You can start exploring it to see if you understsand the different chunks of code and their importance. All the content from this template will eventually be covered in the next labs.</p>
 </div>
 </div>
 
