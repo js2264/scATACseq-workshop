@@ -1,0 +1,28 @@
+baseURL = "https://js2264.github.io/.../"
+publishDir = "docs"
+languageCode = "en-US"
+defaultContentLanguage = "en"
+
+title = "..."
+theme = "hugo-theme-learn"
+metaDataFormat = "yaml"
+defaultContentLanguageInSubdir= true
+
+[params]
+  editURL = "https://github.com/js2264/.../blob/master/content/"
+  packageBaseUrl = ".../"
+  description = "..."
+  author = "Jacques Serizay"
+  showVisitedLinks = false
+  disableBreadcrumb = true
+  disableNextPrev = true
+  disableLandingPageButton = true
+  disableMermaid = false
+  customMermaidURL = "https://unpkg.com/mermaid@8.8.0/dist/mermaid.min.js"
+  titleSeparator = "::"
+  themeVariant = "red"
+  ordersectionsby = "title"
+  disableSearch = true
+
+[blackfriday]
+  hrefTargetBlank = true

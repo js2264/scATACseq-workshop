@@ -1,0 +1,23 @@
+---
+title: "2. Program"
+---
+
+The workshop will take place on ... at the following hours: 
+
+...
+
+## Monday
+
+### Lecture 1 – 
+
+  - ...
+  - ...
+  - ...
+
+### Lab 1 – 
+
+  - ...
+  - ...
+  - ...
+
+

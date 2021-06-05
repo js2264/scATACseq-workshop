@@ -1,0 +1,271 @@
+---
+title: "Lab 1: Familiarizing yourself with the course AWS instance"
+output: 
+    rmdformats::readthedown: 
+        highlight: tango
+        preserve_yaml: true
+        df_print: tibble
+        toc_depth: 4
+        css: ../../../custom.css
+---
+
+## 1. RStudio
+
+Most of single-cell RNA-seq analysis takes place either in `python` or in `R`. Here, we focus on how to leverage `R` to investigate scRNAseq data. 
+`RStudio` is an `IDE` (Integrated Development Environment, in other words: a nice graphical interface to run `R`-related commands). 
+
+For this workshop, we have installed `R` and `RStudio` on AWS. We can directly use `RStudio` (actually, `RStudio-server` since it is installed on an AWS remote server). 
+Simply open a browser and copy-paste [the following address](https://"${IP}":8787): 
+
+```{sh eval = FALSE}
+https://"${IP}":8787
+```
+
+An `RStudio` log in page will appear; to log in, use your `user` ID for both ID and password. 
+
+Notice how when you log in `Rstudio`, there are multiple panels. Familiarize yourself with the different panels. 
+
+The interactive `R` console is generally found in the bottom left corner of `RStudio`(though it may be in another corner sometimes). 
+All the rest (history panel, environment panel, directory explorer panel, editor panel) are extra features provided by `RStudio`. 
+
+> Some useful commands in `R`:
+
+Within the `R` console, you can safely use `R`-dedicated commands.
+Do you know the most common ones? The semantics are a different from the `terminal` commands you may be used to...
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{r eval = FALSE}
+getwd() # equivalent of `pwd` in terminal
+setwd("~/data/") # equivalent of `cd ~/data/` in terminal
+list.files("~/data/") # equivalent of `ls` in terminal
+download.file("...") # equivalent of `wget ...` in terminal
+```
+</p></details><br>
+
+## 2. Connect directly to AWS
+
+A general issue with bioinformatic analyses stems from the fact that nobody works in the same environment: 
+
+- Are you working on Mac? Linux? Windows? 
+- Do you have a lot of computational power? Perhaps a GPU card? 
+- Are you connected to the Internet? With a fast connection? Are you working behind a proxy? 
+
+To ensure that we are all working in the same environment, we rely on AWS (Amazon Web Services) EC2 (Elastic Cloud 2) instances. 
+EC2 instances are "virtual" computers to which you can connect remotely, from a local computer. Each one of you has been assigned a `user` ID (e.g. `user1`), 
+along with a security "`key`" (e.g. `user1.pem`). Using these credentials, you can directly log in to the AWS instance dedicated for this course. 
+
+The instance is common for everybody. We are thus all sharing the same "computer"; this means: 
+
+- **Shared resources**
+- **Same access to shared files**
+- **Same access to system-wide softwares and conda environments**
+
+> Access to AWS terminal through `RStudio`
+
+The easiest way to launch commands from a terminal in AWS is to do it through `RStudio`. 
+
+You can open up a `terminal` directly from within `RStudio` as followd: go to `Tools` > `Terminal` > `New terminal`. 
+This should open up a new tab in the bottom left corner (next to the `R` console). 
+
+**WARNING: `R console` versus `terminal`:**  
+
+From here onwards, be sure you completely understand the difference between "`R` console" and "`terminal`". 
+They are entirely different things, and can be both accessed within `RStudio`. It is crucial you understand the difference between the two to not get confused for the rest of the course. 
+
+> Directly connect to AWS with a pre-installed SSH client (`ssh ...` command line in Mac and Linux)? 
+
+You will need your credentials (`user` ID), and you will also need to download the accompanying security `pem` file in your `Downloads` folder. 
+Then, in your terminal, you can use the following snippet: 
+
+<details><summary style="color: #ff7f00; font-weight: bold">Show code</summary><p>
+```{sh eval = FALSE}
+## Example
+cd ~/Downloads/
+chmod 600 "${USER}".pem
+ssh -i "${USER}".pem "${USER}"@"${IP}"
+
+## Actual Command Example
+cd ~/Downloads/
+chmod 600 user45.pem
+ssh -i user45.pem user45@34.213.180.241
+```
+</p></details><br>
+
+> Directly connect to AWS without pre-installed SSH client (generally for Windows users)? 
+
+Things are a little bit more tedious for Windows users, but luckily not impossible!
+There is a nice breakdown from another Physalia course on instructions for different operating systems and accessing AWS.
+It is called [Connection to the Amazon EC2 service](https://gitlab.com/bfosso/metabarcoding_physalia/-/blob/master/unix_short_tutorial/how_to_connect.md). 
+This will help with connecting to the AWS instance to run analyses.
+
+## 3. Basic commands in AWS
+
+The same `bash` commands are available in AWS `terminal`, regardless of whether you access the terminal from `RStudio` or through `ssh`. 
+
+One can list files, download files, check help pages, ..., just like in `R`. 
+
+- Check the your present directory
+
+```{sh eval = FALSE}
+pwd
+```
+
+- Check history
+
+```{sh eval = FALSE}
+history
+```
+
+- put history into a `history.txt` file
+
+```{sh eval = FALSE}
+history > history.txt
+```
+
+- make a new folder called data
+
+```{sh eval = FALSE}
+mkdir data
+```
+
+- Go to the new `data` directory
+
+```{sh eval = FALSE}
+cd data
+```
+
+- move `history.txt` file into `data` directory
+
+```{sh eval = FALSE}
+mv ../history.txt ./
+```
+
+- check manual page of `wget` command
+
+```{sh eval = FALSE}
+man wget
+```
+
+- check specific help for `cellranger` command and subcommands
+
+```{sh eval = FALSE}
+cellranger --help
+cellranger count --help
+```
+
+- redirect wget help output into a file called `cellranger-help.txt`
+
+```{sh eval = FALSE}
+cellranger count --help > cellranger-help.txt
+```
+
+- Download a file from Internet with `wget`
+
+```{sh eval = FALSE}
+wget https://cf.10xgenomics.com/supp/cell-exp/cellranger-tiny-bcl-1.2.0.tar.gz
+```
+
+- List all files in a folder
+
+```{sh eval = FALSE}
+ls -l ~/Share/
+ls --color -Flh ~/Share/
+```
+
+- Activate `conda` environment which unlocks the use of specific softwares such as `ffq`: 
+
+```{sh eval = FALSE}
+conda activate scRNAseq2021
+```
+
+## 4. Single-cell RNA-seq datasets
+
+"This is a course about single-cell RNA-seq analysis, after all, so where is my data?"
+
+Ok, **"your"** data is (most likely) yet to be sequenced! Or maybe you're interested in digging already existing databases! 
+I mean, who isn't interested in [this mind-blowing achievement from 10X Genomics](https://www.10xgenomics.com/blog/our-13-million-single-cell-dataset-is-ready-to-download)??
+
+[Human Cell Atlas](https://data.humancellatlas.org/explore/projects) is probably a good place to start digging, if you are interested in mammal-related studies. 
+For instance, let's say I want to check 
+
+> Download reads from `Leir ... Harris, Life Sci Alliance 2020` study (DOI: 10.26508/lsa.202000744)
+
+Here is the study:  
+[An atlas of human proximal epididymis reveals cell-specific functions and distinct roles for CFTR](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7471510/)
+
+Can you find the raw data from this paper? Tip: try the [brand new `ffq` tool](https://github.com/pachterlab/ffq)!
+
+```{sh eval = FALSE}
+ffq --help
+```
+
+```{sh eval = FALSE}
+ffq -t GSE GSE148963 > GSE148963_ffq.json
+cat GSE148963_ffq.json
+```
+
+Can you find the links to raw data? You should use a `grep` command: `grep` returns the lines which match a given pattern (e.g. a link...)!
+
+```{sh eval = FALSE}
+grep 'ftp://' GSE148963_ffq.json
+```
+
+And with a bit of magick... 
+
+```{sh eval = FALSE}
+grep 'ftp://' GSE148963_ffq.json | sed 's,.*ftp:,ftp:,' | sed 's,".*,,' > GSE148963_fastqlist.txt
+#wget -i GSE148963_fastqlist.txt ## Do not run, it would take too long...
+```
+
+> Check the content of the reads
+
+A subset of the reads has been downloaded and put in the `~/Share/` folder. Have a look at it!
+
+```{sh eval = FALSE}
+zcat ~/Share/SRR11575369_1.fastq.gz | head -n 12
+```
+
+Try and understand the structure of the `fastq.gz` file. What is the meaning of each line?  
+
+How many reads are there in the `fastq.gz` file? And how long are they? Can you get a summary of what is in this file? All of these questions can be quickly answered using the [`seqkit`](https://bioinf.shenwei.me/seqkit/usage/) tool: 
+
+```{sh eval = FALSE}
+seqkit --help
+seqkit stats --help
+seqkit stat ~/Share/SRR11575369_1.fastq.gz
+```
+
+> Download processed count matrices directly from the HCA portal
+
+You will learn in the next practical how to process raw data, from reads to count matrices. 
+However, many times, researchers provide a filtered count matrix when they publish scRNAseq experiments. It's way lighter than `fastq` reads, 
+and you can go ahead with downstream analyses a lot quicker. But how do you get these matrices? 
+
+- Human Cell Atlas Consortium provides many processed datasets. For instance, in our case, the `Leir et al` study is available at the following link: [https://data.humancellatlas.org/explore/projects/842605c7-375a-47c5-9e2c-a71c2c00fcad]. 
+- GEO also sometimes hosts processed files
+
+In this case, we have downloaded some of the processed files available in GEO, from [the following webpage](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE148963).
+
+Check the content of the count matrix and the additional files. Can you understand what they contain? How are they structured? 
+
+```{sh eval = FALSE}
+wc -l ~/Share/GSM4486714_AXH009*
+head ~/Share/GSM4486714_AXH009*
+```
+
+- How many cells were sequenced? How many genes were counted? 
+- Is it easy to interpret the count matrix? Why is it in such format? 
+- Comment on the file sizes between processed count matrix files and raw reads. 
+
+```{sh eval = FALSE}
+ls -l ~/Share/GSM4486714_AXH009*
+ls -l ~/Share/SRR11575369_1.fastq.gz
+```
+
+## 5. Bonus 
+
+For those of you who are already familiar with the basics, you can fast-forward 
+through this lab and start working on scRNAseq data directly. The script in 
+`bin/prepare_Ernst.R` is a template to process a publicly available scRNAseq dataset. 
+You can start exploring it to see if you understsand the different chunks of code and 
+their importance. All the content from this template will eventually be covered in the next labs. 

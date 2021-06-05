@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Home on ...</title>
+    <link>https://js2264.github.io/.../</link>
+    <description>Recent content in Home on ...</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language><atom:link href="https://js2264.github.io/.../index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>1. Presentation</title>
+      <link>https://js2264.github.io/.../introduction/01_presentation/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://js2264.github.io/.../introduction/01_presentation/</guid>
+      <description>Dr. Jacques Serizay
+Dates &amp;hellip;
+Where This course will be held online.
+Overview Format Targeted audience and required background Learning outcomes </description>
+    </item>
+    
+    <item>
+      <title>2. Program</title>
+      <link>https://js2264.github.io/.../introduction/02_program/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://js2264.github.io/.../introduction/02_program/</guid>
+      <description>The workshop will take place on &amp;hellip; at the following hours:
+&amp;hellip;
+Monday Lecture 1 –  &amp;hellip; &amp;hellip; &amp;hellip;  Lab 1 –  &amp;hellip; &amp;hellip; &amp;hellip;  </description>
+    </item>
+    
+    <item>
+      <title>3. Rstudio</title>
+      <link>https://js2264.github.io/.../introduction/03_rstudio/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://js2264.github.io/.../introduction/03_rstudio/</guid>
+      <description>Rstudio offers a graphical interface to facilitate the interaction between a user and an underlying programming language (this is sometimes called IDE, or integrated development environment). It can be very useful when a user is not necessarily proficent with command line-based computing. However, such graphical interfaces are not always able to connect to services such as AWS.
+Since most of the analyses we will conduct will be done on AWS, we&amp;rsquo;d like to be able to use Rtudio directly from there.</description>
+    </item>
+    
+    <item>
+      <title>4. Prerequisites and required machine configuration</title>
+      <link>https://js2264.github.io/.../introduction/04_prerequisites/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://js2264.github.io/.../introduction/04_prerequisites/</guid>
+      <description>Prerequisites The course is intended for those who have basic familiarity with Unix and the R scripting language.
+ If a refresher is needed for Unix command line (hopefully not), please go over this tutorial and its companion cheatsheet . Getting down to basics: an introduction to the fundamentals of R (courtesy of Mark Ravinet ). Gentle introduction to R/Biocondutor: here  For a full in-depth guide of Bioconductor ecosystem: read the comprehensive R/Bioconductor book from Kasper D.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="description" content="...">
+<meta name="author" content="Jacques Serizay">
+
+    <link rel="icon" href="/.../images/favicon.png" type="image/png">
+
+    <title>4. Prerequisites and required machine configuration :: ...</title>
+
+    
+    <link href="/.../css/nucleus.css?1622892744" rel="stylesheet">
+    <link href="/.../css/fontawesome-all.min.css?1622892744" rel="stylesheet">
+    <link href="/.../css/hybrid.css?1622892744" rel="stylesheet">
+    <link href="/.../css/featherlight.min.css?1622892744" rel="stylesheet">
+    <link href="/.../css/perfect-scrollbar.min.css?1622892744" rel="stylesheet">
+    <link href="/.../css/auto-complete.css?1622892744" rel="stylesheet">
+    <link href="/.../css/atom-one-dark-reasonable.css?1622892744" rel="stylesheet">
+    <link href="/.../css/theme.css?1622892744" rel="stylesheet">
+    <link href="/.../css/hugo-theme.css?1622892744" rel="stylesheet">
+    
+    <link href="/.../css/theme-red.css?1622892744" rel="stylesheet">
+    
+    
+
+    <script src="/.../js/jquery-3.3.1.min.js?1622892744"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/.../introduction/04_prerequisites/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo">
+
+
+
+</a>
+
+    </div>
+    
+  </div>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/.../introduction/" title=" Single-cell RNA-seq analysis with R/Bioconductor" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/.../introduction/">
+           Single-cell RNA-seq analysis with R/Bioconductor
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/.../introduction/01_presentation/" title="1. Presentation" class="dd-item ">
+        <a href="/.../introduction/01_presentation/">
+        1. Presentation
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/.../introduction/02_program/" title="2. Program" class="dd-item ">
+        <a href="/.../introduction/02_program/">
+        2. Program
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/.../introduction/03_rstudio/" title="3. Rstudio" class="dd-item ">
+        <a href="/.../introduction/03_rstudio/">
+        3. Rstudio
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/.../introduction/04_prerequisites/" title="4. Prerequisites and required machine configuration" class="dd-item active">
+        <a href="/.../introduction/04_prerequisites/">
+        4. Prerequisites and required machine configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/.../day01/" title="1. Day 01" class="dd-item
+        
+        
+        
+        ">
+      <a href="/.../day01/">
+          1. Day 01
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/.../extra-resources/" title="Extra resources" class="dd-item
+        
+        
+        
+        ">
+      <a href="/.../extra-resources/">
+          Extra resources
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/.../how_to_log_in_aws/" title="How to log in AWS" class="dd-item
+        
+        
+        
+        ">
+      <a href="/.../how_to_log_in_aws/">
+          How to log in AWS
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      <center>
+
+    <a href="https://github.com/js2264/scRNAseq_Physalia_2021">Check this website source on Github</a>
+    <p>Created by J. Serizay</p>
+    <p>Copyright 2021</p>
+
+</center>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              4. Prerequisites and required machine configuration
+            </h1>
+          
+
+        
+
+
+<h2 id="prerequisites">Prerequisites</h2>
+<p>The course is intended for those who have basic familiarity with <code>Unix</code> and the <code>R</code> scripting language.</p>
+<ul>
+<li>If a refresher is needed for Unix command line (hopefully not), please go over <a href="https://ryanstutorials.net/linuxtutorial/" target="_blank">this tutorial</a>
+ and its <a href="https://ryanstutorials.net/linuxtutorial/cheatsheet.php" target="_blank">companion cheatsheet</a>
+.</li>
+<li>Getting down to basics: an introduction to the fundamentals of R (<a href="markravinet.github.io/Introduction.html" target="_blank">courtesy of Mark Ravinet</a>
+).</li>
+<li>Gentle introduction to <code>R/Biocondutor</code>: <a href="https://bioconductor.github.io/BiocWorkshops/introduction-to-bioconductor-annotation-resources.html" target="_blank">here</a>
+</li>
+<li>For a full in-depth guide of <code>Bioconductor</code> ecosystem: read the comprehensive <code>R/Bioconductor</code> book from Kasper D. Hansen available under the CC BY-NC-SA 4.0 license <a href="/.../
+docs/bioconductor.pdf" target="_blank">[PDF]</a>
+</li>
+</ul>
+<h2 id="local-configuration">Local configuration</h2>
+<ul>
+<li>Ideally (though not strictly required), a configured SSH client (it should be already installed on Linux/Mac machines, <code>PuTTY</code> can be set up for Windows).</li>
+<li>Ideally (though not strictly required), a SSH ftp client (<code>Forklift</code> is excellent for Mac, although not free beyond the trial version; <code>cyberduck</code> can be used for Windows; <code>FileZilla</code> can be used for Mac, Windows and Linux).</li>
+<li>Computer with high-speed internet access (no specific configuration required - everything will be performed on a remote AWS machine).</li>
+</ul>
+<h2 id="remote-configuration">Remote configuration</h2>
+<p>The AWS machine is running <code>Ubuntu 18.04.5 LTS</code> and has been set up as follows (note this is specific to <code>Ubuntu 18.04</code>):</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## --- Clean up previous R installs</span>
+sudo apt purge r-base* r-recommended r-cran-*
+sudo apt autoremove
+sudo apt update
+sudo apt upgrade
+
+<span style="color:#75715e">## --- Libraries</span>
+sudo apt update
+sudo apt install libc6 libicu66 libreadline8 -y 
+sudo apt install -y <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    gcc g++ perl python3 python3-pip python-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    automake make cmake less vim nano fort77 <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    wget git curl bsdtar bzip2 gfortran unzip ftp <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libpng-dev libjpeg-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    texlive-latex-base default-jre build-essential <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libbz2-dev liblzma-dev libtool <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libxml2 libxml2-dev zlib1g-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libdb-dev libglu1-mesa-dev zlib1g-dev  <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libncurses5-dev libghc-zlib-dev libncurses-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libpcre3-dev libxml2-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libblas-dev libzmq3-dev libreadline-dev libssl-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libcurl4-openssl-dev libx11-dev libxt-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    x11-common libcairo2-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libreadline6-dev libgsl0-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libeigen3-dev libboost-all-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libgtk2.0-dev xvfb xauth xfonts-base <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    apt-transport-https libhdf5-serial-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libudunits2-dev libgdal-dev libgeos-dev libproj-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libv8-dev libnode-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libmagick++-dev <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    libharfbuzz-dev libfribidi-dev
+
+<span style="color:#75715e">## --- R 4.1 base install </span>
+sudo add-apt-repository <span style="color:#e6db74">&#39;deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/&#39;</span>
+add-apt-repository <span style="color:#e6db74">&#34;deb https://cloud.r-project.org/bin/linux/ubuntu `lsb_release -cs` -cran40/&#34;</span>
+sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+sudo apt update
+sudo apt install r-base r-recommended r-base-core r-base-dev
+</code></pre></div><p>The following packages have been installed (along with their many dependencies, of course!):</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## --- Install important R packages for single-cell sequencing projects</span>
+Rscript -e <span style="color:#e6db74">&#34;
+</span><span style="color:#e6db74">## CRAN packages
+</span><span style="color:#e6db74">install.packages(&#39;tidyverse&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;devtools&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;umap&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;corrplot&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;gam&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;ggbeeswarm&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;ggthemes&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;Matrix&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;zeallot&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;fossil&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;rgl&#39;, dependencies=TRUE)
+</span><span style="color:#e6db74">install.packages(&#39;BiocManager&#39;)
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">## Bioconductor Packages
+</span><span style="color:#e6db74">BiocManager::install(&#39;SingleCellExperiment&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;scran&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;scater&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;batchelor&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;DropletUtils&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;AUCell&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;plyranges&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;SingleR&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;slingshot&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;tradeSeq&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;clusterExperiment&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;CountClust&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;velociraptor&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;BUSpaRse&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;org.Mm.eg.db&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;org.Hs.eg.db&#39;, update = FALSE)
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">## Github Packages
+</span><span style="color:#e6db74">devtools::install_github(&#39;satijalab/seurat&#39;, upgrade = &#39;never&#39;)
+</span><span style="color:#e6db74">devtools::install_github(&#39;TaddyLab/maptpx&#39;)
+</span><span style="color:#e6db74">devtools::install_github(&#39;MacoskoLab/liger&#39;)
+</span><span style="color:#e6db74">devtools::install_github(&#39;velocyto-team/velocyto.R&#39;)
+</span><span style="color:#e6db74">devtools::install_github(&#39;theislab/destiny&#39;)
+</span><span style="color:#e6db74">devtools::install_github(&#39;broadinstitute/inferCNV&#39;)
+</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#75715e">## --- Create singlecell conda env. and add other dependencies</span>
+sudo R --no-save -e <span style="color:#e6db74">&#34;reticulate::install_miniconda()&#34;</span>
+sudo R --no-save -e <span style="color:#e6db74">&#34;reticulate::conda_create(envname = &#39;singlecell)&#34;</span>
+conda init bash
+conda activate singlecell
+conda install -c conda-forge python<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> umap-learn leidenalg -y
+conda install -y -c conda-forge <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    numpy <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    scipy <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    pandas <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    matplotlib <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    setuptools <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    umap-learn
+
+<span style="color:#75715e">## --- Install other softwares (fastQC, samtools, cellranger and cellranger indexes)</span>
+conda install -c bioconda fastqc samtools
+cd /opt/
+sudo wget -O cellranger-6.0.1.tar.gz <span style="color:#e6db74">&#34;https://cf.10xgenomics.com/releases/cell-exp/cellranger-6.0.1.tar.gz?Expires=1622001486&amp;Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZi4xMHhnZW5vbWljcy5jb20vcmVsZWFzZXMvY2VsbC1leHAvY2VsbHJhbmdlci02LjAuMS50YXIuZ3oiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE2MjIwMDE0ODZ9fX1dfQ__&amp;Signature=IWM4eRXo7G4YRXjOrcTFKscHWsa5sU6bqrIFrWOyzkV0pzOb0OPrjI7uMtoorqV6ivIjKbE21F9PkfajqV77hfODzCIyOmVQWxi9~nV2vZ6fdmo80hB4xmFQ7RdmLNAS~MDrhAg8etcQ-VkPS6wbzwtfNai-jDfRaas7DNPcq5CtFA4UBtfMG51XTpfPFKHDt66QWQOKShD5JNi05Cq4mDcWfJD1EFC-Z5b0Nid416NeLtxzUjNl043VRpWk2EibNGn8s8qGO0Kk~5Uh1l-qW~KkLSPVv5QFWj5wAgPjC3At2bCqjBaD6c87lIcHKx7WTPv46-d-gdQvYg-ZRcmBPQ__&amp;Key-Pair-Id=APKAI7S6A5RYOXBWRPDA&#34;</span>
+sudo tar -xzvf cellranger-6.0.1.tar.gz
+sudo wget https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-mm10-2020-A.tar.gz
+sudo tar -xzvf refdata-gex-mm10-2020-A.tar.gz
+</code></pre></div>
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/.../js/clipboard.min.js?1622892744"></script>
+    <script src="/.../js/perfect-scrollbar.min.js?1622892744"></script>
+    <script src="/.../js/perfect-scrollbar.jquery.min.js?1622892744"></script>
+    <script src="/.../js/jquery.sticky.js?1622892744"></script>
+    <script src="/.../js/featherlight.min.js?1622892744"></script>
+    <script src="/.../js/highlight.pack.js?1622892744"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/.../js/modernizr.custom-3.6.0.js?1622892744"></script>
+    <script src="/.../js/learn.js?1622892744"></script>
+    <script src="/.../js/hugo-learn.js?1622892744"></script>
+    
+        
+            <script src="/.../mermaid/mermaid.js?1622892744"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-105947713-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </body>
+</html>
+
