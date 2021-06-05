@@ -12,21 +12,21 @@
     <title>2. Program :: ...</title>
 
     
-    <link href="/.../css/nucleus.css?1622893067" rel="stylesheet">
-    <link href="/.../css/fontawesome-all.min.css?1622893067" rel="stylesheet">
-    <link href="/.../css/hybrid.css?1622893067" rel="stylesheet">
-    <link href="/.../css/featherlight.min.css?1622893067" rel="stylesheet">
-    <link href="/.../css/perfect-scrollbar.min.css?1622893067" rel="stylesheet">
-    <link href="/.../css/auto-complete.css?1622893067" rel="stylesheet">
-    <link href="/.../css/atom-one-dark-reasonable.css?1622893067" rel="stylesheet">
-    <link href="/.../css/theme.css?1622893067" rel="stylesheet">
-    <link href="/.../css/hugo-theme.css?1622893067" rel="stylesheet">
+    <link href="/.../css/nucleus.css?1622895399" rel="stylesheet">
+    <link href="/.../css/fontawesome-all.min.css?1622895399" rel="stylesheet">
+    <link href="/.../css/hybrid.css?1622895399" rel="stylesheet">
+    <link href="/.../css/featherlight.min.css?1622895399" rel="stylesheet">
+    <link href="/.../css/perfect-scrollbar.min.css?1622895399" rel="stylesheet">
+    <link href="/.../css/auto-complete.css?1622895399" rel="stylesheet">
+    <link href="/.../css/atom-one-dark-reasonable.css?1622895399" rel="stylesheet">
+    <link href="/.../css/theme.css?1622895399" rel="stylesheet">
+    <link href="/.../css/hugo-theme.css?1622895399" rel="stylesheet">
     
-    <link href="/.../css/theme-red.css?1622893067" rel="stylesheet">
+    <link href="/.../css/theme-red.css?1622895399" rel="stylesheet">
     
     
 
-    <script src="/.../js/jquery-3.3.1.min.js?1622893067"></script>
+    <script src="/.../js/jquery-3.3.1.min.js?1622895399"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -292,20 +292,95 @@
         
 
 
-<p>The workshop will take place on &hellip; at the following hours:</p>
-<p>&hellip;</p>
-<h2 id="monday">Monday</h2>
-<h3 id="lecture-1-">Lecture 1 –</h3>
+<h2 id="day-1-processing-bulk-and-single-cell-atac-seq-reads">Day 1: Processing bulk and single-cell ATAC-seq reads</h2>
+<h3 id="atac-seq-experimental-approaches">ATAC-seq experimental approaches</h3>
+<blockquote>
+<p>30'</p>
+</blockquote>
 <ul>
-<li>&hellip;</li>
-<li>&hellip;</li>
-<li>&hellip;</li>
+<li>bulk ATAC-seq methods: classical, omniATAC-seq, low input ATAC-seq, &hellip;</li>
+<li>&ldquo;single cell&rdquo; ATAC-seq methods: droplet-based scATACseq, indexed scATACseq, joint scRNAseq and scATACseq, &hellip;</li>
 </ul>
-<h3 id="lab-1-">Lab 1 –</h3>
+<h3 id="processing-of-bulk-atac-seq">Processing of bulk ATAC-seq</h3>
+<blockquote>
+<p>45'</p>
+</blockquote>
 <ul>
-<li>&hellip;</li>
-<li>&hellip;</li>
-<li>&hellip;</li>
+<li>Sequencing QC</li>
+<li>Mapping reads and correcting</li>
+<li>Visualizing and QC-ing the results</li>
+</ul>
+<h3 id="processing-of-single-cell-atac-seq">Processing of single-cell ATAC-seq</h3>
+<blockquote>
+<p>45'</p>
+</blockquote>
+<ul>
+<li>10X scATACseq: from reads to matrix counts with <code>cellranger</code></li>
+<li>QC-ing with <code>Loupe</code></li>
+</ul>
+<h3 id="data-output-loci-of-accessible-chromatin">Data output: loci of accessible chromatin</h3>
+<blockquote>
+<p>Extra</p>
+</blockquote>
+<ul>
+<li>Distribution of fragment sizes over ATAC peaks</li>
+<li>Distance to closest TSS</li>
+<li>Annotating closest genes</li>
+</ul>
+<h2 id="day-2-peak-centered-downstream-analysis">Day 2: Peak-centered downstream analysis</h2>
+<h3 id="bulk-atacseq-and-peak-sets">Bulk ATACseq and peak sets</h3>
+<blockquote>
+<p>45'</p>
+</blockquote>
+<ul>
+<li>Integrating peak sets from different experiments</li>
+<li>Quantifying accessibility at each ATAC peak</li>
+<li>Differential accessibility tests</li>
+<li>Clustering peak sets</li>
+</ul>
+<h3 id="clustering-scatacseq-cells">Clustering scATACseq cells</h3>
+<blockquote>
+<p>45'</p>
+</blockquote>
+<ul>
+<li>Reading <code>cellranger</code> output in <code>R</code></li>
+<li>Normalizing scATACseq counts</li>
+<li>Clustering cells by their accessible loci</li>
+<li>Annotating cell types</li>
+</ul>
+<h3 id="insigths-into-regulatory-functions">Insigths into regulatory functions</h3>
+<blockquote>
+<p>30'</p>
+</blockquote>
+<ul>
+<li>Interpreting chromatin context(s) at accessible loci</li>
+<li>Interpreting DNA sequence context(s) at accessible loci</li>
+<li>Leveraging Bioconductor <code>AnnotationHub</code> and <code>ExperimentHub</code> resources</li>
+</ul>
+<h3 id="insigths-into-biological-functions">Insigths into biological functions</h3>
+<blockquote>
+<p>Extra</p>
+</blockquote>
+<ul>
+<li>Over-representation analyses</li>
+<li>Gene Set Enrichment Analyses (GSEA)</li>
+</ul>
+<h2 id="day-3-multi-omics-integration">Day 3: &ldquo;Multi-omics&rdquo; integration</h2>
+<h3 id="overlapping-scatacseq-on-top-of-scrnaseq-cells">Overlapping scATACseq on top of scRNAseq cells</h3>
+<blockquote>
+<p>30'</p>
+</blockquote>
+<h3 id="processing-joint-scrnaseq--scatacseq">Processing joint scRNAseq + scATACseq</h3>
+<blockquote>
+<p>45'</p>
+</blockquote>
+<h3 id="building-regulatory-networks-from-scatacseq">Building regulatory networks from scATACseq</h3>
+<blockquote>
+<p>45'</p>
+</blockquote>
+<ul>
+<li>Gene Regulatory Networks</li>
+<li>CICERO</li>
 </ul>
 
 
@@ -490,19 +565,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/.../js/clipboard.min.js?1622893067"></script>
-    <script src="/.../js/perfect-scrollbar.min.js?1622893067"></script>
-    <script src="/.../js/perfect-scrollbar.jquery.min.js?1622893067"></script>
-    <script src="/.../js/jquery.sticky.js?1622893067"></script>
-    <script src="/.../js/featherlight.min.js?1622893067"></script>
-    <script src="/.../js/highlight.pack.js?1622893067"></script>
+    <script src="/.../js/clipboard.min.js?1622895399"></script>
+    <script src="/.../js/perfect-scrollbar.min.js?1622895399"></script>
+    <script src="/.../js/perfect-scrollbar.jquery.min.js?1622895399"></script>
+    <script src="/.../js/jquery.sticky.js?1622895399"></script>
+    <script src="/.../js/featherlight.min.js?1622895399"></script>
+    <script src="/.../js/highlight.pack.js?1622895399"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/.../js/modernizr.custom-3.6.0.js?1622893067"></script>
-    <script src="/.../js/learn.js?1622893067"></script>
-    <script src="/.../js/hugo-learn.js?1622893067"></script>
+    <script src="/.../js/modernizr.custom-3.6.0.js?1622895399"></script>
+    <script src="/.../js/learn.js?1622895399"></script>
+    <script src="/.../js/hugo-learn.js?1622895399"></script>
     
         
-            <script src="/.../mermaid/mermaid.js?1622893067"></script>
+            <script src="/.../mermaid/mermaid.js?1622895399"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
