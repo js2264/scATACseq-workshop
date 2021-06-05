@@ -61,18 +61,23 @@ title: "2. Program"
   - Over-representation analyses
   - Gene Set Enrichment Analyses (GSEA)
 
-## Day 3: "Multi-omics" integration 
+## Day 3: Advanced analysis and multi-omics integration
 
-### Overlapping scATACseq on top of scRNAseq cells
->30'
+### Inferring regulatory networks from scATACseq
+>40'
 
-### Processing joint scRNAseq + scATACseq
->45'
-
-### Building regulatory networks from scATACseq
->45'
-
-  - Gene Regulatory Networks 
   - CICERO
+
+### Integrating unpaired scATACseq and scRNAseq cells
+>40'
+
+  - Projecting scATACseq cells on top of scRNAseq cells
+  - Leveraging scRNAseq to accurately annotate cells in scATACseq
+
+### Investigating paired scRNAseq + scATACseq
+>40'
+
+  - Linking peaks to genes
+
 
 
