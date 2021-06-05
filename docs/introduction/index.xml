@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title> Single-cell RNA-seq analysis with R/Bioconductor on ...</title>
-    <link>https://js2264.github.io/.../introduction/</link>
-    <description>Recent content in  Single-cell RNA-seq analysis with R/Bioconductor on ...</description>
+    <title> Single-cell RNA-seq analysis with R/Bioconductor on Analysis of bulk and single-cell ATAC-seq datasets</title>
+    <link>https://js2264.github.io/scATACseq-workshop/introduction/</link>
+    <description>Recent content in  Single-cell RNA-seq analysis with R/Bioconductor on Analysis of bulk and single-cell ATAC-seq datasets</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-US</language><atom:link href="https://js2264.github.io/.../introduction/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-US</language><atom:link href="https://js2264.github.io/scATACseq-workshop/introduction/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>1. Presentation</title>
-      <link>https://js2264.github.io/.../introduction/01_presentation/</link>
+      <link>https://js2264.github.io/scATACseq-workshop/introduction/01_presentation/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://js2264.github.io/.../introduction/01_presentation/</guid>
+      <guid>https://js2264.github.io/scATACseq-workshop/introduction/01_presentation/</guid>
       <description>Dr. Jacques Serizay
 Dates &amp;hellip;
 Where This course will be held online.
@@ -20,10 +20,10 @@ Overview Format Targeted audience and required background Learning outcomes </de
     
     <item>
       <title>2. Program</title>
-      <link>https://js2264.github.io/.../introduction/02_program/</link>
+      <link>https://js2264.github.io/scATACseq-workshop/introduction/02_program/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://js2264.github.io/.../introduction/02_program/</guid>
+      <guid>https://js2264.github.io/scATACseq-workshop/introduction/02_program/</guid>
       <description>Day 1: Processing bulk and single-cell ATAC-seq reads ATAC-seq experimental approaches  30&#39;
   bulk ATAC-seq methods: classical, omniATAC-seq, low input ATAC-seq, &amp;hellip; &amp;ldquo;single cell&amp;rdquo; ATAC-seq methods: droplet-based scATACseq, indexed scATACseq, joint scRNAseq and scATACseq, &amp;hellip;  Processing of bulk ATAC-seq  45&#39;
   Sequencing QC Mapping reads and correcting Visualizing and QC-ing the results  Processing of single-cell ATAC-seq  45&#39;
@@ -32,20 +32,20 @@ Overview Format Targeted audience and required background Learning outcomes </de
     
     <item>
       <title>3. Rstudio</title>
-      <link>https://js2264.github.io/.../introduction/03_rstudio/</link>
+      <link>https://js2264.github.io/scATACseq-workshop/introduction/03_rstudio/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://js2264.github.io/.../introduction/03_rstudio/</guid>
+      <guid>https://js2264.github.io/scATACseq-workshop/introduction/03_rstudio/</guid>
       <description>Rstudio offers a graphical interface to facilitate the interaction between a user and an underlying programming language (this is sometimes called IDE, or integrated development environment). It can be very useful when a user is not necessarily proficent with command line-based computing. However, such graphical interfaces are not always able to connect to services such as AWS.
 Since most of the analyses we will conduct will be done on AWS, we&amp;rsquo;d like to be able to use Rtudio directly from there.</description>
     </item>
     
     <item>
       <title>4. Prerequisites and required machine configuration</title>
-      <link>https://js2264.github.io/.../introduction/04_prerequisites/</link>
+      <link>https://js2264.github.io/scATACseq-workshop/introduction/04_prerequisites/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://js2264.github.io/.../introduction/04_prerequisites/</guid>
+      <guid>https://js2264.github.io/scATACseq-workshop/introduction/04_prerequisites/</guid>
       <description>Prerequisites The course is intended for those who have basic familiarity with Unix and the R scripting language.
  If a refresher is needed for Unix command line (hopefully not), please go over this tutorial and its companion cheatsheet . Getting down to basics: an introduction to the fundamentals of R (courtesy of Mark Ravinet ). Gentle introduction to R/Biocondutor: here  For a full in-depth guide of Bioconductor ecosystem: read the comprehensive R/Bioconductor book from Kasper D.</description>
     </item>

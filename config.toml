@@ -1,17 +1,17 @@
-baseURL = "https://js2264.github.io/.../"
+baseURL = "https://js2264.github.io/scATACseq-workshop/"
 publishDir = "docs"
 languageCode = "en-US"
 defaultContentLanguage = "en"
 
-title = "..."
+title = "Analysis of bulk and single-cell ATAC-seq datasets"
 theme = "hugo-theme-learn"
 metaDataFormat = "yaml"
 defaultContentLanguageInSubdir= true
 
 [params]
-  editURL = "https://github.com/js2264/.../blob/master/content/"
-  packageBaseUrl = ".../"
-  description = "..."
+  editURL = "https://github.com/js2264/scATACseq-workshop/blob/master/content/"
+  packageBaseUrl = "scATACseq-workshop/"
+  description = "Analysis of bulk and single-cell ATAC-seq datasets"
   author = "Jacques Serizay"
   showVisitedLinks = false
   disableBreadcrumb = true
