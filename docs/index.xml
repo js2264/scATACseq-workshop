@@ -24,10 +24,10 @@ Overview Format Targeted audience and required background Learning outcomes </de
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://js2264.github.io/scATACseq-workshop/introduction/02_program/</guid>
-      <description>Day 1: Processing bulk and single-cell ATAC-seq reads ATAC-seq experimental approaches  30&#39;
-  bulk ATAC-seq methods: classical, omniATAC-seq, low input ATAC-seq, &amp;hellip; &amp;ldquo;single cell&amp;rdquo; ATAC-seq methods: droplet-based scATACseq, indexed scATACseq, joint scRNAseq and scATACseq, &amp;hellip;  Processing of bulk ATAC-seq  45&#39;
-  Sequencing QC Mapping reads and correcting Visualizing and QC-ing the results  Processing of single-cell ATAC-seq  45&#39;
-  10X scATACseq: from reads to matrix counts with cellranger QC-ing with Loupe  Data output: loci of accessible chromatin  Extra</description>
+      <description>Session 1: Processing bulk and single-cell ATAC-seq reads Lecture 1: bulk ATAC-seq experimental approaches  15&#39;
+  bulk ATAC-seq methods: classical, omniATAC-seq, low input ATAC-seq, &amp;hellip;  Hands-on 1: Processing of bulk ATAC-seq  35&#39;
+  Sequencing QC Mapping reads and correcting Visualizing and QC-ing the results  Exercise 1: Inspecting bulk ATAC-seq outputs  10&#39;
+  Visually inspect the generated tracks and the identifed peaks Get the distribution of fragment sizes over ATAC peaks   Lecture 2: single-cell ATAC-seq experimental approaches  20&#39;</description>
     </item>
     
     <item>

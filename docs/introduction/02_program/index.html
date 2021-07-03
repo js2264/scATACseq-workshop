@@ -12,21 +12,21 @@
     <title>2. Program :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
-    <link href="/scATACseq-workshop/css/nucleus.css?1622906668" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1622906668" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hybrid.css?1622906668" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/featherlight.min.css?1622906668" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1622906668" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/auto-complete.css?1622906668" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1622906668" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/theme.css?1622906668" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hugo-theme.css?1622906668" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/nucleus.css?1625303897" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1625303897" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1625303897" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1625303897" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1625303897" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1625303897" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1625303897" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1625303897" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1625303897" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/theme-red.css?1622906668" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme-red.css?1625303897" rel="stylesheet">
     
     
 
-    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1622906668"></script>
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1625303897"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -292,101 +292,158 @@
         
 
 
-<h2 id="day-1-processing-bulk-and-single-cell-atac-seq-reads">Day 1: Processing bulk and single-cell ATAC-seq reads</h2>
-<h3 id="atac-seq-experimental-approaches">ATAC-seq experimental approaches</h3>
+<h2 id="session-1-processing-bulk-and-single-cell-atac-seq-reads">Session 1: Processing bulk and single-cell ATAC-seq reads</h2>
+<h3 id="lecture-1-bulk-atac-seq-experimental-approaches">Lecture 1: bulk ATAC-seq experimental approaches</h3>
 <blockquote>
-<p>30'</p>
+<p>15'</p>
 </blockquote>
 <ul>
 <li>bulk ATAC-seq methods: classical, omniATAC-seq, low input ATAC-seq, &hellip;</li>
-<li>&ldquo;single cell&rdquo; ATAC-seq methods: droplet-based scATACseq, indexed scATACseq, joint scRNAseq and scATACseq, &hellip;</li>
 </ul>
-<h3 id="processing-of-bulk-atac-seq">Processing of bulk ATAC-seq</h3>
+<h3 id="hands-on-1-processing-of-bulk-atac-seq">Hands-on 1: Processing of bulk ATAC-seq</h3>
 <blockquote>
-<p>45'</p>
+<p>35'</p>
 </blockquote>
 <ul>
 <li>Sequencing QC</li>
 <li>Mapping reads and correcting</li>
 <li>Visualizing and QC-ing the results</li>
 </ul>
-<h3 id="processing-of-single-cell-atac-seq">Processing of single-cell ATAC-seq</h3>
+<h3 id="exercise-1-inspecting-bulk-atac-seq-outputs">Exercise 1: Inspecting bulk ATAC-seq outputs</h3>
 <blockquote>
-<p>45'</p>
+<p>10'</p>
+</blockquote>
+<ul>
+<li>Visually inspect the generated tracks and the identifed peaks</li>
+<li>Get the distribution of fragment sizes over ATAC peaks</li>
+</ul>
+<hr>
+<h3 id="lecture-2-single-cell-atac-seq-experimental-approaches">Lecture 2: single-cell ATAC-seq experimental approaches</h3>
+<blockquote>
+<p>20'</p>
+</blockquote>
+<ul>
+<li>&ldquo;single cell&rdquo; ATAC-seq methods: droplet-based scATACseq, indexed scATACseq, joint scRNAseq and scATACseq, &hellip;</li>
+</ul>
+<h3 id="hands-on-2-processing-of-single-cell-atac-seq">Hands-on 2: Processing of single-cell ATAC-seq</h3>
+<blockquote>
+<p>30'</p>
 </blockquote>
 <ul>
 <li>10X scATACseq: from reads to matrix counts with <code>cellranger</code></li>
 <li>QC-ing with <code>Loupe</code></li>
 </ul>
-<h3 id="data-output-loci-of-accessible-chromatin">Data output: loci of accessible chromatin</h3>
+<h3 id="exercise-2-bulk-versus-single-cell-atac-seq">Exercise 2: bulk versus single-cell ATAC-seq</h3>
 <blockquote>
-<p>Extra</p>
+<p>10'</p>
 </blockquote>
 <ul>
-<li>Distribution of fragment sizes over ATAC peaks</li>
-<li>Distance to closest TSS</li>
-<li>Annotating closest genes</li>
+<li>Compare aggregated signal obtained from single-cell ATAC-seq to that of bulk ATAC-seq</li>
 </ul>
-<h2 id="day-2-peak-centered-downstream-analysis">Day 2: Peak-centered downstream analysis</h2>
-<h3 id="bulk-atacseq-and-peak-sets">Bulk ATACseq and peak sets</h3>
+<hr>
+<h3 id="homework-download-raw-data-from-gse-and-process-it">Homework: Download raw data from GSE and process it</h3>
+<ul>
+<li>Install <code>cellranger</code> and mapping tools</li>
+<li>Download reads from GSE129785 and GSE87646</li>
+</ul>
+<h2 id="session-2-peak-centered-differential-accessibility-analysis">Session 2: Peak-centered differential accessibility analysis</h2>
+<h3 id="lecture-3-clustering-single-cell-data">Lecture 3: Clustering single-cell data</h3>
 <blockquote>
-<p>45'</p>
+<p>20'</p>
 </blockquote>
 <ul>
-<li>Integrating peak sets from different experiments</li>
-<li>Quantifying accessibility at each ATAC peak</li>
-<li>Differential accessibility tests</li>
-<li>Clustering peak sets</li>
+<li>Normalizing scATACseq data</li>
+<li>Clustering approaches</li>
+<li>Annotating cell types</li>
 </ul>
-<h3 id="clustering-scatacseq-cells">Clustering scATACseq cells</h3>
+<h3 id="hands-on-3-downstream-analysis-of-scatacseq-data">Hands-on 3: Downstream analysis of scATACseq data</h3>
 <blockquote>
-<p>45'</p>
+<p>30'</p>
 </blockquote>
 <ul>
 <li>Reading <code>cellranger</code> output in <code>R</code></li>
 <li>Normalizing scATACseq counts</li>
 <li>Clustering cells by their accessible loci</li>
-<li>Annotating cell types</li>
 </ul>
-<h3 id="insigths-into-regulatory-functions">Insigths into regulatory functions</h3>
+<h3 id="exercise-3-recovering-peaks-associated-with">Exercise 3: Recovering peaks associated with</h3>
+<blockquote>
+<p>10'</p>
+</blockquote>
+<ul>
+<li>Finding cluster-specific peaks</li>
+</ul>
+<hr>
+<h3 id="lecture-4-atac-seq-and-accessibility-peaks">Lecture 4: ATAC-seq and accessibility peaks</h3>
+<blockquote>
+<p>20'</p>
+</blockquote>
+<ul>
+<li>Peaks in bulk ATAC-seq vs single-cell ATAC-seq</li>
+<li>Integrating peak sets from different experiments</li>
+<li>Finding enriched sequences</li>
+</ul>
+<h3 id="hands-on-4-comparing-atac-seq-peaks">Hands-on 4: Comparing ATAC-seq peaks</h3>
 <blockquote>
 <p>30'</p>
 </blockquote>
 <ul>
-<li>Interpreting chromatin context(s) at accessible loci</li>
-<li>Interpreting DNA sequence context(s) at accessible loci</li>
-<li>Leveraging Bioconductor <code>AnnotationHub</code> and <code>ExperimentHub</code> resources</li>
+<li>Quantifying accessibility at ATAC peaks</li>
+<li>Differential accessibility assay</li>
+<li>Clustering peak sets</li>
 </ul>
-<h3 id="insigths-into-biological-functions">Insigths into biological functions</h3>
+<h3 id="exercise-4-peak-location-vs-genomic-features">Exercise 4: Peak location vs genomic features</h3>
 <blockquote>
-<p>Extra</p>
+<p>10'</p>
 </blockquote>
 <ul>
-<li>Over-representation analyses</li>
-<li>Gene Set Enrichment Analyses (GSEA)</li>
+<li>Get the distance from ATAC peaks to closest TSS</li>
+<li>Find which types of chromatin stats are enriched in acceessible loci</li>
 </ul>
-<h2 id="day-3-advanced-analysis-and-multi-omics-integration">Day 3: Advanced analysis and multi-omics integration</h2>
-<h3 id="inferring-regulatory-networks-from-scatacseq">Inferring regulatory networks from scATACseq</h3>
+<hr>
+<h3 id="homework">Homework</h3>
+<ul>
+<li>Group peaks by accessibility scores in different samples / cells</li>
+<li>Perform gene ontology over-representation analyses (GOA)</li>
+<li>Perform gene Set Enrichment Analyses (GSEA)</li>
+</ul>
+<h2 id="session-3-advanced-topics-and-multi-omics-integration">Session 3: Advanced topics and multi-omics integration</h2>
+<h3 id="lecture-5-motif-enrichment-analysis">Lecture 5: Motif enrichment analysis</h3>
 <blockquote>
-<p>40'</p>
+<p>20'</p>
+</blockquote>
+<ul>
+<li>The good, the bad and the ugly: Ref. sequence, ref. annotations and ref. version!</li>
+<li>Tools to perform motif enrichment analysis</li>
+<li>Public databases for transcription factor binding sites (TFBS)</li>
+</ul>
+<h3 id="hands-on-5-find-motifs-enriched-in-peak-sets">Hands-on 5: Find motifs enriched in peak sets</h3>
+<blockquote>
+<p>30'</p>
+</blockquote>
+<ul>
+<li>Use web-based or command-line <code>meme</code> software to find de novo motifs enriched in a set of peaks</li>
+<li>Scan sets of peaks for known TF binding sites</li>
+</ul>
+<h3 id="hands-on-5-find-motifs-enriched-in-peak-sets-1">Hands-on 5: Find motifs enriched in peak sets</h3>
+<blockquote>
+<p>10'</p>
+</blockquote>
+<ul>
+<li>Compare de novo found motifs to public databases with <code>fimo</code></li>
+</ul>
+<hr>
+<h3 id="topic-6-inferring-regulatory-networks-from-scatacseq">Topic 6: Inferring regulatory networks from scATACseq</h3>
+<blockquote>
+<p>1h'</p>
 </blockquote>
 <ul>
 <li>CICERO</li>
 </ul>
-<h3 id="integrating-unpaired-scatacseq-and-scrnaseq-cells">Integrating unpaired scATACseq and scRNAseq cells</h3>
-<blockquote>
-<p>40'</p>
-</blockquote>
+<hr>
+<h3 id="homework-1">Homework</h3>
 <ul>
-<li>Projecting scATACseq cells on top of scRNAseq cells</li>
-<li>Leveraging scRNAseq to accurately annotate cells in scATACseq</li>
-</ul>
-<h3 id="investigating-paired-scrnaseq--scatacseq">Investigating paired scRNAseq + scATACseq</h3>
-<blockquote>
-<p>40'</p>
-</blockquote>
-<ul>
-<li>Linking peaks to genes</li>
+<li>Find TF motifs enriched in peaks with increased accessibility in a specific cluster</li>
+<li>Find co-regulated genes using CICERO</li>
 </ul>
 
 
@@ -571,19 +628,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/scATACseq-workshop/js/clipboard.min.js?1622906668"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1622906668"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1622906668"></script>
-    <script src="/scATACseq-workshop/js/jquery.sticky.js?1622906668"></script>
-    <script src="/scATACseq-workshop/js/featherlight.min.js?1622906668"></script>
-    <script src="/scATACseq-workshop/js/highlight.pack.js?1622906668"></script>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1625303897"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1625303897"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1625303897"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1625303897"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1625303897"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1625303897"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1622906668"></script>
-    <script src="/scATACseq-workshop/js/learn.js?1622906668"></script>
-    <script src="/scATACseq-workshop/js/hugo-learn.js?1622906668"></script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1625303897"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1625303897"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1625303897"></script>
     
         
-            <script src="/scATACseq-workshop/mermaid/mermaid.js?1622906668"></script>
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1625303897"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

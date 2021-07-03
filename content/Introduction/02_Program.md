@@ -2,82 +2,134 @@
 title: "2. Program"
 ---
 
-## Day 1: Processing bulk and single-cell ATAC-seq reads
+## Session 1: Processing bulk and single-cell ATAC-seq reads
 
-### ATAC-seq experimental approaches 
->30'
+### Lecture 1: bulk ATAC-seq experimental approaches 
+>15'
 
   - bulk ATAC-seq methods: classical, omniATAC-seq, low input ATAC-seq, ...
-  - "single cell" ATAC-seq methods: droplet-based scATACseq, indexed scATACseq, joint scRNAseq and scATACseq, ...
 
-### Processing of bulk ATAC-seq
->45'
+### Hands-on 1: Processing of bulk ATAC-seq
+>35'
 
   - Sequencing QC
   - Mapping reads and correcting
   - Visualizing and QC-ing the results
 
-  ### Processing of single-cell ATAC-seq
->45'
+### Exercise 1: Inspecting bulk ATAC-seq outputs
+>10'
+
+  - Visually inspect the generated tracks and the identifed peaks
+  - Get the distribution of fragment sizes over ATAC peaks
+
+--- 
+
+### Lecture 2: single-cell ATAC-seq experimental approaches 
+>20'
+
+  - "single cell" ATAC-seq methods: droplet-based scATACseq, indexed scATACseq, joint scRNAseq and scATACseq, ...
+
+### Hands-on 2: Processing of single-cell ATAC-seq
+>30'
 
   - 10X scATACseq: from reads to matrix counts with `cellranger`
   - QC-ing with `Loupe`
 
-### Data output: loci of accessible chromatin 
->Extra
+### Exercise 2: bulk versus single-cell ATAC-seq
+>10'
 
-  - Distribution of fragment sizes over ATAC peaks
-  - Distance to closest TSS
-  - Annotating closest genes 
+  - Compare aggregated signal obtained from single-cell ATAC-seq to that of bulk ATAC-seq 
 
-## Day 2: Peak-centered downstream analysis 
+--- 
 
-### Bulk ATACseq and peak sets
->45'
+### Homework: Download raw data from GSE and process it
 
-  - Integrating peak sets from different experiments
-  - Quantifying accessibility at each ATAC peak
-  - Differential accessibility tests
-  - Clustering peak sets
+  - Install `cellranger` and mapping tools
+  - Download reads from GSE129785 and GSE87646
 
-### Clustering scATACseq cells
->45'
+## Session 2: Peak-centered differential accessibility analysis 
+
+
+### Lecture 3: Clustering single-cell data
+> 20' 
+
+  - Normalizing scATACseq data
+  - Clustering approaches
+  - Annotating cell types
+
+### Hands-on 3: Downstream analysis of scATACseq data
+>30'
 
   - Reading `cellranger` output in `R` 
   - Normalizing scATACseq counts
   - Clustering cells by their accessible loci
-  - Annotating cell types
 
-### Insigths into regulatory functions 
->30' 
+### Exercise 3: Recovering peaks associated with 
+>10'
 
-  - Interpreting chromatin context(s) at accessible loci
-  - Interpreting DNA sequence context(s) at accessible loci
-  - Leveraging Bioconductor `AnnotationHub` and `ExperimentHub` resources
+  - Finding cluster-specific peaks
 
-### Insigths into biological functions
->Extra
+---
 
-  - Over-representation analyses
-  - Gene Set Enrichment Analyses (GSEA)
+### Lecture 4: ATAC-seq and accessibility peaks
+> 20' 
 
-## Day 3: Advanced analysis and multi-omics integration
+  - Peaks in bulk ATAC-seq vs single-cell ATAC-seq
+  - Integrating peak sets from different experiments
+  - Finding enriched sequences
 
-### Inferring regulatory networks from scATACseq
->40'
+### Hands-on 4: Comparing ATAC-seq peaks
+>30'
+
+  - Quantifying accessibility at ATAC peaks
+  - Differential accessibility assay
+  - Clustering peak sets
+
+### Exercise 4: Peak location vs genomic features
+>10'
+
+  - Get the distance from ATAC peaks to closest TSS
+  - Find which types of chromatin stats are enriched in acceessible loci
+
+--- 
+
+### Homework
+
+  - Group peaks by accessibility scores in different samples / cells
+  - Perform gene ontology over-representation analyses (GOA)
+  - Perform gene Set Enrichment Analyses (GSEA)
+
+
+## Session 3: Advanced topics and multi-omics integration
+
+### Lecture 5: Motif enrichment analysis
+>20'
+
+  - The good, the bad and the ugly: Ref. sequence, ref. annotations and ref. version!
+  - Tools to perform motif enrichment analysis
+  - Public databases for transcription factor binding sites (TFBS)
+
+### Hands-on 5: Find motifs enriched in peak sets
+> 30' 
+
+  - Use web-based or command-line `meme` software to find de novo motifs enriched in a set of peaks
+  - Scan sets of peaks for known TF binding sites
+
+### Hands-on 5: Find motifs enriched in peak sets
+>10'
+
+  - Compare de novo found motifs to public databases with `fimo`
+
+---
+
+### Topic 6: Inferring regulatory networks from scATACseq
+>1h'
 
   - CICERO
 
-### Integrating unpaired scATACseq and scRNAseq cells
->40'
+--- 
 
-  - Projecting scATACseq cells on top of scRNAseq cells
-  - Leveraging scRNAseq to accurately annotate cells in scATACseq
+### Homework
 
-### Investigating paired scRNAseq + scATACseq
->40'
-
-  - Linking peaks to genes
-
-
-
+  - Find TF motifs enriched in peaks with increased accessibility in a specific cluster
+  - Find co-regulated genes using CICERO
