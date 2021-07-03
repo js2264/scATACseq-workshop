@@ -20,6 +20,5 @@ This course will be held online.
 ## Targeted audience and required background
 
 
-
 ## Learning outcomes
 

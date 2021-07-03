@@ -9,24 +9,24 @@
 
     <link rel="icon" href="/scATACseq-workshop/images/favicon.png" type="image/png">
 
-    <title> Single-cell RNA-seq analysis with R/Bioconductor :: Analysis of bulk and single-cell ATAC-seq datasets</title>
+    <title> Bulk and single-cell ATAC-seq analysis :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
-    <link href="/scATACseq-workshop/css/nucleus.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hybrid.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/featherlight.min.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/auto-complete.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/theme.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hugo-theme.css?1625303897" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/nucleus.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1625305214" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/theme-red.css?1625303897" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme-red.css?1625305214" rel="stylesheet">
     
     
 
-    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1625303897"></script>
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1625305214"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -67,13 +67,13 @@
  
   
     
-    <li data-nav-id="/scATACseq-workshop/introduction/" title=" Single-cell RNA-seq analysis with R/Bioconductor" class="dd-item
+    <li data-nav-id="/scATACseq-workshop/introduction/" title=" Bulk and single-cell ATAC-seq analysis" class="dd-item
         parent
         active
         
         ">
       <a href="/scATACseq-workshop/introduction/">
-           Single-cell RNA-seq analysis with R/Bioconductor
+           Bulk and single-cell ATAC-seq analysis
           
       </a>
       
@@ -285,7 +285,7 @@
           
             <h1>
               
-               Single-cell RNA-seq analysis with R/Bioconductor
+               Bulk and single-cell ATAC-seq analysis
             </h1>
           
 
@@ -294,24 +294,12 @@
 
 
 	<h2 id="course-content">Course content:</h2>
-<p>The workshop content is available <a href="https://github.com/js2264/..." target="_blank">at this adress: https://github.com/js2264/&amp;hellip;</a>
+<p>The workshop content is available <a href="https://github.com/js2264/scATACseq-workshop" target="_blank">at this adress: https://github.com/js2264/scATACseq-workshop</a>
 .</p>
 <p>You can clone it locally with <code>git</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git clone https://github.com/js2264/....git
-</code></pre></div><h2 id="to-log-in-rstudio-server">To log in RStudio server:</h2>
-<p><a href="http://54.188.62.211:8787/" target="_blank">Simply go to the following web page</a>
-: <code>http://54.188.62.211:8787/</code></p>
-<h2 id="ip-for-today-2021-01-14">IP for today (2021-01-14):</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">IP<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;54.188.62.211&#34;</span>
-</code></pre></div><h2 id="to-log-in-your-aws-session">To log in your AWS session:</h2>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">KEY<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;path/to/key.pem&#34;</span>
-chmod <span style="color:#ae81ff">600</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>KEY<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
-USER<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;myuserID&#34;</span>
-IP<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;54.188.62.211&#34;</span>
-ssh -i <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>KEY<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>USER<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>@<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>IP<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
-</code></pre></div><p>More information is available <a href="/scATACseq-workshop/
-how_to_log_in_aws/#connect-to-pre-configured-aws-machine" target="_blank">here</a>
- if needed.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">git clone https://github.com/js2264/scATACseq-workshop.git
+</code></pre></div><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 
 
 
@@ -494,19 +482,19 @@ how_to_log_in_aws/#connect-to-pre-configured-aws-machine" target="_blank">here</
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/scATACseq-workshop/js/clipboard.min.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/jquery.sticky.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/featherlight.min.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/highlight.pack.js?1625303897"></script>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1625305214"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/learn.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/hugo-learn.js?1625303897"></script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1625305214"></script>
     
         
-            <script src="/scATACseq-workshop/mermaid/mermaid.js?1625303897"></script>
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1625305214"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

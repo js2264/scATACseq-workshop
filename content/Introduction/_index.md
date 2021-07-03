@@ -1,18 +1,18 @@
 ---
-title: " Single-cell RNA-seq analysis with R/Bioconductor"
+title: " Bulk and single-cell ATAC-seq analysis"
 ---
 
 ## Course content: 
 
-The workshop content is available [at this adress: https://github.com/js2264/...](https://github.com/js2264/...). 
+The workshop content is available [at this adress: https://github.com/js2264/scATACseq-workshop](https://github.com/js2264/scATACseq-workshop). 
 
 You can clone it locally with `git`: 
 
 ```sh
-git clone https://github.com/js2264/....git
+git clone https://github.com/js2264/scATACseq-workshop.git
 ```
 
-## To log in RStudio server: 
+<!-- ## To log in RStudio server: 
 
 [Simply go to the following web page](http://54.188.62.211:8787/): `http://54.188.62.211:8787/`
 
@@ -32,4 +32,4 @@ IP="54.188.62.211"
 ssh -i "${KEY}" "${USER}"@"${IP}"
 ```
 
-More information is available [here](/{{<myPackageUrl>}}how_to_log_in_aws/#connect-to-pre-configured-aws-machine) if needed. 
+More information is available [here](/{{<myPackageUrl>}}how_to_log_in_aws/#connect-to-pre-configured-aws-machine) if needed.  -->

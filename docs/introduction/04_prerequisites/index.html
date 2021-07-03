@@ -12,21 +12,21 @@
     <title>4. Prerequisites and required machine configuration :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
-    <link href="/scATACseq-workshop/css/nucleus.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hybrid.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/featherlight.min.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/auto-complete.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/theme.css?1625303897" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hugo-theme.css?1625303897" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/nucleus.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1625305214" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/theme-red.css?1625303897" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme-red.css?1625305214" rel="stylesheet">
     
     
 
-    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1625303897"></script>
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1625305214"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -67,13 +67,13 @@
  
   
     
-    <li data-nav-id="/scATACseq-workshop/introduction/" title=" Single-cell RNA-seq analysis with R/Bioconductor" class="dd-item
+    <li data-nav-id="/scATACseq-workshop/introduction/" title=" Bulk and single-cell ATAC-seq analysis" class="dd-item
         parent
         
         
         ">
       <a href="/scATACseq-workshop/introduction/">
-           Single-cell RNA-seq analysis with R/Bioconductor
+           Bulk and single-cell ATAC-seq analysis
           
       </a>
       
@@ -314,39 +314,7 @@ docs/bioconductor.pdf" target="_blank">[PDF]</a>
 </ul>
 <h2 id="remote-configuration">Remote configuration</h2>
 <p>The AWS machine is running <code>Ubuntu 18.04.5 LTS</code> and has been set up as follows (note this is specific to <code>Ubuntu 18.04</code>):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## --- Clean up previous R installs</span>
-sudo apt purge r-base* r-recommended r-cran-*
-sudo apt autoremove
-sudo apt update
-sudo apt upgrade
-
-<span style="color:#75715e">## --- Libraries</span>
-sudo apt update
-sudo apt install libc6 libicu66 libreadline8 -y 
-sudo apt install -y <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    gcc g++ perl python3 python3-pip python-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    automake make cmake less vim nano fort77 <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    wget git curl bsdtar bzip2 gfortran unzip ftp <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libpng-dev libjpeg-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    texlive-latex-base default-jre build-essential <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libbz2-dev liblzma-dev libtool <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libxml2 libxml2-dev zlib1g-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libdb-dev libglu1-mesa-dev zlib1g-dev  <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libncurses5-dev libghc-zlib-dev libncurses-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libpcre3-dev libxml2-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libblas-dev libzmq3-dev libreadline-dev libssl-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libcurl4-openssl-dev libx11-dev libxt-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    x11-common libcairo2-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libreadline6-dev libgsl0-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libeigen3-dev libboost-all-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libgtk2.0-dev xvfb xauth xfonts-base <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    apt-transport-https libhdf5-serial-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libudunits2-dev libgdal-dev libgeos-dev libproj-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libv8-dev libnode-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libmagick++-dev <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    libharfbuzz-dev libfribidi-dev
-
-<span style="color:#75715e">## --- R 4.1 base install </span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## --- R 4.1 base install </span>
 sudo add-apt-repository <span style="color:#e6db74">&#39;deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/&#39;</span>
 add-apt-repository <span style="color:#e6db74">&#34;deb https://cloud.r-project.org/bin/linux/ubuntu `lsb_release -cs` -cran40/&#34;</span>
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
@@ -378,12 +346,6 @@ Rscript -e <span style="color:#e6db74">&#34;
 </span><span style="color:#e6db74">BiocManager::install(&#39;AUCell&#39;, update = FALSE)
 </span><span style="color:#e6db74">BiocManager::install(&#39;plyranges&#39;, update = FALSE)
 </span><span style="color:#e6db74">BiocManager::install(&#39;SingleR&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;slingshot&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;tradeSeq&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;clusterExperiment&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;CountClust&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;velociraptor&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;BUSpaRse&#39;, update = FALSE)
 </span><span style="color:#e6db74">BiocManager::install(&#39;org.Mm.eg.db&#39;, update = FALSE)
 </span><span style="color:#e6db74">BiocManager::install(&#39;org.Hs.eg.db&#39;, update = FALSE)
 </span><span style="color:#e6db74">
@@ -600,19 +562,19 @@ sudo tar -xzvf refdata-gex-mm10-2020-A.tar.gz
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/scATACseq-workshop/js/clipboard.min.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/jquery.sticky.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/featherlight.min.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/highlight.pack.js?1625303897"></script>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1625305214"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/learn.js?1625303897"></script>
-    <script src="/scATACseq-workshop/js/hugo-learn.js?1625303897"></script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1625305214"></script>
     
         
-            <script src="/scATACseq-workshop/mermaid/mermaid.js?1625303897"></script>
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1625305214"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
