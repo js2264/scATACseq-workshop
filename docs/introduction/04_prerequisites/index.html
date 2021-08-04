@@ -12,21 +12,21 @@
     <title>4. Prerequisites and required machine configuration :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
-    <link href="/scATACseq-workshop/css/nucleus.css?1625305214" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1625305214" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hybrid.css?1625305214" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/featherlight.min.css?1625305214" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1625305214" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/auto-complete.css?1625305214" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1625305214" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/theme.css?1625305214" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hugo-theme.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/nucleus.css?1628089103" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628089103" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1628089103" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1628089103" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628089103" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1628089103" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628089103" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1628089103" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1628089103" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/theme-red.css?1625305214" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme-red.css?1628089103" rel="stylesheet">
     
     
 
-    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628089103"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -308,78 +308,54 @@ docs/bioconductor.pdf" target="_blank">[PDF]</a>
 </ul>
 <h2 id="local-configuration">Local configuration</h2>
 <ul>
-<li>Ideally (though not strictly required), a configured SSH client (it should be already installed on Linux/Mac machines, <code>PuTTY</code> can be set up for Windows).</li>
-<li>Ideally (though not strictly required), a SSH ftp client (<code>Forklift</code> is excellent for Mac, although not free beyond the trial version; <code>cyberduck</code> can be used for Windows; <code>FileZilla</code> can be used for Mac, Windows and Linux).</li>
-<li>Computer with high-speed internet access (no specific configuration required - everything will be performed on a remote AWS machine).</li>
+<li>Install R and other important softwares</li>
 </ul>
-<h2 id="remote-configuration">Remote configuration</h2>
-<p>The AWS machine is running <code>Ubuntu 18.04.5 LTS</code> and has been set up as follows (note this is specific to <code>Ubuntu 18.04</code>):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## --- R 4.1 base install </span>
-sudo add-apt-repository <span style="color:#e6db74">&#39;deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran40/&#39;</span>
-add-apt-repository <span style="color:#e6db74">&#34;deb https://cloud.r-project.org/bin/linux/ubuntu `lsb_release -cs` -cran40/&#34;</span>
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
-sudo apt update
-sudo apt install r-base r-recommended r-base-core r-base-dev
-</code></pre></div><p>The following packages have been installed (along with their many dependencies, of course!):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## --- Install important R packages for single-cell sequencing projects</span>
-Rscript -e <span style="color:#e6db74">&#34;
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">conda create --name scatac
+conda activate scatac
+conda install -c conda-forge -c bioconda <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    r-base r-essentials r-devtools r-tidyverse r-biocmanager r-polyclip r-rcpparmadillo <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    trim-galore bowtie2 samtools deeptools meme macs2 igv
+</code></pre></div><ul>
+<li>The following R packages have also been installed (along with their many dependencies, of course!):</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">Rscript -e <span style="color:#e6db74">&#34;
 </span><span style="color:#e6db74">## CRAN packages
-</span><span style="color:#e6db74">install.packages(&#39;tidyverse&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;devtools&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;umap&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;corrplot&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;gam&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;ggbeeswarm&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;ggthemes&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;Matrix&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;zeallot&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;fossil&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;rgl&#39;, dependencies=TRUE)
-</span><span style="color:#e6db74">install.packages(&#39;BiocManager&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;umap&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;corrplot&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;gam&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;ggbeeswarm&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;ggthemes&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;Matrix&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;rgl&#39;, dependencies=TRUE, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;Signac&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;Seurat&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;BiocManager&#39;, repos = &#39;https://cran.irsn.fr&#39;)
 </span><span style="color:#e6db74">
 </span><span style="color:#e6db74">## Bioconductor Packages
-</span><span style="color:#e6db74">BiocManager::install(&#39;SingleCellExperiment&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;scran&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;scater&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;batchelor&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;DropletUtils&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;AUCell&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;AnnotationHub&#39;, update = FALSE)
 </span><span style="color:#e6db74">BiocManager::install(&#39;plyranges&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;SingleR&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;org.Mm.eg.db&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;VplotR&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;annotatr&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;rtracklayer&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;gprofiler2&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;DOSE&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;clusterProfiler&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;EnsDb.Mmusculus.v79&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;EnsDb.Hsapiens.v79&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;TxDb.Hsapiens.UCSC.hg38.knownGene&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;TxDb.Mmusculus.UCSC.mm10.knownGene&#39;, update = FALSE)
 </span><span style="color:#e6db74">BiocManager::install(&#39;org.Hs.eg.db&#39;, update = FALSE)
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">## Github Packages
-</span><span style="color:#e6db74">devtools::install_github(&#39;satijalab/seurat&#39;, upgrade = &#39;never&#39;)
-</span><span style="color:#e6db74">devtools::install_github(&#39;TaddyLab/maptpx&#39;)
-</span><span style="color:#e6db74">devtools::install_github(&#39;MacoskoLab/liger&#39;)
-</span><span style="color:#e6db74">devtools::install_github(&#39;velocyto-team/velocyto.R&#39;)
-</span><span style="color:#e6db74">devtools::install_github(&#39;theislab/destiny&#39;)
-</span><span style="color:#e6db74">devtools::install_github(&#39;broadinstitute/inferCNV&#39;)
+</span><span style="color:#e6db74">BiocManager::install(&#39;org.Mm.eg.db&#39;, update = FALSE)
 </span><span style="color:#e6db74">&#34;</span>
+</code></pre></div><ul>
+<li>
+<p>Additional dependencies:</p>
+<ul>
+<li>cellranger</li>
+</ul>
+</li>
+</ul>
 
-<span style="color:#75715e">## --- Create singlecell conda env. and add other dependencies</span>
-sudo R --no-save -e <span style="color:#e6db74">&#34;reticulate::install_miniconda()&#34;</span>
-sudo R --no-save -e <span style="color:#e6db74">&#34;reticulate::conda_create(envname = &#39;singlecell)&#34;</span>
-conda init bash
-conda activate singlecell
-conda install -c conda-forge python<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span> umap-learn leidenalg -y
-conda install -y -c conda-forge <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    numpy <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    scipy <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    pandas <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    matplotlib <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    setuptools <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    umap-learn
-
-<span style="color:#75715e">## --- Install other softwares (fastQC, samtools, cellranger and cellranger indexes)</span>
-conda install -c bioconda fastqc samtools
-cd /opt/
-sudo wget -O cellranger-6.0.1.tar.gz <span style="color:#e6db74">&#34;https://cf.10xgenomics.com/releases/cell-exp/cellranger-6.0.1.tar.gz?Expires=1622001486&amp;Policy=eyJTdGF0ZW1lbnQiOlt7IlJlc291cmNlIjoiaHR0cHM6Ly9jZi4xMHhnZW5vbWljcy5jb20vcmVsZWFzZXMvY2VsbC1leHAvY2VsbHJhbmdlci02LjAuMS50YXIuZ3oiLCJDb25kaXRpb24iOnsiRGF0ZUxlc3NUaGFuIjp7IkFXUzpFcG9jaFRpbWUiOjE2MjIwMDE0ODZ9fX1dfQ__&amp;Signature=IWM4eRXo7G4YRXjOrcTFKscHWsa5sU6bqrIFrWOyzkV0pzOb0OPrjI7uMtoorqV6ivIjKbE21F9PkfajqV77hfODzCIyOmVQWxi9~nV2vZ6fdmo80hB4xmFQ7RdmLNAS~MDrhAg8etcQ-VkPS6wbzwtfNai-jDfRaas7DNPcq5CtFA4UBtfMG51XTpfPFKHDt66QWQOKShD5JNi05Cq4mDcWfJD1EFC-Z5b0Nid416NeLtxzUjNl043VRpWk2EibNGn8s8qGO0Kk~5Uh1l-qW~KkLSPVv5QFWj5wAgPjC3At2bCqjBaD6c87lIcHKx7WTPv46-d-gdQvYg-ZRcmBPQ__&amp;Key-Pair-Id=APKAI7S6A5RYOXBWRPDA&#34;</span>
-sudo tar -xzvf cellranger-6.0.1.tar.gz
-sudo wget https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-mm10-2020-A.tar.gz
-sudo tar -xzvf refdata-gex-mm10-2020-A.tar.gz
-</code></pre></div>
 
 <footer class="footline">
 	
@@ -562,19 +538,19 @@ sudo tar -xzvf refdata-gex-mm10-2020-A.tar.gz
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/scATACseq-workshop/js/clipboard.min.js?1625305214"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1625305214"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1625305214"></script>
-    <script src="/scATACseq-workshop/js/jquery.sticky.js?1625305214"></script>
-    <script src="/scATACseq-workshop/js/featherlight.min.js?1625305214"></script>
-    <script src="/scATACseq-workshop/js/highlight.pack.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1628089103"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628089103"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628089103"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628089103"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1628089103"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1628089103"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1625305214"></script>
-    <script src="/scATACseq-workshop/js/learn.js?1625305214"></script>
-    <script src="/scATACseq-workshop/js/hugo-learn.js?1625305214"></script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628089103"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1628089103"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1628089103"></script>
     
         
-            <script src="/scATACseq-workshop/mermaid/mermaid.js?1625305214"></script>
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628089103"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

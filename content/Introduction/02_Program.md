@@ -4,12 +4,12 @@ title: "2. Program"
 
 ## Session 1: Processing bulk and single-cell ATAC-seq reads
 
-### Lecture 1: bulk ATAC-seq experimental approaches 
+### Lecture 1: Bulk ATAC-seq experimental approaches 
 >15'
 
-  - bulk ATAC-seq methods: classical, omniATAC-seq, low input ATAC-seq, ...
+  - Introduction to bulk ATAC-seq methods: "classic", omniATAC-seq, low input ATAC-seq, ...
 
-### Hands-on 1: Processing of bulk ATAC-seq
+### Hands-on 1: Processing bulk ATAC-seq data
 >35'
 
   - Sequencing QC
@@ -20,16 +20,17 @@ title: "2. Program"
 >10'
 
   - Visually inspect the generated tracks and the identifed peaks
-  - Get the distribution of fragment sizes over ATAC peaks
+  - Get the distribution of fragment sizes over ATAC peaks. 
+  - Compare this distribution to the previous one. Discuss.
 
 --- 
 
-### Lecture 2: single-cell ATAC-seq experimental approaches 
+### Lecture 2: Single-cell ATAC-seq experimental approaches 
 >20'
 
-  - "single cell" ATAC-seq methods: droplet-based scATACseq, indexed scATACseq, joint scRNAseq and scATACseq, ...
+  - Introduction to "single cell" ATAC-seq methods: droplet-based scATACseq, indexed scATACseq, joint scRNAseq and scATACseq
 
-### Hands-on 2: Processing of single-cell ATAC-seq
+### Hands-on 2: Processing single-cell ATAC-seq data
 >30'
 
   - 10X scATACseq: from reads to matrix counts with `cellranger`
@@ -88,8 +89,7 @@ title: "2. Program"
 ### Exercise 4: Peak location vs genomic features
 >10'
 
-  - Get the distance from ATAC peaks to closest TSS
-  - Find which types of chromatin stats are enriched in acceessible loci
+  - Find which types of chromatin stats are enriched in accessible loci
 
 --- 
 
