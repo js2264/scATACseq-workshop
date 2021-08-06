@@ -1,5 +1,5 @@
 ---
-title: "4. Prerequisites and required machine configuration"
+title: "3. Prerequisites and required machine configuration"
 ---
 
 ## Prerequisites

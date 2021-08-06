@@ -50,7 +50,6 @@ title: "2. Program"
 
 ## Session 2: Peak-centered differential accessibility analysis 
 
-
 ### Lecture 3: Clustering single-cell data
 > 20' 
 
@@ -98,7 +97,6 @@ title: "2. Program"
   - Group peaks by accessibility scores in different samples / cells
   - Perform gene ontology over-representation analyses (GOA)
   - Perform gene Set Enrichment Analyses (GSEA)
-
 
 ## Session 3: Advanced topics and multi-omics integration
 
