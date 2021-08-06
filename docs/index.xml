@@ -31,21 +31,11 @@ Overview Format Targeted audience and required background Learning outcomes </de
     </item>
     
     <item>
-      <title>3. Rstudio</title>
-      <link>https://js2264.github.io/scATACseq-workshop/introduction/03_rstudio/</link>
+      <title>3. Prerequisites and required machine configuration</title>
+      <link>https://js2264.github.io/scATACseq-workshop/introduction/03_prerequisites/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>https://js2264.github.io/scATACseq-workshop/introduction/03_rstudio/</guid>
-      <description>Rstudio offers a graphical interface to facilitate the interaction between a user and an underlying programming language (this is sometimes called IDE, or integrated development environment). It can be very useful when a user is not necessarily proficent with command line-based computing. However, such graphical interfaces are not always able to connect to services such as AWS.
-Since most of the analyses we will conduct will be done on AWS, we&amp;rsquo;d like to be able to use Rtudio directly from there.</description>
-    </item>
-    
-    <item>
-      <title>4. Prerequisites and required machine configuration</title>
-      <link>https://js2264.github.io/scATACseq-workshop/introduction/04_prerequisites/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://js2264.github.io/scATACseq-workshop/introduction/04_prerequisites/</guid>
+      <guid>https://js2264.github.io/scATACseq-workshop/introduction/03_prerequisites/</guid>
       <description>Prerequisites The course is intended for those who have basic familiarity with Unix and the R scripting language.
  If a refresher is needed for Unix command line (hopefully not), please go over this tutorial and its companion cheatsheet . Getting down to basics: an introduction to the fundamentals of R (courtesy of Mark Ravinet ). Gentle introduction to R/Biocondutor: here  For a full in-depth guide of Bioconductor ecosystem: read the comprehensive R/Bioconductor book from Kasper D.</description>
     </item>

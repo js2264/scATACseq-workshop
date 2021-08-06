@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/scATACseq-workshop/images/favicon.png" type="image/png">
 
-    <title>1. Presentation :: Analysis of bulk and single-cell ATAC-seq datasets</title>
+    <title>3. Prerequisites and required machine configuration :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
     <link href="/scATACseq-workshop/css/nucleus.css?1628247336" rel="stylesheet">
@@ -36,7 +36,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/scATACseq-workshop/introduction/01_presentation/">
+  <body class="" data-url="/scATACseq-workshop/introduction/03_prerequisites/">
     <nav id="sidebar" class="">
 
 
@@ -94,7 +94,7 @@
  
   
     
-      <li data-nav-id="/scATACseq-workshop/introduction/01_presentation/" title="1. Presentation" class="dd-item active">
+      <li data-nav-id="/scATACseq-workshop/introduction/01_presentation/" title="1. Presentation" class="dd-item ">
         <a href="/scATACseq-workshop/introduction/01_presentation/">
         1. Presentation
         
@@ -136,7 +136,7 @@
  
   
     
-      <li data-nav-id="/scATACseq-workshop/introduction/03_prerequisites/" title="3. Prerequisites and required machine configuration" class="dd-item ">
+      <li data-nav-id="/scATACseq-workshop/introduction/03_prerequisites/" title="3. Prerequisites and required machine configuration" class="dd-item active">
         <a href="/scATACseq-workshop/introduction/03_prerequisites/">
         3. Prerequisites and required machine configuration
         
@@ -240,22 +240,85 @@
           
             <h1>
               
-              1. Presentation
+              3. Prerequisites and required machine configuration
             </h1>
           
 
         
 
 
-<p><em>Dr. Jacques Serizay</em></p>
-<h2 id="dates">Dates</h2>
-<p>&hellip;</p>
-<h2 id="where">Where</h2>
-<p>This course will be held online.</p>
-<h2 id="overview">Overview</h2>
-<h2 id="format">Format</h2>
-<h2 id="targeted-audience-and-required-background">Targeted audience and required background</h2>
-<h2 id="learning-outcomes">Learning outcomes</h2>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>The course is intended for those who have basic familiarity with <code>Unix</code> and the <code>R</code> scripting language.</p>
+<ul>
+<li>If a refresher is needed for Unix command line (hopefully not), please go over <a href="https://ryanstutorials.net/linuxtutorial/" target="_blank">this tutorial</a>
+ and its <a href="https://ryanstutorials.net/linuxtutorial/cheatsheet.php" target="_blank">companion cheatsheet</a>
+.</li>
+<li>Getting down to basics: an introduction to the fundamentals of R (<a href="markravinet.github.io/Introduction.html" target="_blank">courtesy of Mark Ravinet</a>
+).</li>
+<li>Gentle introduction to <code>R/Biocondutor</code>: <a href="https://bioconductor.github.io/BiocWorkshops/introduction-to-bioconductor-annotation-resources.html" target="_blank">here</a>
+</li>
+<li>For a full in-depth guide of <code>Bioconductor</code> ecosystem: read the comprehensive <code>R/Bioconductor</code> book from Kasper D. Hansen available under the CC BY-NC-SA 4.0 license <a href="/scATACseq-workshop/
+docs/bioconductor.pdf" target="_blank">[PDF]</a>
+</li>
+</ul>
+<h2 id="local-configuration">Local configuration</h2>
+<ul>
+<li>Install R and other important softwares</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">conda create --name scatac
+conda activate scatac
+conda install -c conda-forge -c bioconda <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    r-base r-essentials r-devtools r-tidyverse r-biocmanager r-polyclip r-rcpparmadillo <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    trim-galore bowtie2 samtools deeptools meme macs2 igv sinto yapc htseq
+conda install -c anaconda hdf5
+</code></pre></div><ul>
+<li>The following R packages have also been installed (along with their many dependencies, of course!):</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">Rscript -e <span style="color:#e6db74">&#34;
+</span><span style="color:#e6db74">## CRAN packages
+</span><span style="color:#e6db74">install.packages(&#39;vroom&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;umap&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;corrplot&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;gam&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;ggbeeswarm&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;ggthemes&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;Matrix&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;rgl&#39;, dependencies=TRUE, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;hdf5r&#39;, dependencies=TRUE, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;Signac&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;Seurat&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">install.packages(&#39;BiocManager&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+</span><span style="color:#e6db74">
+</span><span style="color:#e6db74">## Bioconductor Packages
+</span><span style="color:#e6db74">BiocManager::install(&#39;SingleCellExperiment&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;scran&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;scater&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;chromVAR&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;AnnotationHub&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;plyranges&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;VplotR&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;annotatr&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;rtracklayer&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;pheatmap&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;biovizBase&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;gprofiler2&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;DOSE&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;clusterProfiler&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;EnsDb.Mmusculus.v79&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;EnsDb.Hsapiens.v79&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;TxDb.Hsapiens.UCSC.hg38.knownGene&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;TxDb.Mmusculus.UCSC.mm10.knownGene&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;org.Hs.eg.db&#39;, update = FALSE)
+</span><span style="color:#e6db74">BiocManager::install(&#39;org.Mm.eg.db&#39;, update = FALSE)
+</span><span style="color:#e6db74">&#34;</span>
+</code></pre></div><ul>
+<li>
+<p>Additional dependencies:</p>
+<ul>
+<li>cellranger-atac</li>
+</ul>
+</li>
+</ul>
 
 
 <footer class="footline">
@@ -307,23 +370,6 @@
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
                         
                         
                     
@@ -354,6 +400,23 @@
             
         
                     
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -361,6 +424,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 

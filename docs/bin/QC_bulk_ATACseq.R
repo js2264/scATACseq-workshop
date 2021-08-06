@@ -1,6 +1,7 @@
 library(AnnotationDbi)
 library(tidyverse)
 library(plyranges)
+library(annotatr)
 library(VplotR)
 
 ## -- Importing genomic features
