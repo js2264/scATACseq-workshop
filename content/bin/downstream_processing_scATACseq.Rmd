@@ -1,0 +1,184 @@
+## Hands-on 3: analysing scATACseq with Signac
+
+Files available from https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_adult_brain_fresh_5k. 
+
+> Importing data
+
+```{r}
+library(Signac)
+library(Seurat)
+library(tidyverse)
+library(BiocParallel)
+library(plyranges)
+
+## -- Read brain ATAC-seq counts
+brain_assay <- Signac::CreateChromatinAssay(
+    counts = Seurat::Read10X_h5("data/MouseBrain/atac_v1_adult_brain_fresh_5k_filtered_peak_bc_matrix.h5"),
+    sep = c(":", "-"),
+    genome = "mm10",
+    fragments = 'data/MouseBrain/atac_v1_adult_brain_fresh_5k_fragments.tsv.gz',
+    min.cells = 1
+)
+class(brain_assay)
+
+
+## -- Create Seurat object
+metadata <- vroom::vroom(
+    file = "data/MouseBrain/atac_v1_adult_brain_fresh_5k_singlecell.csv",
+    col_names = TRUE
+) %>% 
+    filter(barcode != 'NO_BARCODE') %>% 
+    mutate(cell = barcode) %>%
+    column_to_rownames('barcode') %>% 
+    as.data.frame()
+brain <- Seurat::CreateSeuratObject(
+    counts = brain_assay,
+    assay = 'peaks',
+    project = 'ATAC',
+    meta.data = metadata
+)
+
+## -- Add genome annotations
+Annotation(brain) <- AnnotationHub::AnnotationHub()[['AH49547']] %>% 
+    filter(gene_type == 'protein_coding', type == 'gene') %>% 
+    mutate(gene_biotype = gene_type)
+```
+
+> Accessing data 
+
+```{r}
+# Data slots available in the Seurat object
+Assays(brain)
+slots <- slotNames(brain@assays[[brain@active.assay]])
+
+# Find peaks 
+peaks <- GetAssayData(brain, slot = 'ranges')
+
+# Find counts 
+counts <- GetAssayData(brain, slot = "counts")
+data <- GetAssayData(brain, slot = "data")
+
+# Find annotations
+annots <- GetAssayData(brain, slot = "annotation")
+
+# Find seqinfo 
+seqinfo <- GetAssayData(brain, slot = "seqinfo")
+```
+
+> Annotate peaks
+
+```{r}
+peaks <- granges(brain)
+annots <- Annotation(brain) 
+annotated_peaks <- join_nearest(peaks, annots) %>% 
+    add_nearest_distance(annots) %>% 
+    mutate(inGene = distance == 0)
+table(annotated_peaks$inGene)
+
+# - Distance to nearest promoter 
+mm_promoters <- Annotation(brain) %>% 
+    resize(1, fix = 'start') %>% 
+    resize(4000, fix = 'center') %>% 
+    mutate(prom_id = paste0('prom_', 1:n()))
+add_nearest_distance(peaks, mm_promoters) %>% 
+    as_tibble() %>% 
+    pull(distance) %>% 
+    quantile(probs = seq(0, 1, 0.1))
+```
+
+> QCing data 
+
+```{r}
+## -- Frag. size distribution
+brain <- NucleosomeSignal(object = brain)
+brain$nucleosome_group <- ifelse(brain$nucleosome_signal > 4, 'NS > 4', 'NS < 4')
+table(brain$nucleosome_group)
+
+frags <- vroom::vroom('/data/20210804_scATACseq-workshop/data/MouseBrain/atac_v1_adult_brain_fresh_5k_fragments.tsv.gz', col_names = FALSE) %>% 
+    setNames(c('chr', 'start', 'stop', 'cell', 'cluster'))
+frags_chr12 <- filter(frags, chr == 'chr12', start < 50000000, cluster %in% c(1:10))
+x <- left_join(frags_chr12, dplyr::select(brain@meta.data, cell, nucleosome_group)) %>% 
+    mutate(width = stop - start) 
+p <- ggplot(x, aes(x = width)) + 
+    geom_bar() + 
+    facet_wrap(~nucleosome_group+cluster, scales = 'free', ncol = 10) + 
+    xlim(c(0, 800))
+
+## -- TSS enrichment
+brain <- TSSEnrichment(brain, fast = TRUE)
+brain$high.tss <- ifelse(brain$TSS.enrichment > 2, 'High', 'Low')
+
+df <- frags_chr12 %>% 
+    left_join(dplyr::select(brain@meta.data, cell, high.tss)) %>% # For each fragment, recover cell TSS enrich. status
+    dplyr::rename(c('seqnames' = 'chr', 'end' = 'stop')) %>% 
+    as_granges() %>% 
+    join_overlap_left(plyranges::select(mm_promoters, prom_id)) %>% # Link each fragment to overlapping promoter
+    as_tibble() %>% 
+    drop_na(prom_id) %>% # Remove fragments which are not overlapping any promoter
+    left_join(
+        as_tibble(mm_promoters), by = c('prom_id')
+    ) %>% 
+    mutate(
+        midprom = start.y + (end.y - start.y)/2, 
+        distance = midprom - start.x
+    ) %>%
+    filter(high.tss == 'High') %>%
+    count(distance)
+p<- ggplot(df, aes(x = distance, y = n)) + 
+    geom_col() + 
+    geom_smooth(method = 'loess', span = 0.05) + 
+    theme_minimal() + 
+    theme(legend.position = 'none') + 
+    labs(title = 'Fragment "cut" sites', x = 'Distance from TSS', y = '# of cut sites') + 
+    xlim(c(-1000, 1000))
+
+```
+
+> Subsetting data
+
+```{r}
+brain.bak <- brain 
+brain$FRiP <- brain$peak_region_fragments / brain$passed_filters * 100
+brain$FRiBl <- brain$blacklist_region_fragments / brain$peak_region_fragments
+brain <- subset(
+  brain,
+  peak_region_fragments > 3000 & # Keep cells with high number of fragments in peaks
+    peak_region_fragments < 100000 & # Remove cells with number of fragments in peaks too high
+    FRiP > 50 & # Keep cells with high FRiP 
+    FRiBl < 0.05 & # Keep cells with low FRiBl
+    nucleosome_signal < 4 & # Remove cells with high nucleosome signal
+    TSS.enrichment > 2 # Keep cells with good TSSES
+)
+brain <- brain[rowSums(GetAssayData(brain, slot = "counts")) > 0, ]
+```
+
+> Normalizing and reduce dimensionality data 
+
+```{r}
+brain <- Signac::RunTFIDF(brain) # Normalize data
+brain <- Signac::FindTopFeatures(brain, min.cutoff = 'q0') # Find variable features
+brain <- Signac::RunSVD(object = brain) # Perform dimensionality reduction
+```
+
+> Clustering 
+
+```{r}
+brain <- RunUMAP(brain, reduction = 'lsi', dims = 2:30)
+brain <- FindNeighbors(object = brain, reduction = 'lsi', dims = 2:30)
+brain <- FindClusters(object = brain, algorithm = 3, resolution = 1.2, verbose = FALSE)
+```
+
+> Clustering with Bioconductor
+
+```{r}
+brain_SCE <- as.SingleCellExperiment(brain)
+graph <- scran::buildSNNGraph(
+    brain_SCE, 
+    k = 5, 
+    use.dimred = 'lsi'
+)
+sce_clust <- igraph::cluster_louvain(graph)$membership
+table(sce_clust)
+sce$clusters_graph <- factor(sce_clust)
+
+```

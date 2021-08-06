@@ -20,7 +20,8 @@ conda create --name scatac
 conda activate scatac
 conda install -c conda-forge -c bioconda \
     r-base r-essentials r-devtools r-tidyverse r-biocmanager r-polyclip r-rcpparmadillo \
-    trim-galore bowtie2 samtools deeptools meme macs2 igv
+    trim-galore bowtie2 samtools deeptools meme macs2 igv sinto yapc htseq
+conda install -c anaconda hdf5
 ```
 
 - The following R packages have also been installed (along with their many dependencies, of course!): 
@@ -28,6 +29,7 @@ conda install -c conda-forge -c bioconda \
 ```sh
 Rscript -e "
 ## CRAN packages
+install.packages('vroom', repos = 'https://cran.irsn.fr')
 install.packages('umap', repos = 'https://cran.irsn.fr')
 install.packages('corrplot', repos = 'https://cran.irsn.fr')
 install.packages('gam', repos = 'https://cran.irsn.fr')
@@ -35,16 +37,23 @@ install.packages('ggbeeswarm', repos = 'https://cran.irsn.fr')
 install.packages('ggthemes', repos = 'https://cran.irsn.fr')
 install.packages('Matrix', repos = 'https://cran.irsn.fr')
 install.packages('rgl', dependencies=TRUE, repos = 'https://cran.irsn.fr')
+install.packages('hdf5r', dependencies=TRUE, repos = 'https://cran.irsn.fr')
 install.packages('Signac', repos = 'https://cran.irsn.fr')
 install.packages('Seurat', repos = 'https://cran.irsn.fr')
 install.packages('BiocManager', repos = 'https://cran.irsn.fr')
 
 ## Bioconductor Packages
+BiocManager::install('SingleCellExperiment', update = FALSE)
+BiocManager::install('scran', update = FALSE)
+BiocManager::install('scater', update = FALSE)
+BiocManager::install('chromVAR', update = FALSE)
 BiocManager::install('AnnotationHub', update = FALSE)
 BiocManager::install('plyranges', update = FALSE)
 BiocManager::install('VplotR', update = FALSE)
 BiocManager::install('annotatr', update = FALSE)
 BiocManager::install('rtracklayer', update = FALSE)
+BiocManager::install('pheatmap', update = FALSE)
+BiocManager::install('biovizBase', update = FALSE)
 BiocManager::install('gprofiler2', update = FALSE)
 BiocManager::install('DOSE', update = FALSE)
 BiocManager::install('clusterProfiler', update = FALSE)
@@ -59,5 +68,5 @@ BiocManager::install('org.Mm.eg.db', update = FALSE)
 
 - Additional dependencies: 
 
-    * cellranger
+    * cellranger-atac
 
