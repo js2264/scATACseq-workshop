@@ -7,11 +7,7 @@
   </url>
   
   <url>
-    <loc>https://js2264.github.io/scATACseq-workshop/day01/</loc>
-  </url>
-  
-  <url>
-    <loc>https://js2264.github.io/scATACseq-workshop/introduction/01_presentation/</loc>
+    <loc>https://js2264.github.io/scATACseq-workshop/hands-on-sessions/</loc>
   </url>
   
   <url>
@@ -19,7 +15,15 @@
   </url>
   
   <url>
-    <loc>https://js2264.github.io/scATACseq-workshop/introduction/03_prerequisites/</loc>
+    <loc>https://js2264.github.io/scATACseq-workshop/exercises/</loc>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/scATACseq-workshop/introduction/01_prerequisites/</loc>
+  </url>
+  
+  <url>
+    <loc>https://js2264.github.io/scATACseq-workshop/homeworks/</loc>
   </url>
   
   <url>

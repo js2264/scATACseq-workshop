@@ -1,5 +1,5 @@
 ---
-title: "2. Program"
+title: "1. Program"
 ---
 
 ## Session 1: Processing bulk and single-cell ATAC-seq reads
@@ -130,4 +130,5 @@ title: "2. Program"
 ### Homework
 
   - Find TF motifs enriched in peaks with increased accessibility in a specific cluster
-  - Find co-regulated genes using CICERO
+  - Run chromVAR on a single-cell dataset
+  - Leverage the motifmatchr package to replicate the ugly nested apply functions in Hands-on # 5

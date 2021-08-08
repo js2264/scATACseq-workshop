@@ -1,5 +1,5 @@
 ---
-title: "3. Prerequisites and required machine configuration"
+title: "2. Prerequisites and required machine configuration"
 ---
 
 ## Prerequisites
@@ -20,7 +20,7 @@ conda create --name scatac
 conda activate scatac
 conda install -c conda-forge -c bioconda \
     r-base r-essentials r-devtools r-tidyverse r-biocmanager r-polyclip r-rcpparmadillo \
-    trim-galore bowtie2 samtools deeptools meme macs2 igv sinto yapc htseq
+    trim-galore bowtie2 samtools deeptools meme macs2 igv sinto yapc htseq subread
 conda install -c anaconda hdf5
 ```
 
@@ -46,6 +46,7 @@ install.packages('BiocManager', repos = 'https://cran.irsn.fr')
 BiocManager::install('SingleCellExperiment', update = FALSE)
 BiocManager::install('scran', update = FALSE)
 BiocManager::install('scater', update = FALSE)
+BiocManager::install('DESeq2', update = FALSE)
 BiocManager::install('chromVAR', update = FALSE)
 BiocManager::install('AnnotationHub', update = FALSE)
 BiocManager::install('plyranges', update = FALSE)
@@ -57,12 +58,17 @@ BiocManager::install('biovizBase', update = FALSE)
 BiocManager::install('gprofiler2', update = FALSE)
 BiocManager::install('DOSE', update = FALSE)
 BiocManager::install('clusterProfiler', update = FALSE)
+BiocManager::install('JASPAR2020', update = FALSE)
+BiocManager::install('motifmatchr', update = FALSE)
 BiocManager::install('EnsDb.Mmusculus.v79', update = FALSE)
 BiocManager::install('EnsDb.Hsapiens.v79', update = FALSE)
 BiocManager::install('TxDb.Hsapiens.UCSC.hg38.knownGene', update = FALSE)
 BiocManager::install('TxDb.Mmusculus.UCSC.mm10.knownGene', update = FALSE)
 BiocManager::install('org.Hs.eg.db', update = FALSE)
 BiocManager::install('org.Mm.eg.db', update = FALSE)
+BiocManager::install('BSgenome.Mmusculus.UCSC.mm10', update = FALSE)
+BiocManager::install('BSgenome.Hsapiens.UCSC.hg38', update = FALSE)
+BiocManager::install('BSgenome.Celegans.UCSC.ce11', update = FALSE)
 "
 ```
 
