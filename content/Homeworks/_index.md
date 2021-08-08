@@ -4,10 +4,29 @@ title: "3. Homeworks"
 
 ## Homeworks: day 1
 
+[] Process bulk ATAC-seq for PBMCs, perform QCs and compare them to single-cell QCs
+[] Split bam file from scATACseq into bams / cell type using `sinto`
+[] Make some celltype-specific pseudo-bulk bigwig tracks
+[] Compare bulk and pseudo-bulk tracks in IGV; try to infer the cell type of each cell cluster in scATACseq
 
 ## Homeworks: day 2
 
+[] Import counts from mouse E18 brain scATACseq (5K) (provided by 10X Genomics) in R and process them
+[] Transfer annotations from PBMC 10X scRNAseq to PBMC 10X scATACseq (pre-processed scRNAseq available in `data/MouseBrain/mPBMC_scRNAseq.rds`)
+[] Find genes associated to DA peaks and run GO over-enrichment / gene set enrichment analysis
+
+> Links: 
+
+- https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k
+- https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K
 
 ## Homeworks: day 3
 
+[] Import, filter, normalize and cluster cells from the T-cell exhaustion dataset
+[] Run chromVAR to identify TF activity in each cell cluster
+[] Using knowledge on TFs used in different cell types, suggest cell cluster annotation of the dataset
+[] Confirm this by computing gene activity scores and check known markers
 
+> Links:
+
+- DOI: [10.1038/s41587-019-0206-z](https://doi.org/10.1038/s41587-019-0206-z)

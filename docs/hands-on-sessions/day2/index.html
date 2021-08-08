@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="description" content="Analysis of bulk and single-cell ATAC-seq datasets">
+<meta name="author" content="Jacques Serizay">
+
+    <link rel="icon" href="/scATACseq-workshop/images/favicon.png" type="image/png">
+
+    <title>Day 02 :: Analysis of bulk and single-cell ATAC-seq datasets</title>
+
+    
+    <link href="/scATACseq-workshop/css/nucleus.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1628453292" rel="stylesheet">
+    
+    <link href="/scATACseq-workshop/css/theme-red.css?1628453292" rel="stylesheet">
+    
+    
+
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628453292"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/scATACseq-workshop/hands-on-sessions/day2/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo">
+
+
+
+</a>
+
+    </div>
+    
+  </div>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/introduction/" title=" Bulk and single-cell ATAC-seq analysis" class="dd-item
+        
+        
+        
+        ">
+      <a href="/scATACseq-workshop/introduction/">
+           Bulk and single-cell ATAC-seq analysis
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/introduction/02_program/" title="1. Program" class="dd-item ">
+        <a href="/scATACseq-workshop/introduction/02_program/">
+        1. Program
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/introduction/01_prerequisites/" title="2. Prerequisites and required machine configuration" class="dd-item ">
+        <a href="/scATACseq-workshop/introduction/01_prerequisites/">
+        2. Prerequisites and required machine configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/hands-on-sessions/" title="1. Hands-on sessions" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/scATACseq-workshop/hands-on-sessions/">
+          1. Hands-on sessions
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands-on-sessions/day1/" title="Day 01" class="dd-item ">
+        <a href="/scATACseq-workshop/hands-on-sessions/day1/">
+        Day 01
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands-on-sessions/day2/" title="Day 02" class="dd-item active">
+        <a href="/scATACseq-workshop/hands-on-sessions/day2/">
+        Day 02
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands-on-sessions/day3/" title="Day 03" class="dd-item ">
+        <a href="/scATACseq-workshop/hands-on-sessions/day3/">
+        Day 03
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/exercises/" title="2. Exercises" class="dd-item
+        
+        
+        
+        ">
+      <a href="/scATACseq-workshop/exercises/">
+          2. Exercises
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/homeworks/" title="3. Homeworks" class="dd-item
+        
+        
+        
+        ">
+      <a href="/scATACseq-workshop/homeworks/">
+          3. Homeworks
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/extra-resources/" title="Extra resources" class="dd-item
+        
+        
+        
+        ">
+      <a href="/scATACseq-workshop/extra-resources/">
+          Extra resources
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      <center>
+
+    <a href="https://github.com/js2264/scATACseq-workshop">Check this website source on Github</a>
+    <p>Created by J. Serizay</p>
+    <p>Copyright 2021</p>
+
+</center>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Day 02
+            </h1>
+          
+
+        
+
+
+<h2 id="hands-on-session-3-analysing-scatacseq-with-signac">Hands-on session 3: analysing scATACseq with Signac</h2>
+<p>Here, we will focus on an example dataset generated by 10X Genomics: a set of ~5,000 cells from an mouse adult brain.
+Processed data (generated by <code>cellranger-atac count</code>) can be downladed from here:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell">mkdir -p data/MouseBrain
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_analysis.tar.gz -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_analysis.tar.gz
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_filtered_peak_bc_matrix.tar.gz -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_filtered_peak_bc_matrix.tar.gz
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_filtered_peak_bc_matrix.h5 -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_filtered_peak_bc_matrix.h5
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_filtered_tf_bc_matrix.tar.gz -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_filtered_tf_bc_matrix.tar.gz
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_filtered_tf_bc_matrix.h5 -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_filtered_tf_bc_matrix.h5
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_fragments.tsv.gz -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_fragments.tsv.gz
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_fragments.tsv.gz.tbi -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_fragments.tsv.gz.tbi
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_peak_annotation.tsv -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_peak_annotation.tsv
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_peaks.bed -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_peaks.bed
+wget https://cg.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_possorted_bam.bam -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_possorted_bam.bam
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_possorted_bam.bam.bai -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_possorted_bam.bam.bai
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_raw_peak_bc_matrix.tar.gz -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_raw_peak_bc_matrix.tar.gz
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_raw_peak_bc_matrix.h5 -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_raw_peak_bc_matrix.h5
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_singlecell.csv -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_singlecell.csv
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_summary.csv -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_summary.csv
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_summary.json -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_summary.json
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_web_summary.html -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_web_summary.html
+wget https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_adult_brain_fresh_5k/atac_v1_adult_brain_fresh_5k_cloupe.cloupe -O data/MouseBrain/atac_v1_adult_brain_fresh_5k_cloupe.cloupe
+</code></pre></div><h3 id="importing-data">Importing data</h3>
+<p>scATACseq raw data processing can be very different from bulk ATAC-seq, and downstream analysis is also quite specific to single-cell assays.
+As of today, <code>Signac</code> is one of the few solutions developed to investigate scATACseq data in R, and is the most widely used approach. <code>Signac</code> is
+an &ldquo;extension&rdquo; of <code>Seurat</code>, which originally focused on single-cell RNA-seq data analysis. It uses the same type of object structure.
+A slight difference regarding the features is that they are actually chromatin accessible loci, rather than genes. Because peaks are frequently
+studied in relation to neighbouring genes, the <code>Seurat</code> object can conventiently store gene annotations (or any type of genomic annotations)
+in its <code>annotation</code> slot.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(Signac)
+<span style="color:#a6e22e">library</span>(Seurat)
+<span style="color:#a6e22e">library</span>(tidyverse)
+<span style="color:#a6e22e">library</span>(BiocParallel)
+<span style="color:#a6e22e">library</span>(plyranges)
+
+<span style="color:#75715e">## -- Read brain ATAC-seq counts</span>
+brain_assay <span style="color:#f92672">&lt;-</span> Signac<span style="color:#f92672">::</span><span style="color:#a6e22e">CreateChromatinAssay</span>(
+    counts <span style="color:#f92672">=</span> Seurat<span style="color:#f92672">::</span><span style="color:#a6e22e">Read10X_h5</span>(<span style="color:#e6db74">&#34;data/MouseBrain/atac_v1_adult_brain_fresh_5k_filtered_peak_bc_matrix.h5&#34;</span>),
+    sep <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;:&#34;</span>, <span style="color:#e6db74">&#34;-&#34;</span>),
+    genome <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;mm10&#34;</span>,
+    fragments <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;data/MouseBrain/atac_v1_adult_brain_fresh_5k_fragments.tsv.gz&#39;</span>,
+    min.cells <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+)
+<span style="color:#a6e22e">class</span>(brain_assay)
+
+<span style="color:#75715e">## -- Create Seurat object</span>
+metadata <span style="color:#f92672">&lt;-</span> vroom<span style="color:#f92672">::</span><span style="color:#a6e22e">vroom</span>(
+    file <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;data/MouseBrain/atac_v1_adult_brain_fresh_5k_singlecell.csv&#34;</span>,
+    col_names <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>
+) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">filter</span>(barcode <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;NO_BARCODE&#39;</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">mutate</span>(cell <span style="color:#f92672">=</span> barcode) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">column_to_rownames</span>(<span style="color:#e6db74">&#39;barcode&#39;</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">as.data.frame</span>()
+brain <span style="color:#f92672">&lt;-</span> Seurat<span style="color:#f92672">::</span><span style="color:#a6e22e">CreateSeuratObject</span>(
+    counts <span style="color:#f92672">=</span> brain_assay,
+    assay <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;peaks&#39;</span>,
+    project <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;ATAC&#39;</span>,
+    meta.data <span style="color:#f92672">=</span> metadata
+)
+
+<span style="color:#75715e">## -- Add genome annotations</span>
+<span style="color:#a6e22e">Annotation</span>(brain) <span style="color:#f92672">&lt;-</span> AnnotationHub<span style="color:#f92672">::</span><span style="color:#a6e22e">AnnotationHub</span>()[[<span style="color:#e6db74">&#39;AH49547&#39;</span>]] <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">filter</span>(gene_type <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;protein_coding&#39;</span>, type <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;gene&#39;</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">mutate</span>(gene_biotype <span style="color:#f92672">=</span> gene_type)
+</code></pre></div><h3 id="accessing-data">Accessing data</h3>
+<p>Accessing the data stored in a <code>Seurat</code> object is (generally) relatively easy, using the <code>getAssayData()</code> function.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e"># Data slots available in the Seurat object</span>
+<span style="color:#a6e22e">Assays</span>(brain)
+slots <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">slotNames</span>(brain<span style="color:#f92672">@</span>assays[[brain<span style="color:#f92672">@</span>active.assay]])
+
+<span style="color:#75715e"># Find peaks </span>
+peaks <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">GetAssayData</span>(brain, slot <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;ranges&#39;</span>)
+
+<span style="color:#75715e"># Find counts </span>
+counts <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">GetAssayData</span>(brain, slot <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;counts&#34;</span>)
+data <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">GetAssayData</span>(brain, slot <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;data&#34;</span>)
+
+<span style="color:#75715e"># Find annotations</span>
+annots <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">GetAssayData</span>(brain, slot <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;annotation&#34;</span>)
+
+<span style="color:#75715e"># Find seqinfo </span>
+seqinfo <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">GetAssayData</span>(brain, slot <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;seqinfo&#34;</span>)
+</code></pre></div><h3 id="annotate-peaks">Annotate peaks</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">peaks <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">granges</span>(brain)
+annots <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">Annotation</span>(brain) 
+annotated_peaks <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">join_nearest</span>(peaks, annots) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">add_nearest_distance</span>(annots) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">mutate</span>(
+        peak <span style="color:#f92672">=</span> <span style="color:#a6e22e">paste</span>(seqnames, start, end, sep <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;-&#39;</span>),
+        inGene <span style="color:#f92672">=</span> distance <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>
+    )
+<span style="color:#a6e22e">table</span>(annotated_peaks<span style="color:#f92672">$</span>inGene)
+
+<span style="color:#75715e"># - Distance to nearest promoter </span>
+mm_promoters <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">Annotation</span>(brain) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">resize</span>(<span style="color:#ae81ff">1</span>, fix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;start&#39;</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">resize</span>(<span style="color:#ae81ff">4000</span>, fix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;center&#39;</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">mutate</span>(prom_id <span style="color:#f92672">=</span> <span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#39;prom_&#39;</span>, <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#a6e22e">n</span>()))
+<span style="color:#a6e22e">add_nearest_distance</span>(peaks, mm_promoters) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">as_tibble</span>() <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">pull</span>(distance) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">quantile</span>(probs <span style="color:#f92672">=</span> <span style="color:#a6e22e">seq</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0.1</span>))
+</code></pre></div><h3 id="qcing-data">QCing data</h3>
+<p>QC of scATACseq data stored in <code>Seurat</code> is simplified, using <code>Signac</code>-provided functions. On top of these utilities,
+scATACseq fragments can always be imported (remember: they are stored in the <code>fragments.tsv.gz</code> generated by
+<code>cellranger-atac count</code>, and they also contain information re: the cell-of-origin, for each fragment),
+if one wants to manually check fragment distribution, size, &hellip;</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">## -- Nucleosome signal </span>
+brain <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">NucleosomeSignal</span>(object <span style="color:#f92672">=</span> brain)
+brain<span style="color:#f92672">$</span>nucleosome_group <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ifelse</span>(brain<span style="color:#f92672">$</span>nucleosome_signal <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">4</span>, <span style="color:#e6db74">&#39;NS &gt; 4&#39;</span>, <span style="color:#e6db74">&#39;NS &lt; 4&#39;</span>)
+<span style="color:#a6e22e">range</span>(brain<span style="color:#f92672">$</span>nucleosome_group)
+<span style="color:#a6e22e">table</span>(brain<span style="color:#f92672">$</span>nucleosome_group)
+
+<span style="color:#75715e">## -- Frag. size distribution</span>
+frags <span style="color:#f92672">&lt;-</span> vroom<span style="color:#f92672">::</span><span style="color:#a6e22e">vroom</span>(<span style="color:#e6db74">&#39;/data/20210804_scATACseq-workshop/data/MouseBrain/atac_v1_adult_brain_fresh_5k_fragments.tsv.gz&#39;</span>, col_names <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">setNames</span>(<span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#39;chr&#39;</span>, <span style="color:#e6db74">&#39;start&#39;</span>, <span style="color:#e6db74">&#39;stop&#39;</span>, <span style="color:#e6db74">&#39;cell&#39;</span>, <span style="color:#e6db74">&#39;cluster&#39;</span>))
+frags_chr12 <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">filter</span>(frags, chr <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;chr12&#39;</span>, start <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">50000000</span>, cluster <span style="color:#f92672">%in%</span> <span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">10</span>))
+x <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">left_join</span>(frags_chr12, dplyr<span style="color:#f92672">::</span><span style="color:#a6e22e">select</span>(brain<span style="color:#f92672">@</span>meta.data, cell, nucleosome_group)) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">mutate</span>(width <span style="color:#f92672">=</span> stop <span style="color:#f92672">-</span> start) 
+p <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ggplot</span>(x, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> width)) <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">geom_bar</span>() <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">facet_wrap</span>(<span style="color:#f92672">~</span>nucleosome_group<span style="color:#f92672">+</span>cluster, scales <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;free&#39;</span>, ncol <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>) <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">xlim</span>(<span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">800</span>))
+
+<span style="color:#75715e">## -- TSS enrichment</span>
+brain <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">TSSEnrichment</span>(brain, fast <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>)
+brain<span style="color:#f92672">$</span>high.tss <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ifelse</span>(brain<span style="color:#f92672">$</span>TSS.enrichment <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;High&#39;</span>, <span style="color:#e6db74">&#39;Low&#39;</span>)
+
+df <span style="color:#f92672">&lt;-</span> frags_chr12 <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">left_join</span>(dplyr<span style="color:#f92672">::</span><span style="color:#a6e22e">select</span>(brain<span style="color:#f92672">@</span>meta.data, cell, high.tss)) <span style="color:#f92672">%&gt;%</span> <span style="color:#75715e"># For each fragment, recover cell TSS enrich. status</span>
+    dplyr<span style="color:#f92672">::</span><span style="color:#a6e22e">rename</span>(<span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#39;seqnames&#39;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;chr&#39;</span>, <span style="color:#e6db74">&#39;end&#39;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;stop&#39;</span>)) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">as_granges</span>() <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">join_overlap_left</span>(plyranges<span style="color:#f92672">::</span><span style="color:#a6e22e">select</span>(mm_promoters, prom_id)) <span style="color:#f92672">%&gt;%</span> <span style="color:#75715e"># Link each fragment to overlapping promoter</span>
+    <span style="color:#a6e22e">as_tibble</span>() <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">drop_na</span>(prom_id) <span style="color:#f92672">%&gt;%</span> <span style="color:#75715e"># Remove fragments which are not overlapping any promoter</span>
+    <span style="color:#a6e22e">left_join</span>(
+        <span style="color:#a6e22e">as_tibble</span>(mm_promoters), by <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#39;prom_id&#39;</span>)
+    ) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">mutate</span>(
+        midprom <span style="color:#f92672">=</span> start.y <span style="color:#f92672">+</span> (end.y <span style="color:#f92672">-</span> start.y)<span style="color:#f92672">/</span><span style="color:#ae81ff">2</span>, 
+        distance <span style="color:#f92672">=</span> midprom <span style="color:#f92672">-</span> start.x
+    ) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">filter</span>(high.tss <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;High&#39;</span>) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">count</span>(distance)
+p<span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ggplot</span>(df, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> distance, y <span style="color:#f92672">=</span> n)) <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">geom_col</span>() <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">geom_smooth</span>(method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;loess&#39;</span>, span <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.05</span>) <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">theme_minimal</span>() <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">theme</span>(legend.position <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;none&#39;</span>) <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Fragment &#34;cut&#34; sites&#39;</span>, x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Distance from TSS&#39;</span>, y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;# of cut sites&#39;</span>) <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">xlim</span>(<span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">-1000</span>, <span style="color:#ae81ff">1000</span>))
+
+</code></pre></div><h3 id="subsetting-data">Subsetting data</h3>
+<p>Cell selection can be done based on some QC metrics (e.g. FRiP, FRiBl).
+Feature selection can be done based on a count threshold.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">brain<span style="color:#f92672">$</span>FRiP <span style="color:#f92672">&lt;-</span> brain<span style="color:#f92672">$</span>peak_region_fragments <span style="color:#f92672">/</span> brain<span style="color:#f92672">$</span>passed_filters <span style="color:#f92672">*</span> <span style="color:#ae81ff">100</span>
+brain<span style="color:#f92672">$</span>FRiBl <span style="color:#f92672">&lt;-</span> brain<span style="color:#f92672">$</span>blacklist_region_fragments <span style="color:#f92672">/</span> brain<span style="color:#f92672">$</span>peak_region_fragments
+brain <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">subset</span>(
+  brain,
+  peak_region_fragments <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">3000</span> <span style="color:#f92672">&amp;</span> <span style="color:#75715e"># Keep cells with high number of fragments in peaks</span>
+    peak_region_fragments <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">100000</span> <span style="color:#f92672">&amp;</span> <span style="color:#75715e"># Remove cells with number of fragments in peaks too high</span>
+    FRiP <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">50</span> <span style="color:#f92672">&amp;</span> <span style="color:#75715e"># Keep cells with high FRiP </span>
+    FRiBl <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0.05</span> <span style="color:#f92672">&amp;</span> <span style="color:#75715e"># Keep cells with low FRiBl</span>
+    nucleosome_signal <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">4</span> <span style="color:#f92672">&amp;</span> <span style="color:#75715e"># Remove cells with high nucleosome signal</span>
+    TSS.enrichment <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">2</span> <span style="color:#75715e"># Keep cells with good TSSES</span>
+)
+brain <span style="color:#f92672">&lt;-</span> brain[
+    <span style="color:#a6e22e">rowSums</span>(<span style="color:#a6e22e">GetAssayData</span>(brain, slot <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;counts&#34;</span>)) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">10</span> <span style="color:#f92672">&amp;</span> 
+    <span style="color:#a6e22e">rowSums</span>(<span style="color:#a6e22e">GetAssayData</span>(brain, slot <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;counts&#34;</span>) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">10</span>, 
+]
+</code></pre></div><h3 id="normalizing-and-reduce-dimensionality-data">Normalizing and reduce dimensionality data</h3>
+<p>Data normalization and dimensionality reduction is done differently in scATACseq, compared to scRNAseq. This is
+mostly due to the fact that scATACseq data is overly sparse, compared to (already quite sparse) scRNAseq data.
+For more info, read <code>Signac</code> pre-print: (Multimodal single-cell chromatin analysis with Signac)[https://www.biorxiv.org/content/10.1101/2020.11.09.373613v1.full]
+To alleviate normalization problems linked to massive sparsity, an alternative normalization approach based on a &ldquo;term frequency-inverse document frequency&rdquo; approach.
+TF-IDF transformation yields metrics reflecting how important a &ldquo;word&rdquo; is to a &ldquo;document&rdquo; in a &ldquo;collection&rdquo;
+(in this case, a &ldquo;word&rdquo; is an accessible chromatin locus, a &ldquo;document&rdquo; is a cell, and the &ldquo;collection&rdquo; is the entire set of cells).</p>
+<p>Dimensions of the normalized data matrix generated by this transformation are then reduced using singular value decomposition (SVD).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">brain <span style="color:#f92672">&lt;-</span> Signac<span style="color:#f92672">::</span><span style="color:#a6e22e">RunTFIDF</span>(brain) <span style="color:#75715e"># Normalize data</span>
+brain <span style="color:#f92672">&lt;-</span> Signac<span style="color:#f92672">::</span><span style="color:#a6e22e">FindTopFeatures</span>(brain, min.cutoff <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;q0&#39;</span>) <span style="color:#75715e"># Find variable features</span>
+brain <span style="color:#f92672">&lt;-</span> Signac<span style="color:#f92672">::</span><span style="color:#a6e22e">RunSVD</span>(object <span style="color:#f92672">=</span> brain) <span style="color:#75715e"># Perform dimensionality reduction</span>
+</code></pre></div><h3 id="clustering">Clustering</h3>
+<p>Now that cells are embedded in a lower dimensional space, they can be graph-clustered just like &ldquo;regular&rdquo; cells from scRNAseq.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">brain <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">FindNeighbors</span>(object <span style="color:#f92672">=</span> brain, reduction <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;lsi&#39;</span>, dims <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">30</span>)
+brain <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">FindClusters</span>(object <span style="color:#f92672">=</span> brain, algorithm <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>, resolution <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.2</span>, verbose <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)
+brain <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">RunUMAP</span>(brain, reduction <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;lsi&#39;</span>, dims <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span><span style="color:#f92672">:</span><span style="color:#ae81ff">30</span>)
+<span style="color:#a6e22e">saveRDS</span>(brain, <span style="color:#e6db74">&#39;data/MouseBrain/brain.rds&#39;</span>)
+</code></pre></div><h3 id="da-with-seurat">DA with Seurat</h3>
+<p>Differential accessibility analysis of chromatin loci in scATACseq is a difficult exercise, which is still very experimental and rapidly-evolving.
+One &ldquo;easy&rdquo; way to perform DA analysis within a scATACseq workflow is to rely on the already-existing <code>FindMarkers()</code> function from <code>Seurat</code>.
+This approach has not been very thoroughly used yet, but allows quick-n-dirty exploratory analysis of the chromatin loci differently accessible
+between pairs of (goups of) clusters.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">da_peaks <span style="color:#f92672">&lt;-</span> Seurat<span style="color:#f92672">::</span><span style="color:#a6e22e">FindMarkers</span>(
+    object <span style="color:#f92672">=</span> brain,
+    ident.1 <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">16</span>),
+    ident.2 <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>),
+    min.pct <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.05</span>,
+    test.use <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;LR&#39;</span>,
+    latent.vars <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;peak_region_fragments&#39;</span>
+)
+</code></pre></div><h2 id="hands-on-session-4-peaks-differential-accessibility-analysis">Hands-on session 4: Peaks differential accessibility analysis</h2>
+<h3 id="processing-raw-atac-data">Processing raw ATAC data</h3>
+<p>In this section, we will rely on worm bulk ATACseq data obtained from isolated tissues, to study differential accessibility analysis.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e">## -- Download raw data </span>
+mkdir data/ATAC_worm/fastq/
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR105/079/SRR10564679/SRR10564679_1.fastq.gz -o data/ATAC_worm/fastq/SRR10564679_GSM4197239_Neurons_YA_ATAC_pe_rep1_Caenorhabditis_elegans_ATAC-seq_1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR105/079/SRR10564679/SRR10564679_2.fastq.gz -o data/ATAC_worm/fastq/SRR10564679_GSM4197239_Neurons_YA_ATAC_pe_rep1_Caenorhabditis_elegans_ATAC-seq_2.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR105/086/SRR10564686/SRR10564686_1.fastq.gz -o data/ATAC_worm/fastq/SRR10564686_GSM4197244_Neurons_YA_ATAC_pe_rep2_Caenorhabditis_elegans_ATAC-seq_1.fastq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR105/086/SRR10564686/SRR10564686_2.fastq.gz -o data/ATAC_worm/fastq/SRR10564686_GSM4197244_Neurons_YA_ATAC_pe_rep2_Caenorhabditis_elegans_ATAC-seq_2.fastq.gz
+
+<span style="color:#75715e">## -- Process data </span>
+GENOME<span style="color:#f92672">=</span>~/genomes/ce11/ce11.fa
+CPU<span style="color:#f92672">=</span><span style="color:#ae81ff">16</span> 
+SAMPLE<span style="color:#f92672">=</span>Neurons_rep1
+R1<span style="color:#f92672">=</span>data/ATAC_worm/fastq/SRR10564679_GSM4197239_Neurons_YA_ATAC_pe_rep1_Caenorhabditis_elegans_ATAC-seq_1.fastq.gz
+R2<span style="color:#f92672">=</span>data/ATAC_worm/fastq/SRR10564679_GSM4197239_Neurons_YA_ATAC_pe_rep1_Caenorhabditis_elegans_ATAC-seq_2.fastq.gz
+bowtie2 --threads <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> -x <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>GENOME<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --maxins <span style="color:#ae81ff">1000</span> -1 <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>R1<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> -2 <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>R2<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> | <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>samtools fixmate -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --output-fmt bam -m - - | <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>samtools sort -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --output-fmt bam -T data/ATAC_worm/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.sam_sorting - | <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>samtools markdup -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --output-fmt bam -r -T data/ATAC_worm/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.sam_markdup - - | <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>samtools view -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --output-fmt bam -f <span style="color:#ae81ff">2</span> -q <span style="color:#ae81ff">10</span> -1 -b - | <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>samtools sort -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --output-fmt bam -l <span style="color:#ae81ff">9</span> -T data/ATAC_worm/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.sam_sorting2 -o data/ATAC_worm/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_filtered.bam
+samtools index -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> data/ATAC_worm/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_filtered.bam
+SAMPLE<span style="color:#f92672">=</span>Neurons_rep2
+R1<span style="color:#f92672">=</span>data/ATAC_worm/fastq/SRR10564686_GSM4197244_Neurons_YA_ATAC_pe_rep2_Caenorhabditis_elegans_ATAC-seq_1.fastq.gz
+R2<span style="color:#f92672">=</span>data/ATAC_worm/fastq/SRR10564686_GSM4197244_Neurons_YA_ATAC_pe_rep2_Caenorhabditis_elegans_ATAC-seq_2.fastq.gz
+bowtie2 --threads <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> -x <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>GENOME<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --maxins <span style="color:#ae81ff">1000</span> -1 <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>R1<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> -2 <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>R2<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> | <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>samtools fixmate -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --output-fmt bam -m - - | <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>samtools sort -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --output-fmt bam -T data/ATAC_worm/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.sam_sorting - | <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>samtools markdup -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --output-fmt bam -r -T data/ATAC_worm/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.sam_markdup - - | <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>samtools view -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --output-fmt bam -f <span style="color:#ae81ff">2</span> -q <span style="color:#ae81ff">10</span> -1 -b - | <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>samtools sort -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --output-fmt bam -l <span style="color:#ae81ff">9</span> -T data/ATAC_worm/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.sam_sorting2 -o data/ATAC_worm/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_filtered.bam
+samtools index -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> data/ATAC_worm/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_filtered.bam
+
+<span style="color:#75715e"># This was repeated for 4 other tissues</span>
+</code></pre></div><h3 id="defining-a-unified-set-of-peaks-from-a-bunch-of-atac-seq-experiments">Defining a unified set of peaks from a bunch of ATAC-seq experiments</h3>
+<p>When dealing with bulk ATAC-seq samples (or &ldquo;pseudo-bulk&rdquo; samples from scATACseq), another approach is to cluster accessible chromatin loci
+based on their levels of accessibility in each sample. This can leverage a traditional <code>DESeq2</code> workflow, but first, one needs to identify a
+set of chromatin loci overlapping <em>all</em> the accessible sites of each sample.</p>
+<p>An approach to do this (if not using <code>cellranger-atac count</code>-identified peaks) can be to use <code>yapc</code> (yet another peak caller) command-line tool.
+<code>yapc</code> relies on the ATAC-seq coverage &ldquo;shape&rdquo; of duplicates to identify &ldquo;concave&rdquo; coverage regions (i.e. &ldquo;peaks&rdquo;).
+So we need bigwig tracks of each ATAC-seq experiment to map peaks with <code>yapc</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e">## -- Downloading tracks </span>
+mkdir data/ATAC_worm
+wget https://ftp.ncbi.nlm.nih.gov/geo/series/GSE141nnn/GSE141210/suppl//GSE141210_RAW.tar?tool<span style="color:#f92672">=</span>geoquery -O data/ATAC_worm/ATACseq_tracks.tar.gz
+tar -xvf data/ATAC_worm/ATACseq_tracks.tar.gz -C data/ATAC_worm/
+
+<span style="color:#75715e">## -- Find peaks with yapc</span>
+yapc data/ATAC_worm/yapc <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    Germline data/ATAC_worm/GSM4197238_Germline_YA_ATAC_pe_rep1.bw data/ATAC_worm/GSM4197243_Germline_YA_ATAC_pe_rep2.bw <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    Neurons data/ATAC_worm/GSM4197239_Neurons_YA_ATAC_pe_rep1.bw data/ATAC_worm/GSM4197244_Neurons_YA_ATAC_pe_rep2.bw <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    Muscle data/ATAC_worm/GSM4197240_Muscle_YA_ATAC_pe_rep1.bw data/ATAC_worm/GSM4197245_Muscle_YA_ATAC_pe_rep2.bw <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    Hypodermis data/ATAC_worm/GSM4197241_Hypodermis_YA_ATAC_pe_rep1.bw data/ATAC_worm/GSM4197246_Hypodermis_YA_ATAC_pe_rep2.bw <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    Intestine data/ATAC_worm/GSM4197242_Intestine_YA_ATAC_pe_rep1.bw data/ATAC_worm/GSM4197247_Intestine_YA_ATAC_pe_rep2.bw
+
+<span style="color:#75715e">## -- Further processing depending on what you intend to do </span>
+<span style="color:#75715e"># .....</span>
+<span style="color:#75715e"># Details of how the identified peaks were further processed are available in Serizay et al., Genome Research 2020. </span>
+<span style="color:#75715e"># Eventually, ~15,000 tissue-specific promoters were identified in this study, and available from VplotR::ce11_proms</span>
+</code></pre></div><h3 id="counting-reads-over-peaks">Counting reads over peaks</h3>
+<p>From the ~ 45,000 identified peaks with <code>yapc</code>, we annotated and filtered down ~ 17,000 promoters.
+We can compute the coverage of each promoter in each of the 10 ATAC-seq samples in <code>R</code> using
+<code>featureCounts()</code>  function from <code>R</code> wrapper of <code>subread</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">files <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(
+    <span style="color:#e6db74">&#39;data/ATAC_worm/Germline_rep1_filtered.bam&#39;</span>,
+    <span style="color:#e6db74">&#39;data/ATAC_worm/Germline_rep2_filtered.bam&#39;</span>,
+    <span style="color:#e6db74">&#39;data/ATAC_worm/Neurons_rep1_filtered.bam&#39;</span>,
+    <span style="color:#e6db74">&#39;data/ATAC_worm/Neurons_rep2_filtered.bam&#39;</span>,
+    <span style="color:#e6db74">&#39;data/ATAC_worm/Muscle_rep1_filtered.bam&#39;</span>,
+    <span style="color:#e6db74">&#39;data/ATAC_worm/Muscle_rep2_filtered.bam&#39;</span>,
+    <span style="color:#e6db74">&#39;data/ATAC_worm/Hypodermis_rep1_filtered.bam&#39;</span>,
+    <span style="color:#e6db74">&#39;data/ATAC_worm/Hypodermis_rep2_filtered.bam&#39;</span>,
+    <span style="color:#e6db74">&#39;data/ATAC_worm/Intestine_rep1_filtered.bam&#39;</span>,
+    <span style="color:#e6db74">&#39;data/ATAC_worm/Intestine_rep2_filtered.bam&#39;</span>
+)
+gtf <span style="color:#f92672">&lt;-</span> <span style="color:#e6db74">&#39;data/ATAC_worm/ce11_proms.gtf&#39;</span>
+cnts <span style="color:#f92672">&lt;-</span> Rsubread<span style="color:#f92672">::</span><span style="color:#a6e22e">featureCounts</span>(
+    files <span style="color:#f92672">=</span> files, 
+    annot.ext <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;data/ATAC_worm/ce11_proms.gtf&#39;</span>, 
+    isGTFAnnotationFile <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>, 
+    GTF.featureType <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;sequence_feature&#39;</span>, 
+    GTF.attrType <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;id&#39;</span>, 
+    isPairedEnd <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>, 
+    nthreads <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span>
+)
+</code></pre></div><h3 id="performing-da-tests">Performing DA tests</h3>
+<p><code>DESeq2</code> time-tested workflow can be followed, starting from the counts obtained by <code>featureCounts</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(tidyverse)
+<span style="color:#a6e22e">library</span>(SummarizedExperiment)
+<span style="color:#a6e22e">library</span>(DESeq2)
+
+<span style="color:#a6e22e">data</span>(ce11_proms, <span style="color:#e6db74">&#39;VplotR&#39;</span>)
+counts <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">SummarizedExperiment</span>(
+    assays <span style="color:#f92672">=</span> <span style="color:#a6e22e">list</span>(<span style="color:#e6db74">&#39;counts&#39;</span> <span style="color:#f92672">=</span> cnts<span style="color:#f92672">$</span>counts), 
+    rowRanges <span style="color:#f92672">=</span> ce11_proms,
+    colData <span style="color:#f92672">=</span> S4Vectors<span style="color:#f92672">::</span><span style="color:#a6e22e">DataFrame</span>(
+        sample <span style="color:#f92672">=</span> cnts<span style="color:#f92672">$</span>targets, 
+        tissue <span style="color:#f92672">=</span> <span style="color:#a6e22e">factor</span>(<span style="color:#a6e22e">str_replace_all</span>(cnts<span style="color:#f92672">$</span>targets, <span style="color:#e6db74">&#39;_.*&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>), <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#39;Germline&#39;</span>, <span style="color:#e6db74">&#39;Neurons&#39;</span>, <span style="color:#e6db74">&#39;Muscle&#39;</span>, <span style="color:#e6db74">&#39;Hypodermis&#39;</span>, <span style="color:#e6db74">&#39;Intestine&#39;</span>)), 
+        rep <span style="color:#f92672">=</span> <span style="color:#a6e22e">str_replace_all</span>(cnts<span style="color:#f92672">$</span>targets, <span style="color:#e6db74">&#39;_filtered.bam|.*rep&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>)
+    )
+)
+
+dds <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">DESeqDataSet</span>(counts, design <span style="color:#f92672">=</span> <span style="color:#f92672">~</span> tissue)
+dds <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">DESeq</span>(dds)
+
+contrasts <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">levels</span>(counts<span style="color:#f92672">$</span>tissue) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">combn</span>(<span style="color:#ae81ff">2</span>, simplify <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">lapply</span>(<span style="color:#a6e22e">function</span>(x) {<span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;tissue&#34;</span>, x[2], x[1])})
+contrasts_names <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sapply</span>(contrasts, <span style="color:#a6e22e">function</span>(x) <span style="color:#a6e22e">paste0</span>(x[2], <span style="color:#e6db74">&#34;_vs_&#34;</span>, x[3]))
+out.l2fc <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">data.frame</span>(<span style="color:#a6e22e">matrix</span>(nrow<span style="color:#f92672">=</span><span style="color:#a6e22e">length</span>(ce11_proms), ncol<span style="color:#f92672">=</span><span style="color:#a6e22e">length</span>(contrasts))) ; <span style="color:#a6e22e">colnames</span>(out.l2fc) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(contrasts_names, <span style="color:#e6db74">&#39;.l2FC&#39;</span>)
+out.padj <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">data.frame</span>(<span style="color:#a6e22e">matrix</span>(nrow<span style="color:#f92672">=</span><span style="color:#a6e22e">length</span>(ce11_proms), ncol<span style="color:#f92672">=</span><span style="color:#a6e22e">length</span>(contrasts))) ; <span style="color:#a6e22e">colnames</span>(out.padj) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(contrasts_names, <span style="color:#e6db74">&#39;.padj&#39;</span>)
+<span style="color:#a6e22e">for </span>(i in <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#a6e22e">length</span>(contrasts)) {
+    res <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">results</span>(dds, contrast <span style="color:#f92672">=</span> contrasts[[i]])
+    <span style="color:#a6e22e">metadata</span>(res)<span style="color:#f92672">$</span>alpha <span style="color:#f92672">&lt;-</span> <span style="color:#ae81ff">0.01</span>
+    out <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as.data.frame</span>(res)
+    out.l2fc[,i] <span style="color:#f92672">&lt;-</span> out[,<span style="color:#ae81ff">2</span>]
+    out.padj[,i] <span style="color:#f92672">&lt;-</span> out[,<span style="color:#ae81ff">6</span>]
+}
+
+FPM <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">fpm</span>(dds, robust <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)
+<span style="color:#a6e22e">colnames</span>(FPM) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#39;FPM_&#39;</span>, counts<span style="color:#f92672">$</span>sample) <span style="color:#f92672">%&gt;%</span> <span style="color:#a6e22e">str_replace_all</span>(<span style="color:#e6db74">&#39;_filtered.bam&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>)
+
+results <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">cbind</span>(
+    <span style="color:#a6e22e">as.data.frame</span>(ce11_proms),
+    FPM,
+    out.l2fc,
+    out.padj
+)
+results<span style="color:#f92672">$</span>sign.l2FC <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">apply</span>(results[,<span style="color:#a6e22e">grepl</span>(<span style="color:#e6db74">&#34;l2FC&#34;</span>, <span style="color:#a6e22e">colnames</span>(results))], <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">function</span>(x) <span style="color:#a6e22e">any</span>(x <span style="color:#f92672">&lt;</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">log2</span>(<span style="color:#ae81ff">2</span>) <span style="color:#f92672">|</span> x <span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">log2</span>(<span style="color:#ae81ff">2</span>)))
+results<span style="color:#f92672">$</span>sign.padj <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">apply</span>(results[,<span style="color:#a6e22e">grepl</span>(<span style="color:#e6db74">&#34;padj&#34;</span>, <span style="color:#a6e22e">colnames</span>(results))], <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">function</span>(x) <span style="color:#a6e22e">any</span>(x <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0.01</span>))
+<span style="color:#a6e22e">write.table</span>(results, <span style="color:#e6db74">&#39;data/ATAC_worm/quantif.txt&#39;</span>, quote <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>, col.names <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>, row.names <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>, sep <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\t&#39;</span>)
+
+<span style="color:#a6e22e">rowData</span>(dds) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">cbind</span>(
+    <span style="color:#a6e22e">rowData</span>(dds), 
+    FPM,
+    out.l2fc,
+    out.padj
+)
+<span style="color:#a6e22e">saveRDS</span>(dds, <span style="color:#e6db74">&#39;data/ATAC_worm/quantif.rds&#39;</span>)
+</code></pre></div><h3 id="clustering-peaks">Clustering peaks</h3>
+<p>Regularized log values can be averaged across replicates to quantify chromatin
+accessibility at each peak in each sample.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">rlogs <span style="color:#f92672">&lt;-</span> DESeq2<span style="color:#f92672">::</span><span style="color:#a6e22e">rlog</span>(dds, blind <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">assay</span>() <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">as_tibble</span>() <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">setNames</span>(<span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#39;rlog_&#39;</span>, dds<span style="color:#f92672">$</span>sample) <span style="color:#f92672">%&gt;%</span> <span style="color:#a6e22e">str_replace_all</span>(<span style="color:#e6db74">&#39;_filtered.bam&#39;</span>, <span style="color:#e6db74">&#39;&#39;</span>)) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">mutate</span>(id <span style="color:#f92672">=</span> <span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#39;prom_&#39;</span>, <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#a6e22e">n</span>())) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">pivot_longer</span>(<span style="color:#f92672">-</span>id, names_to <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;class&#39;</span>, values_to <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;rlog&#39;</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">separate</span>(class, into <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#66d9ef">NA</span>, <span style="color:#e6db74">&#39;tissue&#39;</span>, <span style="color:#e6db74">&#39;rep&#39;</span>), sep <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;_&#39;</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">group_by</span>(id, tissue) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">summarize</span>(rlog <span style="color:#f92672">=</span> <span style="color:#a6e22e">mean</span>(rlog)) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">pivot_wider</span>(names_from <span style="color:#f92672">=</span> tissue, values_from <span style="color:#f92672">=</span> rlog) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">ungroup</span>() <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">filter</span>(<span style="color:#a6e22e">rowSums</span>(<span style="color:#a6e22e">select</span>(., <span style="color:#f92672">-</span>id)) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>)
+<span style="color:#a6e22e">saveRDS</span>(rlogs, <span style="color:#e6db74">&#39;data/ATAC_worm/rlogs.rds&#39;</span>)
+</code></pre></div><p>Peaks can then be clustered based on these rlog values, using an unsupervised approach
+such as <code>k-means</code> or <code>k-medoids</code> (through the <code>pam()</code> function).</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">clusts <span style="color:#f92672">&lt;-</span> cluster<span style="color:#f92672">::</span><span style="color:#a6e22e">pam</span>(<span style="color:#a6e22e">select</span>(rlogs, <span style="color:#f92672">-</span>id), k <span style="color:#f92672">=</span> <span style="color:#ae81ff">9</span>)
+p <span style="color:#f92672">&lt;-</span> pheatmap<span style="color:#f92672">::</span><span style="color:#a6e22e">pheatmap</span>(
+    <span style="color:#a6e22e">select</span>(rlogs, <span style="color:#f92672">-</span>id)<span style="color:#a6e22e">[order</span>(clusts<span style="color:#f92672">$</span>clustering), ], 
+    cluster_rows <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>, 
+    cluster_cols <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>, 
+    breaks <span style="color:#f92672">=</span> <span style="color:#a6e22e">seq</span>(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">12</span>, length.out <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>), 
+    <span style="color:#a6e22e">colorRampPalette</span>(<span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#34;#ffffff&#34;</span>, <span style="color:#e6db74">&#34;#ffffff&#34;</span>, <span style="color:#e6db74">&#34;#dda937&#34;</span>, <span style="color:#e6db74">&#34;#E31A1C&#34;</span>, <span style="color:#e6db74">&#34;#a51618&#34;</span>))(<span style="color:#ae81ff">100</span>)
+)
+</code></pre></div>
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1628453292"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1628453292"></script>
+    
+        
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628453292"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-105947713-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </body>
+</html>
+

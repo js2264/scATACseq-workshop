@@ -12,21 +12,21 @@
     <title>2. Exercises :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
-    <link href="/scATACseq-workshop/css/nucleus.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hybrid.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/featherlight.min.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/auto-complete.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/theme.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hugo-theme.css?1628442815" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/nucleus.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1628453292" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/theme-red.css?1628442815" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme-red.css?1628453292" rel="stylesheet">
     
     
 
-    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628442815"></script>
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628453292"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -154,6 +154,79 @@
       </a>
       
       
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands-on-sessions/day1/" title="Day 01" class="dd-item ">
+        <a href="/scATACseq-workshop/hands-on-sessions/day1/">
+        Day 01
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands-on-sessions/day2/" title="Day 02" class="dd-item ">
+        <a href="/scATACseq-workshop/hands-on-sessions/day2/">
+        Day 02
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands-on-sessions/day3/" title="Day 03" class="dd-item ">
+        <a href="/scATACseq-workshop/hands-on-sessions/day3/">
+        Day 03
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
     </li>
   
  
@@ -277,14 +350,59 @@
 
 	<h2 id="day-1">Day 1</h2>
 <h3 id="exercises-session-1">Exercises session 1</h3>
-<h3 id="exercises-session-2">Exercises session 2</h3>
-<h2 id="day-2">Day 2</h2>
+<ul>
+<li>Check fragment size distribution in bulk ATAC-seq</li>
+</ul>
+<pre><code class="language-{r" data-lang="{r">library(tidyverse)
+library(plyranges)
+fragments &lt;- VplotR::importPEBamFiles(
+    '?...?', 
+    shift_ATAC_fragments = TRUE
+)
+df&lt;-?...?(fragments) %&gt;% 
+    group_by(?...?) %&gt;% 
+    count() %&gt;% 
+    ungroup() 
+p1&lt;-ggplot(df, aes(x = ?...?, y = ?...?)) + 
+    ?...?() + 
+    labs(title = '?...?', x = '?...?', y = '?...?')
+</code></pre><h3 id="exercises-session-2">Exercises session 2</h3>
+<ul>
+<li>Check coverage of each cluster in <code>Loupe</code> at relevant loci to propose an annotation for each cluster.</li>
+</ul>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># Check e.g. `CD19`, `CD8`, `CD4`, `CD3`</span>
+</code></pre></div><h2 id="day-2">Day 2</h2>
 <h3 id="exercises-session-3">Exercises session 3</h3>
-<h3 id="exercises-session-4">Exercises session 4</h3>
-<h2 id="day-3">Day 3</h2>
+<ul>
+<li>Inspect genes closest to the most DA peaks (in DA analysis between clusters 10+16 and 4+5). Propose a function for cells in these groups.</li>
+</ul>
+<pre><code class="language-{r" data-lang="{r">da_peaks &lt;- readRDS('data/MouseBrain/da_peaks_10-16_vs_4-5.rds')
+peaks &lt;- rownames(da_peaks)[da_peaks$?...? &lt;= 0.01 &amp; da_peaks$?...? &gt;= 1.5]
+peaks &lt;- GenomicRanges::GRanges(str_replace(peaks, '-', ':'))
+Annotation(brain)[nearest(?...?, Annotation(?...?))]$?...?
+</code></pre><h3 id="exercises-session-4">Exercises session 4</h3>
+<ul>
+<li>Compare clustering to provided cell type activity for ce11 promoters. Comment.</li>
+</ul>
+<pre><code class="language-{r" data-lang="{r">dds &lt;- readRDS('data/ATAC_worm/quantif.rds')
+rlogs &lt;- readRDS('?...?')
+clusts &lt;- cluster::pam(select(rlogs, -?...?), k = 9)
+table(rowData(dds)$which.tissues[!rowData(dds)$allZero], clusts$?...?)
+</code></pre><h2 id="day-3">Day 3</h2>
 <h3 id="exercises-session-5">Exercises session 5</h3>
 <h3 id="exercises-session-6">Exercises session 6</h3>
-
+<ul>
+<li>Try different thresholds for tSNE embeddings. Comment.</li>
+</ul>
+<pre><code class="language-{r" data-lang="{r">set.seed(2021)
+dev &lt;- readRDS('data/scATAC_LSC-LMPP-mono/dev.rds')
+p &lt;- cowplot::plot_grid(
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]],
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.25, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]],
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.5, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]],
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.75, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]]
+)
+</code></pre>
 
 
 
@@ -383,6 +501,54 @@
                     
 
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -453,19 +619,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/scATACseq-workshop/js/clipboard.min.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/featherlight.min.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/highlight.pack.js?1628442815"></script>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1628453292"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/learn.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/hugo-learn.js?1628442815"></script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1628453292"></script>
     
         
-            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628442815"></script>
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628453292"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

@@ -12,21 +12,21 @@
     <title>3. Homeworks :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
-    <link href="/scATACseq-workshop/css/nucleus.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hybrid.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/featherlight.min.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/auto-complete.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/theme.css?1628442815" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hugo-theme.css?1628442815" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/nucleus.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1628453292" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/theme-red.css?1628442815" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme-red.css?1628453292" rel="stylesheet">
     
     
 
-    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628442815"></script>
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628453292"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -154,6 +154,79 @@
       </a>
       
       
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands-on-sessions/day1/" title="Day 01" class="dd-item ">
+        <a href="/scATACseq-workshop/hands-on-sessions/day1/">
+        Day 01
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands-on-sessions/day2/" title="Day 02" class="dd-item ">
+        <a href="/scATACseq-workshop/hands-on-sessions/day2/">
+        Day 02
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands-on-sessions/day3/" title="Day 03" class="dd-item ">
+        <a href="/scATACseq-workshop/hands-on-sessions/day3/">
+        Day 03
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
     </li>
   
  
@@ -276,8 +349,33 @@
 
 
 	<h2 id="homeworks-day-1">Homeworks: day 1</h2>
+<p>[] Process bulk ATAC-seq for PBMCs, perform QCs and compare them to single-cell QCs
+[] Split bam file from scATACseq into bams / cell type using <code>sinto</code>
+[] Make some celltype-specific pseudo-bulk bigwig tracks
+[] Compare bulk and pseudo-bulk tracks in IGV; try to infer the cell type of each cell cluster in scATACseq</p>
 <h2 id="homeworks-day-2">Homeworks: day 2</h2>
+<p>[] Import counts from mouse E18 brain scATACseq (5K) (provided by 10X Genomics) in R and process them
+[] Transfer annotations from PBMC 10X scRNAseq to PBMC 10X scATACseq (pre-processed scRNAseq available in <code>data/MouseBrain/mPBMC_scRNAseq.rds</code>)
+[] Find genes associated to DA peaks and run GO over-enrichment / gene set enrichment analysis</p>
+<blockquote>
+<p>Links:</p>
+</blockquote>
+<ul>
+<li><a href="https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k">https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k</a></li>
+<li><a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K">https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K</a></li>
+</ul>
 <h2 id="homeworks-day-3">Homeworks: day 3</h2>
+<p>[] Import, filter, normalize and cluster cells from the T-cell exhaustion dataset
+[] Run chromVAR to identify TF activity in each cell cluster
+[] Using knowledge on TFs used in different cell types, suggest cell cluster annotation of the dataset
+[] Confirm this by computing gene activity scores and check known markers</p>
+<blockquote>
+<p>Links:</p>
+</blockquote>
+<ul>
+<li>DOI: <a href="https://doi.org/10.1038/s41587-019-0206-z" target="_blank">10.1038/s41587-019-0206-z</a>
+</li>
+</ul>
 
 
 
@@ -377,6 +475,54 @@
                     
 
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -447,19 +593,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/scATACseq-workshop/js/clipboard.min.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/featherlight.min.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/highlight.pack.js?1628442815"></script>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1628453292"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/learn.js?1628442815"></script>
-    <script src="/scATACseq-workshop/js/hugo-learn.js?1628442815"></script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1628453292"></script>
     
         
-            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628442815"></script>
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628453292"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
