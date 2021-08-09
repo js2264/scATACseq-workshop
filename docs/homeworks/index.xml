@@ -6,5 +6,40 @@
     <description>Recent content in 3. Homeworks on Analysis of bulk and single-cell ATAC-seq datasets</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-US</language><atom:link href="https://js2264.github.io/scATACseq-workshop/homeworks/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Homework 1</title>
+      <link>https://js2264.github.io/scATACseq-workshop/homeworks/homework_1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://js2264.github.io/scATACseq-workshop/homeworks/homework_1/</guid>
+      <description>Goals  Process bulk ATAC-seq for PBMCs (GSE111013), perform QCs and compare them to the bulk ATAC-seq QCs seen during demonstration session 1   We recommend focusing on few datasets from healthy donors, e.g. SRR6762787, SRR6762790 and SRR6762793.
+ Split bam file from human 5,000 PBMCs scATACseq into bams / cell type using sinto   Processed data can be obtained directly from 10X Genomics   Make some celltype-specific pseudo-bulk bigwig tracks</description>
+    </item>
+    
+    <item>
+      <title>Homework 2</title>
+      <link>https://js2264.github.io/scATACseq-workshop/homeworks/homework_2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://js2264.github.io/scATACseq-workshop/homeworks/homework_2/</guid>
+      <description>Goals  Import counts from mouse E18 brain scATACseq (5K) (provided by 10X Genomics) in R and process them   Processed data for mouse E18 brain scATACseq can be obtained directly from 10X Genomics   Compare Signac processing and SingleCellExperiment processing
+  Transfer annotations from mouse E18 brain scRNAseq (5K) to mouse E18 brain scATACseq
+   Processed data for mouse E18 brain scRNAseq can be obtained directly from 10X Genomics  Find genes associated to DA peaks and run GO over-enrichment / gene set enrichment analysis  1.</description>
+    </item>
+    
+    <item>
+      <title>Homework 3</title>
+      <link>https://js2264.github.io/scATACseq-workshop/homeworks/homework_3/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://js2264.github.io/scATACseq-workshop/homeworks/homework_3/</guid>
+      <description>Goals   Import, filter, normalize and cluster cells from the T-cell exhaustion dataset
+  Run chromVAR to identify TF activity in each cell cluster
+  Using knowledge on TFs used in different cell types, suggest cell cluster annotation of the dataset
+  Confirm this by computing gene activity scores and check known markers
+  Integrate scRNAseq and scATACseq to validate cluster annotations
+  </description>
+    </item>
+    
   </channel>
 </rss>

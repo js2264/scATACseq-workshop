@@ -12,26 +12,30 @@
     <title>2. Exercises :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
-    <link href="/scATACseq-workshop/css/nucleus.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hybrid.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/featherlight.min.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/auto-complete.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/theme.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hugo-theme.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/nucleus.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1628535635" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/theme-red.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme-red.css?1628535635" rel="stylesheet">
     
-    
+    <link href="/scATACseq-workshop/css/custom_css.css?1628535635" rel="stylesheet">
 
-    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628535635"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
           display:none !important;
       }
+      
+        :not(pre) > code + span.copy-to-clipboard {
+            display: none;
+        }
       
     </style>
     
@@ -275,6 +279,79 @@
       </a>
       
       
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_1/" title="Homework 1" class="dd-item ">
+        <a href="/scATACseq-workshop/homeworks/homework_1/">
+        Homework 1
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_2/" title="Homework 2" class="dd-item ">
+        <a href="/scATACseq-workshop/homeworks/homework_2/">
+        Homework 2
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_3/" title="Homework 3" class="dd-item ">
+        <a href="/scATACseq-workshop/homeworks/homework_3/">
+        Homework 3
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
     </li>
   
  
@@ -353,56 +430,56 @@
 <ul>
 <li>Check fragment size distribution in bulk ATAC-seq</li>
 </ul>
-<pre><code class="language-{r" data-lang="{r">library(tidyverse)
-library(plyranges)
-fragments &lt;- VplotR::importPEBamFiles(
-    '?...?', 
-    shift_ATAC_fragments = TRUE
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(tidyverse)
+<span style="color:#a6e22e">library</span>(plyranges)
+fragments <span style="color:#f92672">&lt;-</span> VplotR<span style="color:#f92672">::</span><span style="color:#a6e22e">importPEBamFiles</span>(
+    <span style="color:#e6db74">&#39;?...?&#39;</span>, 
+    shift_ATAC_fragments <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>
 )
-df&lt;-?...?(fragments) %&gt;% 
-    group_by(?...?) %&gt;% 
-    count() %&gt;% 
-    ungroup() 
-p1&lt;-ggplot(df, aes(x = ?...?, y = ?...?)) + 
-    ?...?() + 
-    labs(title = '?...?', x = '?...?', y = '?...?')
-</code></pre><h3 id="exercises-session-2">Exercises session 2</h3>
+df<span style="color:#f92672">&lt;-?</span><span style="color:#66d9ef">...</span><span style="color:#f92672">?</span>(fragments) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">group_by</span>(<span style="color:#f92672">?</span><span style="color:#66d9ef">...</span><span style="color:#f92672">?</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">count</span>() <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">ungroup</span>() 
+p1<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ggplot</span>(df, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> <span style="color:#f92672">?</span><span style="color:#66d9ef">...</span><span style="color:#f92672">?</span>, y <span style="color:#f92672">=</span> <span style="color:#f92672">?</span><span style="color:#66d9ef">...</span><span style="color:#f92672">?</span>)) <span style="color:#f92672">+</span> 
+    <span style="color:#f92672">?</span><span style="color:#66d9ef">...</span><span style="color:#f92672">?</span>() <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;?...?&#39;</span>, x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;?...?&#39;</span>, y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;?...?&#39;</span>)
+</code></pre></div><h3 id="exercises-session-2">Exercises session 2</h3>
 <ul>
 <li>Check coverage of each cluster in <code>Loupe</code> at relevant loci to propose an annotation for each cluster.</li>
 </ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e"># Check e.g. `CD19`, `CD8`, `CD4`, `CD3`</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e"># Check e.g. `CD19`, `CD8`, `CD4`, `CD3`</span>
 </code></pre></div><h2 id="day-2">Day 2</h2>
 <h3 id="exercises-session-3">Exercises session 3</h3>
 <ul>
 <li>Inspect genes closest to the most DA peaks (in DA analysis between clusters 10+16 and 4+5). Propose a function for cells in these groups.</li>
 </ul>
-<pre><code class="language-{r" data-lang="{r">da_peaks &lt;- readRDS('data/MouseBrain/da_peaks_10-16_vs_4-5.rds')
-peaks &lt;- rownames(da_peaks)[da_peaks$?...? &lt;= 0.01 &amp; da_peaks$?...? &gt;= 1.5]
-peaks &lt;- GenomicRanges::GRanges(str_replace(peaks, '-', ':'))
-Annotation(brain)[nearest(?...?, Annotation(?...?))]$?...?
-</code></pre><h3 id="exercises-session-4">Exercises session 4</h3>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">da_peaks <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">readRDS</span>(<span style="color:#e6db74">&#39;data/MouseBrain/da_peaks_10-16_vs_4-5.rds&#39;</span>)
+peaks <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">rownames</span>(da_peaks)[da_peaks<span style="color:#f92672">$?</span><span style="color:#66d9ef">...</span><span style="color:#f92672">?</span> <span style="color:#f92672">&lt;=</span> <span style="color:#ae81ff">0.01</span> <span style="color:#f92672">&amp;</span> da_peaks<span style="color:#f92672">$?</span><span style="color:#66d9ef">...</span><span style="color:#f92672">?</span> <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">1.5</span>]
+peaks <span style="color:#f92672">&lt;-</span> GenomicRanges<span style="color:#f92672">::</span><span style="color:#a6e22e">GRanges</span>(<span style="color:#a6e22e">str_replace</span>(peaks, <span style="color:#e6db74">&#39;-&#39;</span>, <span style="color:#e6db74">&#39;:&#39;</span>))
+<span style="color:#a6e22e">Annotation</span>(brain)<span style="color:#a6e22e">[nearest</span>(<span style="color:#f92672">?</span><span style="color:#66d9ef">...</span><span style="color:#f92672">?</span>, <span style="color:#a6e22e">Annotation</span>(<span style="color:#f92672">?</span><span style="color:#66d9ef">...</span><span style="color:#f92672">?</span>))]<span style="color:#f92672">$?</span><span style="color:#66d9ef">...</span><span style="color:#f92672">?</span>
+</code></pre></div><h3 id="exercises-session-4">Exercises session 4</h3>
 <ul>
 <li>Compare clustering to provided cell type activity for ce11 promoters. Comment.</li>
 </ul>
-<pre><code class="language-{r" data-lang="{r">dds &lt;- readRDS('data/ATAC_worm/quantif.rds')
-rlogs &lt;- readRDS('?...?')
-clusts &lt;- cluster::pam(select(rlogs, -?...?), k = 9)
-table(rowData(dds)$which.tissues[!rowData(dds)$allZero], clusts$?...?)
-</code></pre><h2 id="day-3">Day 3</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">dds <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">readRDS</span>(<span style="color:#e6db74">&#39;data/ATAC_worm/quantif.rds&#39;</span>)
+rlogs <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">readRDS</span>(<span style="color:#e6db74">&#39;?...?&#39;</span>)
+clusts <span style="color:#f92672">&lt;-</span> cluster<span style="color:#f92672">::</span><span style="color:#a6e22e">pam</span>(<span style="color:#a6e22e">select</span>(rlogs, <span style="color:#f92672">-?</span><span style="color:#66d9ef">...</span><span style="color:#f92672">?</span>), k <span style="color:#f92672">=</span> <span style="color:#ae81ff">9</span>)
+<span style="color:#a6e22e">table</span>(<span style="color:#a6e22e">rowData</span>(dds)<span style="color:#f92672">$</span>which.tissues[<span style="color:#f92672">!</span><span style="color:#a6e22e">rowData</span>(dds)<span style="color:#f92672">$</span>allZero], clusts<span style="color:#f92672">$?</span><span style="color:#66d9ef">...</span><span style="color:#f92672">?</span>)
+</code></pre></div><h2 id="day-3">Day 3</h2>
 <h3 id="exercises-session-5">Exercises session 5</h3>
 <h3 id="exercises-session-6">Exercises session 6</h3>
 <ul>
 <li>Try different thresholds for tSNE embeddings. Comment.</li>
 </ul>
-<pre><code class="language-{r" data-lang="{r">set.seed(2021)
-dev &lt;- readRDS('data/scATAC_LSC-LMPP-mono/dev.rds')
-p &lt;- cowplot::plot_grid(
-    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]],
-    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.25, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]],
-    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.5, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]],
-    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.75, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]]
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">set.seed</span>(<span style="color:#ae81ff">2021</span>)
+dev <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">readRDS</span>(<span style="color:#e6db74">&#39;data/scATAC_LSC-LMPP-mono/dev.rds&#39;</span>)
+p <span style="color:#f92672">&lt;-</span> cowplot<span style="color:#f92672">::</span><span style="color:#a6e22e">plot_grid</span>(
+    chromVAR<span style="color:#f92672">::</span><span style="color:#a6e22e">plotDeviationsTsne</span>(dev, chromVAR<span style="color:#f92672">::</span><span style="color:#a6e22e">deviationsTsne</span>(dev, threshold <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, perplexity <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>), annotation_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;FOS&#34;</span>, shiny <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)[[1]],
+    chromVAR<span style="color:#f92672">::</span><span style="color:#a6e22e">plotDeviationsTsne</span>(dev, chromVAR<span style="color:#f92672">::</span><span style="color:#a6e22e">deviationsTsne</span>(dev, threshold <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.25</span>, perplexity <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>), annotation_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;FOS&#34;</span>, shiny <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)[[1]],
+    chromVAR<span style="color:#f92672">::</span><span style="color:#a6e22e">plotDeviationsTsne</span>(dev, chromVAR<span style="color:#f92672">::</span><span style="color:#a6e22e">deviationsTsne</span>(dev, threshold <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.5</span>, perplexity <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>), annotation_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;FOS&#34;</span>, shiny <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)[[1]],
+    chromVAR<span style="color:#f92672">::</span><span style="color:#a6e22e">plotDeviationsTsne</span>(dev, chromVAR<span style="color:#f92672">::</span><span style="color:#a6e22e">deviationsTsne</span>(dev, threshold <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.75</span>, perplexity <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>), annotation_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;FOS&#34;</span>, shiny <span style="color:#f92672">=</span> <span style="color:#66d9ef">FALSE</span>)[[1]]
 )
-</code></pre>
+</code></pre></div>
 
 
 
@@ -585,6 +662,54 @@ p &lt;- cowplot::plot_grid(
                     
 
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -612,6 +737,13 @@ p &lt;- cowplot::plot_grid(
 
 	 
 	 
+		
+			<a class="nav nav-prev" href="/scATACseq-workshop/hands-on-sessions/day3/" title="Day 03"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/scATACseq-workshop/homeworks/" title="3. Homeworks" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
     </div>
 
     </section>
@@ -619,19 +751,19 @@ p &lt;- cowplot::plot_grid(
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/scATACseq-workshop/js/clipboard.min.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/featherlight.min.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/highlight.pack.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1628535635"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/learn.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/hugo-learn.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1628535635"></script>
     
         
-            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628453292"></script>
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628535635"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.80.0" />
+    <meta name="description" content="Analysis of bulk and single-cell ATAC-seq datasets">
+<meta name="author" content="Jacques Serizay">
+
+    <link rel="icon" href="/scATACseq-workshop/images/favicon.png" type="image/png">
+
+    <title>Homework 1 :: Analysis of bulk and single-cell ATAC-seq datasets</title>
+
+    
+    <link href="/scATACseq-workshop/css/nucleus.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1628535635" rel="stylesheet">
+    
+    <link href="/scATACseq-workshop/css/theme-red.css?1628535635" rel="stylesheet">
+    
+    <link href="/scATACseq-workshop/css/custom_css.css?1628535635" rel="stylesheet">
+
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628535635"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+        :not(pre) > code + span.copy-to-clipboard {
+            display: none;
+        }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/scATACseq-workshop/homeworks/homework_1/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo">
+
+
+
+</a>
+
+    </div>
+    
+  </div>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/introduction/" title=" Bulk and single-cell ATAC-seq analysis" class="dd-item
+        
+        
+        
+        ">
+      <a href="/scATACseq-workshop/introduction/">
+           Bulk and single-cell ATAC-seq analysis
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/introduction/02_program/" title="1. Program" class="dd-item ">
+        <a href="/scATACseq-workshop/introduction/02_program/">
+        1. Program
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/introduction/01_prerequisites/" title="2. Prerequisites and required machine configuration" class="dd-item ">
+        <a href="/scATACseq-workshop/introduction/01_prerequisites/">
+        2. Prerequisites and required machine configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/hands-on-sessions/" title="1. Hands-on sessions" class="dd-item
+        
+        
+        
+        ">
+      <a href="/scATACseq-workshop/hands-on-sessions/">
+          1. Hands-on sessions
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands-on-sessions/day1/" title="Day 01" class="dd-item ">
+        <a href="/scATACseq-workshop/hands-on-sessions/day1/">
+        Day 01
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands-on-sessions/day2/" title="Day 02" class="dd-item ">
+        <a href="/scATACseq-workshop/hands-on-sessions/day2/">
+        Day 02
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands-on-sessions/day3/" title="Day 03" class="dd-item ">
+        <a href="/scATACseq-workshop/hands-on-sessions/day3/">
+        Day 03
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/exercises/" title="2. Exercises" class="dd-item
+        
+        
+        
+        ">
+      <a href="/scATACseq-workshop/exercises/">
+          2. Exercises
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/homeworks/" title="3. Homeworks" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/scATACseq-workshop/homeworks/">
+          3. Homeworks
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_1/" title="Homework 1" class="dd-item active">
+        <a href="/scATACseq-workshop/homeworks/homework_1/">
+        Homework 1
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_2/" title="Homework 2" class="dd-item ">
+        <a href="/scATACseq-workshop/homeworks/homework_2/">
+        Homework 2
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_3/" title="Homework 3" class="dd-item ">
+        <a href="/scATACseq-workshop/homeworks/homework_3/">
+        Homework 3
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/extra-resources/" title="Extra resources" class="dd-item
+        
+        
+        
+        ">
+      <a href="/scATACseq-workshop/extra-resources/">
+          Extra resources
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      <center>
+
+    <a href="https://github.com/js2264/scATACseq-workshop">Check this website source on Github</a>
+    <p>Created by J. Serizay</p>
+    <p>Copyright 2021</p>
+
+</center>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Homework 1
+            </h1>
+          
+
+        
+
+
+<h2 id="goals">Goals</h2>
+<ol>
+<li>Process bulk ATAC-seq for PBMCs (<code>GSE111013</code>), perform QCs and compare them to the bulk ATAC-seq QCs seen during demonstration session 1</li>
+</ol>
+<blockquote>
+<p>We recommend focusing on few datasets from healthy donors, e.g. <code>SRR6762787</code>, <code>SRR6762790</code> and <code>SRR6762793</code>.</p>
+</blockquote>
+<ol start="2">
+<li>Split bam file from human 5,000 PBMCs scATACseq into bams / cell type using <code>sinto</code></li>
+</ol>
+<blockquote>
+<p>Processed data can be obtained directly from <a href="https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_web_summary.html" target="_blank">10X Genomics</a>
+</p>
+</blockquote>
+<ol start="3">
+<li>
+<p>Make some celltype-specific pseudo-bulk bigwig tracks</p>
+</li>
+<li>
+<p>Compare bulk and pseudo-bulk tracks in IGV; try to infer cell type for some of the cell clusters in scATACseq</p>
+</li>
+</ol>
+<h2 id="1-process-bulk-atac-seq-from-human-b-cells-cd4-and-cd8-t-cells">1. Process bulk ATAC-seq from human B cells, CD4+ and CD8+ T cells</h2>
+<p>Data was generated in <a href="https://doi.org/10.1038/s41467-019-14081-6" target="_blank">this study: DOI 10.1038/s41467-019-14081-6</a>
+.</p>
+<h3 id="download-data">Download data</h3>
+<p>First, we need to fetch to raw reads. You can go to the <a href="https://trace.ncbi.nlm.nih.gov/Traces/study/?acc=GSE111013&amp;o=acc_s%3Aa" target="_blank">SRA Run Selector</a>
+
+and search for your <code>GSE</code> of interest. Try and download reads for samples <code>SRR6762787</code>, <code>SRR6762790</code> and <code>SRR6762793</code>.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">https://trace.ncbi.nlm.nih.gov/Traces/study/?acc<span style="color:#f92672">=</span>GSE111013&amp;o<span style="color:#f92672">=</span>acc_s%3Aa
+</code></pre></div><p>Alternatively, I like to use another web-based approach: the <a href="https://sra-explorer.info/#" target="_blank">sra-explorer</a>
+ website.
+It allows you to search for individual experiments using GEO ids, SRA ids, and much more, and reports download links for
+your samples of interest.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mkdir -p data/Homework_1/fastq
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/007/SRR6762787/SRR6762787.fastq.gz -o data/Homework_1/fastq/Bcells.fq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/000/SRR6762790/SRR6762790.fastq.gz -o data/Homework_1/fastq/CD4Tcells.fq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/003/SRR6762793/SRR6762793.fastq.gz -o data/Homework_1/fastq/CD8Tcells.fq.gz
+</code></pre></div><p>Yet another approach is to use the recent <code>ffq</code> tool. It&rsquo;s quite effective, though it is not very fast&hellip;</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">conda install -c conda-forge -c bioconda ffq
+ffq SRR6762787 SRR6762790 SRR6762793 | grep <span style="color:#e6db74">&#34;url&#34;</span>
+</code></pre></div><h3 id="map-raw-data-onto-hg19">Map raw data onto hg19</h3>
+<p>Note that in the next step (focusing on scATACseq), the reads were aligned to the <code>GRCh38</code> reference. For tracks to be comparable,
+we will align bulk ATAC-seq data onto <code>GRCh38</code> reference as well.</p>
+<blockquote>
+<p>Build GRCh38 genome reference</p>
+</blockquote>
+<p>If you don&rsquo;t have a human reference yet, you will need to build one for Bowtie2!
+We recommend fetching assembly and annotations from Ensembl.
+This step will take ~ 15 min at least, but you&rsquo;ll only have to do it once!.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mkdir ~/genomes/GRCh38/
+curl -L http://ftp.ensembl.org/pub/release-98/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz -o ~/genomes/GRCh38/GRCh38.fa.gz
+gunzip ~/genomes/GRCh38/*
+bowtie2-build --large-index --threads <span style="color:#ae81ff">16</span> ~/genomes/GRCh38/GRCh38.fa ~/genomes/GRCh38/GRCh38.fa
+samtools faidx ~/genomes/GRCh38/GRCh38.fa
+cut -f1,2 ~/genomes/GRCh38/GRCh38.fa.fai &gt; ~/genomes/GRCh38/GRCh38.sizes.genome
+cat ~/genomes/GRCh38/GRCh38.sizes.genome <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    | sed -E <span style="color:#e6db74">&#39;s/^([0-9]+|[XY])/chr\1/&#39;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    | sed -E <span style="color:#e6db74">&#39;s/^MT/chrM/&#39;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    &gt; ~/genomes/GRCh38/GRCh38.sizes.genome.modified
+</code></pre></div><blockquote>
+<p>Align reads to GRCh38 reference</p>
+</blockquote>
+<p>Note that in this study, the ATAC-seq experiments were sequenced in single-end mode.
+This is not a major issue, though it limits QCs as fragment sizes are not available.</p>
+<p>Try and adapt the different mapping steps used during the demonstration session
+to map single-end reads. Commands for trimming, mapping, filtering and track
+generation will all be affected !! Check the manual for each command if you are
+unsure of some flags.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mkdir data/Homework_1/bam
+mkdir data/Homework_1/bw
+GENOME<span style="color:#f92672">=</span>~/genomes/GRCh38/GRCh38.fa
+CPU<span style="color:#f92672">=</span><span style="color:#ae81ff">16</span>
+
+<span style="color:#66d9ef">for</span> SAMPLE in Bcells CD4Tcells CD8Tcells
+<span style="color:#66d9ef">do</span>
+
+    READS<span style="color:#f92672">=</span>data/Homework_1/fastq/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.fq.gz
+    TRIMMEDREADS<span style="color:#f92672">=</span>data/Homework_1/fastq/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_trimmed.fq.gz
+    SAMFILE<span style="color:#f92672">=</span>data/Homework_1/bam/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.sam
+    FILTEREDBAM<span style="color:#f92672">=</span>data/Homework_1/bam/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.bam
+    TRACK<span style="color:#f92672">=</span>data/Homework_1/bw/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.bw
+
+    <span style="color:#75715e">## -- Trim reads and run QC</span>
+    trim_galore --fastqc --cores <span style="color:#ae81ff">4</span> --output_dir data/Homework_1/fastq/ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>READS<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+
+    <span style="color:#75715e">## -- Map reads in single-end mode</span>
+    bowtie2 --threads <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> -x <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>GENOME<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> -U <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>TRIMMEDREADS<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> &gt; <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMFILE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+
+    <span style="color:#75715e">## -- Filter reads </span>
+    samtools sort -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> -T <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMFILE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_sorting <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMFILE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> | <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    samtools markdup -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> -r -T <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMFILE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_markdup - - | <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    samtools view -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> -F <span style="color:#ae81ff">4</span> -q <span style="color:#ae81ff">10</span> -1 -b - | <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    samtools sort -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> --output-fmt bam -l <span style="color:#ae81ff">9</span> -T <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMFILE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_sorting2 -o <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>FILTEREDBAM<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+    samtools index -@ <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CPU<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>FILTEREDBAM<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+
+<span style="color:#66d9ef">done</span>
+</code></pre></div><p>Because we have single-end reads only, we recommend to rely on <code>macs2</code> to
+predict the fragment size model, rather than <code>bamCoverage</code>. <code>macs2</code> can compute both
+peaks and normalized coverage. Check <code>macs2 callpeak</code> help to see which flags are important to generate
+a depth-normalized coverage track.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#66d9ef">for</span> SAMPLE in CD4Tcells CD8Tcells
+<span style="color:#66d9ef">do</span>
+
+    <span style="color:#75715e">## -- Generate track and peaks simultaneously with MACS2</span>
+    macs2 callpeak <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        -t data/Homework_1/bam/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.bam <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        --gsize hs <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        --outdir data/Homework_1/bw <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        --name <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>        --bdg --SPMR 
+    
+    <span style="color:#75715e">## -- Convert macs2 bdg track to bigwig </span>
+    sed -i <span style="color:#e6db74">&#39;s/,/./&#39;</span> data/Homework_1/bw/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_treat_pileup.bdg
+    bedGraphToBigWig data/Homework_1/bw/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_treat_pileup.bdg ~/genomes/GRCh38/GRCh38.sizes.genome data/Homework_1/bw/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>SAMPLE<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.bw
+
+<span style="color:#66d9ef">done</span>
+</code></pre></div><h3 id="qc-the-3-different-samples-in-r">QC the 3 different samples in R</h3>
+<blockquote>
+<p>Get human gene features</p>
+</blockquote>
+<p>We can define TSSs and promoters manually from gene annotations.
+We recommend you fetch gene annotations using <code>AnnotationHub</code>.
+Keep in mind that you obtained the <code>GRCh38</code> reference from Ensembl <code>v98</code>!!</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(AnnotationDbi)
+<span style="color:#a6e22e">library</span>(tidyverse)
+<span style="color:#a6e22e">library</span>(plyranges)
+<span style="color:#a6e22e">library</span>(annotatr)
+
+<span style="color:#75715e">## -- Import genomic features</span>
+AnnotationHub<span style="color:#f92672">::</span><span style="color:#a6e22e">query</span>(AnnotationHub<span style="color:#f92672">::</span><span style="color:#a6e22e">AnnotationHub</span>(), <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#39;ensembl&#39;</span>, <span style="color:#e6db74">&#39;98&#39;</span>, <span style="color:#e6db74">&#39;GRCh38&#39;</span>, <span style="color:#e6db74">&#39;gtf&#39;</span>))
+hg_genes <span style="color:#f92672">&lt;-</span> AnnotationHub<span style="color:#f92672">::</span><span style="color:#a6e22e">AnnotationHub</span>()[[<span style="color:#e6db74">&#39;AH75393&#39;</span>]] <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">filter</span>(type <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;gene&#39;</span>, gene_biotype <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;protein_coding&#39;</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">filter</span>(<span style="color:#f92672">!</span>(<span style="color:#a6e22e">grepl</span>(<span style="color:#e6db74">&#39;GL|KI&#39;</span>, seqnames)))
+hg_TSSs <span style="color:#f92672">&lt;-</span> hg_genes <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">anchor_start</span>() <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">resize</span>(width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">unanchor</span>()
+hg_promoters <span style="color:#f92672">&lt;-</span> hg_TSSs <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">flank_upstream</span>(<span style="color:#ae81ff">4000</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">shift_downstream</span>(<span style="color:#ae81ff">2000</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">mutate</span>(ID <span style="color:#f92672">=</span> <span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#39;prom_&#39;</span>, <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#a6e22e">n</span>()))
+</code></pre></div><blockquote>
+<p>Import the 3 bam files in R</p>
+</blockquote>
+<p><code>VplotR</code> provides the <code>importPEBamFiles()</code> function, which wraps
+<code>GenomicAlignments::readGAlignmentPairs()</code> to import paired-end ATAC-seq data
+as fragments and shift them.
+In this study, since we are working with single-end data, we cannot rely on it.
+Try and import reads &ldquo;manually&rdquo;. Search for the right function from <code>GenomicAlignments</code> package!</p>
+<p>Try also to import <code>macs2</code> peaks in R. You can leverage the convenient <code>rtracklayer</code> package for this!</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(GenomicAlignments)
+<span style="color:#a6e22e">library</span>(rtracklayer)
+samples <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">c</span>(<span style="color:#e6db74">&#39;Bcells&#39;</span>, <span style="color:#e6db74">&#39;CD4Tcells&#39;</span>, <span style="color:#e6db74">&#39;CD8Tcells&#39;</span>)
+bams <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">lapply</span>(samples, <span style="color:#a6e22e">function</span>(sample) {
+    bfile <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#39;data/Homework_1/bam/&#39;</span>, sample, <span style="color:#e6db74">&#39;.bam&#39;</span>)
+    ga <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">readGAlignments</span>(bfile)
+    gr <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as</span>(ga, <span style="color:#e6db74">&#39;GRanges&#39;</span>)
+    <span style="color:#a6e22e">return</span>(gr)
+})
+<span style="color:#a6e22e">lengths</span>(bams)
+peaks <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">lapply</span>(samples, <span style="color:#a6e22e">function</span>(sample) {
+    peaks <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">import</span>(<span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#39;data/Homework_1/bw/&#39;</span>, sample, <span style="color:#e6db74">&#39;_peaks.narrowPeak&#39;</span>))
+    peak_summits <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">import</span>(<span style="color:#a6e22e">paste0</span>(<span style="color:#e6db74">&#39;data/Homework_1/bw/&#39;</span>, sample, <span style="color:#e6db74">&#39;_summits.bed&#39;</span>))
+    peaks<span style="color:#f92672">$</span>summit <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">start</span>(peak_summits)
+    <span style="color:#a6e22e">return</span>(peaks)
+})
+<span style="color:#a6e22e">lengths</span>(peaks)
+<span style="color:#a6e22e">names</span>(bams) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">names</span>(peaks) <span style="color:#f92672">&lt;-</span> samples
+</code></pre></div><blockquote>
+<p>Compute FRiP</p>
+</blockquote>
+<p>FRiP is the easiest metric to compute in ATAC QC: one just needs to identify
+which reads are overlapping with annotated peaks.</p>
+<p>Careful with reads which may overlap several peaks simultaneously !!</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r">Bcells_reads <span style="color:#f92672">&lt;-</span> bams[[<span style="color:#e6db74">&#39;Bcells&#39;</span>]]
+<span style="color:#75715e"># nInPeaks &lt;- length(queryHits(findOverlaps(Bcells_reads, peaks[[&#39;Bcells&#39;]])))</span>
+nInPeaks <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">length</span>(<span style="color:#a6e22e">unique</span>(<span style="color:#a6e22e">queryHits</span>(<span style="color:#a6e22e">findOverlaps</span>(Bcells_reads, peaks[[<span style="color:#e6db74">&#39;Bcells&#39;</span>]]))))
+nTot <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">length</span>(Bcells_reads)
+nInPeaks<span style="color:#f92672">/</span>nTot
+</code></pre></div><blockquote>
+<p>Check distance from Tn5 &ldquo;cut&rdquo; sites to TSS</p>
+</blockquote>
+<p>The &ldquo;cut&rdquo; site is at the first base of the single-end read.
+We can calculate the distance from the start of each ATAC read to the nearest TSS,
+and check the cumulative distribution of distances.</p>
+<p>Start first by trying to manually compute the distance using the standard
+<code>distanceToNearest()</code> function from <code>IRanges</code>, then build a data.frame and
+plot results manually.</p>
+<p>If you feel confident handling <code>GRanges</code> objects, try to leverage functions from
+<code>plyranges</code> to perform as much of the computation in a tidy workflow and
+building on top of the <code>GRanges</code> structure.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">## -- Manual way</span>
+Bcells_reads <span style="color:#f92672">&lt;-</span> bams[[<span style="color:#e6db74">&#39;Bcells&#39;</span>]]
+Bcells_reads <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">resize</span>(Bcells_reads, width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, fix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;start&#39;</span>)
+dists <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">distanceToNearest</span>(Bcells_reads, hg_TSSs, ignore.strand <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>)
+dists <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">elementMetadata</span>(dists)<span style="color:#f92672">$</span>distance
+dists <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">round</span>(dists<span style="color:#f92672">/</span><span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">0</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">10</span>
+dists <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">data.frame</span>(<span style="color:#a6e22e">table</span>(dists))
+dists<span style="color:#f92672">$</span>cumsum <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">cumsum</span>(dists<span style="color:#f92672">$</span>Freq)
+dists<span style="color:#f92672">$</span>log10dists <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">log10</span>(<span style="color:#a6e22e">as.numeric</span>(<span style="color:#a6e22e">as.character</span>(dists<span style="color:#f92672">$</span>dists)))
+<span style="color:#a6e22e">plot</span>(x <span style="color:#f92672">=</span> dists<span style="color:#f92672">$</span>log10dists, y <span style="color:#f92672">=</span> dists<span style="color:#f92672">$</span>cumsum)
+
+<span style="color:#75715e">## -- &#34;Tidy&#34; way, using `plyranges` and `tidyverse` functions</span>
+df<span style="color:#f92672">&lt;-</span>bams[[<span style="color:#e6db74">&#39;Bcells&#39;</span>]] <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">resize</span>(width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, fix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;start&#39;</span>) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">add_nearest_distance</span>(hg_TSSs) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">mutate</span>(distance <span style="color:#f92672">=</span> <span style="color:#a6e22e">round</span>(distance<span style="color:#f92672">/</span><span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">0</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">10</span>) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">as_tibble</span>() <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">count</span>(distance) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">mutate</span>(cumsum <span style="color:#f92672">=</span> <span style="color:#a6e22e">cumsum</span>(n), pct <span style="color:#f92672">=</span> cumsum<span style="color:#f92672">/</span><span style="color:#a6e22e">max</span>(cumsum))
+p<span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ggplot</span>(df, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> distance, y <span style="color:#f92672">=</span> pct)) <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">geom_line</span>() <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">theme_minimal</span>() <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">scale_x_log10</span>(limits <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1e7</span>)) <span style="color:#f92672">+</span>
+    <span style="color:#a6e22e">theme</span>(legend.position <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;none&#39;</span>) <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Cumulative distribution of Bcells ATAC-seq reads&#39;</span>, x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Distance from TSS&#39;</span>, y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Cum. %&#39;</span>)
+</code></pre></div><blockquote>
+<p>Compute promoter (TSS) Enrichment Score</p>
+</blockquote>
+<p>TSSES is another inmportant metric. Again, try both approaches: (1) using &ldquo;dirty&rdquo;
+(but efficient!) successives functions, or (2) a &ldquo;tidy&rdquo; approach relying on <code>plyranges</code>.</p>
+<p>A summaryzing plot is also typically shown to illustrate the &ldquo;shape&rdquo; of the TSS
+enrichment.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#75715e">## -- Manual way</span>
+Bcells_reads <span style="color:#f92672">&lt;-</span> bams[[<span style="color:#e6db74">&#39;Bcells&#39;</span>]]
+Bcells_reads <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">resize</span>(Bcells_reads, width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, fix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;start&#39;</span>)
+Bcells_reads_noMT <span style="color:#f92672">&lt;-</span> Bcells_reads<span style="color:#a6e22e">[seqnames</span>(Bcells_reads) <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#34;MT&#34;</span>]
+ov <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">findOverlaps</span>(Bcells_reads_noMT, hg_promoters, ignore.strand <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>)
+midprom <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">start</span>(hg_promoters<span style="color:#a6e22e">[subjectHits</span>(ov)]) <span style="color:#f92672">+</span> (<span style="color:#a6e22e">end</span>(hg_promoters<span style="color:#a6e22e">[subjectHits</span>(ov)]) <span style="color:#f92672">-</span> <span style="color:#a6e22e">start</span>(hg_promoters<span style="color:#a6e22e">[subjectHits</span>(ov)])) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
+distance <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">start</span>(Bcells_reads_noMT<span style="color:#a6e22e">[queryHits</span>(ov)]) <span style="color:#f92672">-</span> midprom
+binned_distance <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">round</span>(distance<span style="color:#f92672">/</span><span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">0</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span>
+dists <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">data.frame</span>(<span style="color:#a6e22e">table</span>(binned_distance))
+bg <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">mean</span>(dists<span style="color:#f92672">$</span>Freq<span style="color:#a6e22e">[abs</span>(<span style="color:#a6e22e">as.numeric</span>(<span style="color:#a6e22e">as.character</span>(dists<span style="color:#f92672">$</span>binned_distance))) <span style="color:#f92672">==</span> <span style="color:#ae81ff">2000</span>], na.rm <span style="color:#f92672">=</span> <span style="color:#66d9ef">TRUE</span>)
+dists<span style="color:#f92672">$</span>enrich <span style="color:#f92672">&lt;-</span> dists<span style="color:#f92672">$</span>Freq<span style="color:#f92672">/</span>bg
+TSSES <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">round</span>(dists<span style="color:#f92672">$</span>enrich<span style="color:#a6e22e">[as.numeric</span>(<span style="color:#a6e22e">as.character</span>(dists<span style="color:#f92672">$</span>binned_distance)) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>], <span style="color:#ae81ff">2</span>)
+<span style="color:#a6e22e">plot</span>(x <span style="color:#f92672">=</span> <span style="color:#a6e22e">as.numeric</span>(<span style="color:#a6e22e">as.character</span>(dists<span style="color:#f92672">$</span>binned_distance)), y <span style="color:#f92672">=</span> dists<span style="color:#f92672">$</span>enrich, type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;l&#39;</span>)
+
+<span style="color:#75715e">## -- &#34;Tidy&#34; way, using `plyranges` and `tidyverse` functions</span>
+df<span style="color:#f92672">&lt;-</span>bams[[<span style="color:#e6db74">&#39;Bcells&#39;</span>]] <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">resize</span>(width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, fix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;start&#39;</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">join_overlap_left</span>(hg_promoters) <span style="color:#f92672">%&gt;%</span> 
+    plyranges<span style="color:#f92672">::</span><span style="color:#a6e22e">select</span>(ID) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">filter</span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">is.na</span>(ID), seqnames <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;MT&#39;</span>) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">as_tibble</span>() <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">left_join</span>(<span style="color:#a6e22e">as_tibble</span>(hg_promoters) <span style="color:#f92672">%&gt;%</span> dplyr<span style="color:#f92672">::</span><span style="color:#a6e22e">select</span>(start, end, ID), by <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;ID&#39;</span>) <span style="color:#f92672">%&gt;%</span> 
+    <span style="color:#a6e22e">mutate</span>(
+        prom_mid <span style="color:#f92672">=</span> start.y <span style="color:#f92672">+</span> (end.y <span style="color:#f92672">-</span> start.y) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>, 
+        distance <span style="color:#f92672">=</span> start.x <span style="color:#f92672">-</span> prom_mid, 
+        binned_distance <span style="color:#f92672">=</span> <span style="color:#a6e22e">round</span>(distance<span style="color:#f92672">/</span><span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">0</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span>
+    ) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">count</span>(binned_distance) <span style="color:#f92672">%&gt;%</span>
+    <span style="color:#a6e22e">mutate</span>(
+        bg <span style="color:#f92672">=</span> <span style="color:#a6e22e">sum</span>(.data<span style="color:#f92672">$</span>n<span style="color:#a6e22e">[abs</span>(.data<span style="color:#f92672">$</span>binned_distance) <span style="color:#f92672">==</span> <span style="color:#ae81ff">2000</span>]), 
+        enrich_score <span style="color:#f92672">=</span> n<span style="color:#f92672">/</span>bg
+    )
+TSSES <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">round</span>(df[df<span style="color:#f92672">$</span>binned_distance <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;enrich_score&#39;</span>], <span style="color:#ae81ff">2</span>)
+p<span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">ggplot</span>(df, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> binned_distance, y <span style="color:#f92672">=</span> enrich_score)) <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">geom_line</span>() <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">theme_minimal</span>() <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">theme</span>(legend.position <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;none&#39;</span>) <span style="color:#f92672">+</span> 
+    <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> glue<span style="color:#f92672">::</span><span style="color:#a6e22e">glue</span>(<span style="color:#e6db74">&#39;TSS enrichment score (Signal-to-noise ratio): {TSSES}&#39;</span>), x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Distance from TSS&#39;</span>, y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Enrich. score&#39;</span>)
+</code></pre></div><p>How do you find the &ldquo;tidy&rdquo; approach, compared to the manual one without <code>plyranges</code>? What are the pros/cons of each approach?</p>
+<blockquote>
+<p>Can you wrap the 3 samples together?</p>
+</blockquote>
+<p>Try leveraging <code>BiocParallel</code> package. It provides <code>apply()</code>-like functions, and can run computation in
+parallel using the <code>BPPARAM</code> argument.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(BiocParallel)
+pl <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">bplapply</span>(BPPARAM <span style="color:#f92672">=</span> <span style="color:#a6e22e">MulticoreParam</span>(workers <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>), samples, <span style="color:#a6e22e">function</span>(sample) {
+    reads <span style="color:#f92672">&lt;-</span> bams[[sample]]
+    reads_1bp <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">resize</span>(reads, width <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, fix <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;start&#39;</span>)
+    peaks <span style="color:#f92672">&lt;-</span> peaks[[sample]]
+    <span style="color:#75715e">## FRiP</span>
+    df<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">add_nearest_distance</span>(reads, peaks) <span style="color:#f92672">%&gt;%</span>
+        <span style="color:#a6e22e">as_tibble</span>() <span style="color:#f92672">%&gt;%</span> 
+        <span style="color:#a6e22e">mutate</span>(isInPeak <span style="color:#f92672">=</span> distance <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">%&gt;%</span> 
+        <span style="color:#a6e22e">drop_na</span>(isInPeak)
+    pct <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">round</span>(<span style="color:#a6e22e">sum</span>(df<span style="color:#f92672">$</span>isInPeak <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">/</span> <span style="color:#a6e22e">nrow</span>(df) <span style="color:#f92672">*</span> <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">2</span>)
+    p1<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ggplot</span>(df, <span style="color:#a6e22e">aes</span>(y <span style="color:#f92672">=</span> isInPeak)) <span style="color:#f92672">+</span> 
+        <span style="color:#a6e22e">geom_bar</span>() <span style="color:#f92672">+</span> 
+        <span style="color:#a6e22e">theme_minimal</span>() <span style="color:#f92672">+</span> 
+        <span style="color:#a6e22e">theme</span>(legend.position <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;none&#39;</span>) <span style="color:#f92672">+</span> 
+        <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> glue<span style="color:#f92672">::</span><span style="color:#a6e22e">glue</span>(<span style="color:#e6db74">&#39;{sample}: Fraction of reads in peaks (FRiP): {pct}&#39;</span>), x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;# of ATAC-seq reads&#39;</span>, y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Fragment within peak&#39;</span>)
+    <span style="color:#75715e">## Distance from TSSs</span>
+    df<span style="color:#f92672">&lt;-</span>reads_1bp <span style="color:#f92672">%&gt;%</span> 
+        <span style="color:#a6e22e">add_nearest_distance</span>(hg_TSSs) <span style="color:#f92672">%&gt;%</span>
+        <span style="color:#a6e22e">mutate</span>(distance <span style="color:#f92672">=</span> <span style="color:#a6e22e">round</span>(distance<span style="color:#f92672">/</span><span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">0</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">10</span>) <span style="color:#f92672">%&gt;%</span>
+        <span style="color:#a6e22e">as_tibble</span>() <span style="color:#f92672">%&gt;%</span> 
+        <span style="color:#a6e22e">count</span>(distance) <span style="color:#f92672">%&gt;%</span> 
+        <span style="color:#a6e22e">mutate</span>(cumsum <span style="color:#f92672">=</span> <span style="color:#a6e22e">cumsum</span>(n), pct <span style="color:#f92672">=</span> cumsum<span style="color:#f92672">/</span><span style="color:#a6e22e">max</span>(cumsum))
+    p2<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ggplot</span>(df, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> distance, y <span style="color:#f92672">=</span> pct)) <span style="color:#f92672">+</span> 
+        <span style="color:#a6e22e">geom_line</span>() <span style="color:#f92672">+</span> 
+        <span style="color:#a6e22e">theme_minimal</span>() <span style="color:#f92672">+</span> 
+        <span style="color:#a6e22e">scale_x_log10</span>(limits <span style="color:#f92672">=</span> <span style="color:#a6e22e">c</span>(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1e7</span>)) <span style="color:#f92672">+</span>
+        <span style="color:#a6e22e">theme</span>(legend.position <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;none&#39;</span>) <span style="color:#f92672">+</span> 
+        <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> glue<span style="color:#f92672">::</span><span style="color:#a6e22e">glue</span>(<span style="color:#e6db74">&#39;{sample}: Cumulative distribution of ATAC-seq reads&#39;</span>), x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Distance from TSS&#39;</span>, y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Cum. %&#39;</span>)
+    <span style="color:#75715e">## TSSES</span>
+    df<span style="color:#f92672">&lt;-</span>reads_1bp <span style="color:#f92672">%&gt;%</span> 
+        <span style="color:#a6e22e">join_overlap_left</span>(hg_promoters) <span style="color:#f92672">%&gt;%</span> 
+        plyranges<span style="color:#f92672">::</span><span style="color:#a6e22e">select</span>(ID) <span style="color:#f92672">%&gt;%</span>
+        <span style="color:#a6e22e">filter</span>(<span style="color:#f92672">!</span><span style="color:#a6e22e">is.na</span>(ID), seqnames <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;MT&#39;</span>) <span style="color:#f92672">%&gt;%</span>
+        <span style="color:#a6e22e">as_tibble</span>() <span style="color:#f92672">%&gt;%</span> 
+        <span style="color:#a6e22e">left_join</span>(<span style="color:#a6e22e">as_tibble</span>(hg_promoters) <span style="color:#f92672">%&gt;%</span> dplyr<span style="color:#f92672">::</span><span style="color:#a6e22e">select</span>(start, end, ID), by <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;ID&#39;</span>) <span style="color:#f92672">%&gt;%</span> 
+        <span style="color:#a6e22e">mutate</span>(
+            prom_mid <span style="color:#f92672">=</span> start.y <span style="color:#f92672">+</span> (end.y <span style="color:#f92672">-</span> start.y) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>, 
+            distance <span style="color:#f92672">=</span> start.x <span style="color:#f92672">-</span> prom_mid, 
+            binned_distance <span style="color:#f92672">=</span> <span style="color:#a6e22e">round</span>(distance<span style="color:#f92672">/</span><span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">0</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">100</span>
+        ) <span style="color:#f92672">%&gt;%</span>
+        <span style="color:#a6e22e">count</span>(binned_distance) <span style="color:#f92672">%&gt;%</span>
+        <span style="color:#a6e22e">mutate</span>(
+            bg <span style="color:#f92672">=</span> <span style="color:#a6e22e">sum</span>(.data<span style="color:#f92672">$</span>n<span style="color:#a6e22e">[abs</span>(.data<span style="color:#f92672">$</span>binned_distance) <span style="color:#f92672">==</span> <span style="color:#ae81ff">2000</span>]), 
+            enrich_score <span style="color:#f92672">=</span> n<span style="color:#f92672">/</span>bg
+        )
+    TSSES <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">round</span>(df[df<span style="color:#f92672">$</span>binned_distance <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>, <span style="color:#e6db74">&#39;enrich_score&#39;</span>], <span style="color:#ae81ff">2</span>)
+    p3<span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ggplot</span>(df, <span style="color:#a6e22e">aes</span>(x <span style="color:#f92672">=</span> binned_distance, y <span style="color:#f92672">=</span> enrich_score)) <span style="color:#f92672">+</span> 
+        <span style="color:#a6e22e">geom_line</span>() <span style="color:#f92672">+</span> 
+        <span style="color:#a6e22e">theme_minimal</span>() <span style="color:#f92672">+</span> 
+        <span style="color:#a6e22e">theme</span>(legend.position <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;none&#39;</span>) <span style="color:#f92672">+</span> 
+        <span style="color:#a6e22e">labs</span>(title <span style="color:#f92672">=</span> glue<span style="color:#f92672">::</span><span style="color:#a6e22e">glue</span>(<span style="color:#e6db74">&#39;{sample}: TSS enrichment score (Signal-to-noise ratio): {TSSES}&#39;</span>), x <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Distance from TSS&#39;</span>, y <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;Enrich. score&#39;</span>)
+    cowplot<span style="color:#f92672">::</span><span style="color:#a6e22e">plot_grid</span>(p1, p2, p3, nrow <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>)
+})
+cowplot<span style="color:#f92672">::</span><span style="color:#a6e22e">plot_grid</span>(plotlist <span style="color:#f92672">=</span> pl, nrow <span style="color:#f92672">=</span> <span style="color:#ae81ff">3</span>)
+</code></pre></div><p>Comment the differences. Can you visually appreciate whether some samples are
+a better quality than others, when loading the tracks in IGV?</p>
+<h2 id="2-split-bam-file-from-human-5000-pbmcs-scatacseq-into-bams--cell-type">2. Split bam file from human 5,000 PBMCs scATACseq into bams / cell type</h2>
+<h3 id="download-data-1">Download data</h3>
+<p>scATACseq for human 5K PBMCs can be downloaded from
+<a href="https://support.10xgenomics.com/single-cell-atac/datasets/2.0.0/atac_pbmc_5k_nextgem" target="_blank">10X Genomics</a>
+.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mkdir -p data/Homework_1/scATAC
+curl https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_analysis.tar.gz -o data/Homework_1/scATAC/atac_pbmc_5k_nextgem_analysis.tar.gz
+curl https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_possorted_bam.bam -o data/Homework_1/scATAC/atac_pbmc_5k_nextgem_possorted_bam.bam
+curl https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_possorted_bam.bam.bai -o data/Homework_1/scATAC/atac_pbmc_5k_nextgem_possorted_bam.bam.bai
+curl https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_web_summary.html -o data/Homework_1/scATAC/atac_pbmc_5k_nextgem_web_summary.html
+curl https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_cloupe.cloupe -o data/Homework_1/scATAC/atac_pbmc_5k_nextgem_cloupe.cloupe
+</code></pre></div><h3 id="check-the-clusters-found-by-cellranger">Check the clusters found by cellranger</h3>
+<p>Different cluster strategies are ran by <code>cellranger-atac</code>.
+Check the HTML report: by default, the graph-based clustering results are shown. What do you think of them?
+Load the <code>cloupe</code> file in <code>Loupe</code> to check other clustering results.
+Is there another clustering approach that may look better-suited?</p>
+<h3 id="split-bam-file-into-cluster-specific-bam-files-using-sinto">Split bam file into cluster-specific bam files using sinto</h3>
+<p>Now that you have chosen which cluster strategy you are going to use by inspecting data in Loupe,
+can you find where the different clustering results are stored in the <code>scATAC</code> directory?
+Can you locate the clustering results from <code>kmeans</code> clustering with <code>k = 5</code>? How many cells are in each cluster?</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">sed <span style="color:#e6db74">&#39;1d&#39;</span> data/Homework_1/scATAC/analysis/clustering/kmeans_5_clusters/clusters.csv | cut -f2 -d, | sort | uniq -c
+</code></pre></div><p>Read <a href="https://timoast.github.io/sinto/basic_usage.html" target="_blank">&lt;code&gt;sinto&lt;/code&gt;</a>
+ documentation. Which subcommand
+is going to be useful to split a single scATACseq bam file into cluster-specific bam files?
+Do we have the required files for <code>sinto</code> to work? What about the sorting of the original bam file?
+Which bam tag is storing the cell barcode information, in the bam file generated by <code>cellranger-atac count</code>?</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">samtools view -h data/Homework_1/scATAC/atac_pbmc_5k_nextgem_possorted_bam.bam | head -n <span style="color:#ae81ff">220</span> | grep -Pv <span style="color:#e6db74">&#34;^@SQ&#34;</span>
+samtools view data/Homework_1/scATAC/atac_pbmc_5k_nextgem_possorted_bam.bam | head -n <span style="color:#ae81ff">1</span> 
+</code></pre></div><p>Try and separate the <code>bam</code> file into individual bigwig files using <code>sinto</code>.
+Watch out the space needed by <code>sinto</code>! <code>sinto</code> does not provide any way to
+indicate the temporary/destination directory to use, it simply creates the bam files
+according to barcodes in the working directory. Since the original <code>bam</code> file is ~15Gb,
+the generated data is going to take at least this much disk space in the current directory!</p>
+<p><code>sinto</code> will take about 15 min to run for the 5K cells dataset.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">currdir<span style="color:#f92672">=</span><span style="color:#e6db74">`</span>pwd<span style="color:#e6db74">`</span>
+cd data/Homework_1/scATAC
+sed <span style="color:#e6db74">&#39;1d&#39;</span> analysis/clustering/kmeans_5_clusters/clusters.csv | sed <span style="color:#e6db74">&#39;s/,/\t/&#39;</span> &gt; clusters.tsv
+sinto filterbarcodes <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -b atac_pbmc_5k_nextgem_possorted_bam.bam <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --cells clusters.tsv <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -p <span style="color:#ae81ff">12</span> 
+cd $currdir
+</code></pre></div><h2 id="3-make-pseudo-bulk-bigwig-tracks">3. Make pseudo-bulk bigwig tracks</h2>
+<p>Are the generated bam files ready to be converted into coverage track?
+Are there any processing step we should take care of (e.g. mapping, filtering)?
+Which method can be used at this stage, to generate a depth-normalized track from
+bam files?</p>
+<blockquote>
+<p>With macs2</p>
+</blockquote>
+<p>Watch out, this file is now paired-end !</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">mkdir -p data/Homework_1/scATAC/peaks
+mkdir -p data/Homework_1/scATAC/bw
+CLUSTER<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>
+macs2 callpeak <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    -t data/Homework_1/scATAC/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CLUSTER<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.bam <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --format BAMPE <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --gsize hs <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --outdir data/Homework_1/scATAC/peaks/ <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --name <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CLUSTER<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --bdg --SPMR 
+sed -i <span style="color:#e6db74">&#39;s/,/./&#39;</span> data/Homework_1/scATAC/peaks/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CLUSTER<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_treat_pileup.bdg
+bedGraphToBigWig data/Homework_1/scATAC/peaks/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CLUSTER<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_treat_pileup.bdg ~/genomes/GRCh38/GRCh38.sizes.genome.modified data/Homework_1/scATAC/bw/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CLUSTER<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_macs2.bw
+</code></pre></div><blockquote>
+<p>With bedtools</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">CLUSTER<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>
+genomeCoverageBed -ibam -d -bg -pc -i data/Homework_1/scATAC/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CLUSTER<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.bam | sort -k1,1 -k2,2n &gt; tmp.bdg
+bedGraphToBigWig tmp.bdg ~/genomes/GRCh38/GRCh38.sizes.genome.modified data/Homework_1/scATAC/bw/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CLUSTER<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_bedtools.bw
+</code></pre></div><blockquote>
+<p>With deeptools bamCoverage</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">CLUSTER<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>
+samtools index data/Homework_1/scATAC/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CLUSTER<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.bam
+bamCoverage <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --bam data/Homework_1/scATAC/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CLUSTER<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>.bam <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --outFileName data/Homework_1/scATAC/bw/<span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>CLUSTER<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>_deeptools.bw <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --binSize <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --numberOfProcessors <span style="color:#ae81ff">16</span> <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --extendReads <span style="color:#ae81ff">\
+</span><span style="color:#ae81ff"></span>    --ignoreDuplicates
+</code></pre></div><blockquote>
+<p>With tracklayer in R</p>
+</blockquote>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(GenomicAlignments)
+<span style="color:#a6e22e">for </span>(sample in <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">5</span>) {
+    bam <span style="color:#f92672">&lt;-</span> glue<span style="color:#f92672">::</span><span style="color:#a6e22e">glue</span>(<span style="color:#e6db74">&#39;data/Homework_1/scATAC/{sample}.bam&#39;</span>)
+    track <span style="color:#f92672">&lt;-</span> glue<span style="color:#f92672">::</span><span style="color:#a6e22e">glue</span>(<span style="color:#e6db74">&#39;data/Homework_1/scATAC/bw/{sample}_R.bw&#39;</span>)
+    ncells <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sum</span>(<span style="color:#a6e22e">read.table</span>(<span style="color:#e6db74">&#39;data/Homework_1/scATAC/clusters.tsv&#39;</span>)<span style="color:#f92672">$</span>V2 <span style="color:#f92672">==</span> sample)
+    ga <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">readGAlignments</span>(bam)
+    gr <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as</span>(ga, <span style="color:#e6db74">&#39;GRanges&#39;</span>)
+    gr.cov <span style="color:#f92672">&lt;-</span> IRanges<span style="color:#f92672">::</span><span style="color:#a6e22e">coverage</span>(gr)
+    rtracklayer<span style="color:#f92672">::</span><span style="color:#a6e22e">export.bw</span>(gr.cov, track)
+}
+</code></pre></div><p>Should the sequencing depth be taken into account here?
+How can we normalize the coverage signal in this context?
+Using the <code>R</code> method, try to normalize by the number of cells in each cluster.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-r" data-lang="r"><span style="color:#a6e22e">library</span>(GenomicAlignments)
+<span style="color:#a6e22e">for </span>(sample in <span style="color:#ae81ff">1</span><span style="color:#f92672">:</span><span style="color:#ae81ff">5</span>) {
+    bam <span style="color:#f92672">&lt;-</span> glue<span style="color:#f92672">::</span><span style="color:#a6e22e">glue</span>(<span style="color:#e6db74">&#39;data/Homework_1/scATAC/{sample}.bam&#39;</span>)
+    track <span style="color:#f92672">&lt;-</span> glue<span style="color:#f92672">::</span><span style="color:#a6e22e">glue</span>(<span style="color:#e6db74">&#39;data/Homework_1/scATAC/bw/{sample}_R_cellnb-normalized.bw&#39;</span>)
+    ncells <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sum</span>(<span style="color:#a6e22e">read.table</span>(<span style="color:#e6db74">&#39;data/Homework_1/scATAC/clusters.tsv&#39;</span>)<span style="color:#f92672">$</span>V2 <span style="color:#f92672">==</span> sample)
+    ga <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">readGAlignments</span>(bam)
+    gr <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">as</span>(ga, <span style="color:#e6db74">&#39;GRanges&#39;</span>)
+    gr.cov <span style="color:#f92672">&lt;-</span> IRanges<span style="color:#f92672">::</span><span style="color:#a6e22e">coverage</span>(gr) <span style="color:#f92672">/</span> (ncells<span style="color:#f92672">*</span><span style="color:#ae81ff">2</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">100</span>
+    rtracklayer<span style="color:#f92672">::</span><span style="color:#a6e22e">export.bw</span>(gr.cov, track)
+}
+</code></pre></div><h2 id="4-compare-bulk-and-pseudo-bulk-tracks">4. Compare bulk and pseudo-bulk tracks</h2>
+<p>Load tracks from bulk ATAC-seq (B cells, CD4+ T cells and CD8+ T cells) in IGV,
+along with the 5 pseudo-bulk tracks from scATACseq.
+Look at relevant loci (<code>CD4</code>, <code>CD8A</code>, <code>CD8B</code>, &hellip;). Which cluster could correspond
+to B cells? To T cells?</p>
+
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/scATACseq-workshop/homeworks/" title="3. Homeworks"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/scATACseq-workshop/homeworks/homework_2/" title="Homework 2" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1628535635"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1628535635"></script>
+    
+        
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628535635"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-105947713-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </body>
+</html>
+

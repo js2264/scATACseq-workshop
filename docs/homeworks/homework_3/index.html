@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/scATACseq-workshop/images/favicon.png" type="image/png">
 
-    <title>2. Prerequisites and required machine configuration :: Analysis of bulk and single-cell ATAC-seq datasets</title>
+    <title>Homework 3 :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
     <link href="/scATACseq-workshop/css/nucleus.css?1628535635" rel="stylesheet">
@@ -40,7 +40,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/scATACseq-workshop/introduction/01_prerequisites/">
+  <body class="" data-url="/scATACseq-workshop/homeworks/homework_3/">
     <nav id="sidebar" class="">
 
 
@@ -72,7 +72,7 @@
   
     
     <li data-nav-id="/scATACseq-workshop/introduction/" title=" Bulk and single-cell ATAC-seq analysis" class="dd-item
-        parent
+        
         
         
         ">
@@ -119,7 +119,7 @@
  
   
     
-      <li data-nav-id="/scATACseq-workshop/introduction/01_prerequisites/" title="2. Prerequisites and required machine configuration" class="dd-item active">
+      <li data-nav-id="/scATACseq-workshop/introduction/01_prerequisites/" title="2. Prerequisites and required machine configuration" class="dd-item ">
         <a href="/scATACseq-workshop/introduction/01_prerequisites/">
         2. Prerequisites and required machine configuration
         
@@ -269,7 +269,7 @@
   
     
     <li data-nav-id="/scATACseq-workshop/homeworks/" title="3. Homeworks" class="dd-item
-        
+        parent
         
         
         ">
@@ -337,7 +337,7 @@
  
   
     
-      <li data-nav-id="/scATACseq-workshop/homeworks/homework_3/" title="Homework 3" class="dd-item ">
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_3/" title="Homework 3" class="dd-item active">
         <a href="/scATACseq-workshop/homeworks/homework_3/">
         Homework 3
         
@@ -417,90 +417,31 @@
           
             <h1>
               
-              2. Prerequisites and required machine configuration
+              Homework 3
             </h1>
           
 
         
 
 
-<h2 id="prerequisites">Prerequisites</h2>
-<p>The course is intended for those who have basic familiarity with <code>Unix</code> and the <code>R</code> scripting language.</p>
-<ul>
-<li>If a refresher is needed for Unix command line (hopefully not), please go over <a href="https://ryanstutorials.net/linuxtutorial/" target="_blank">this tutorial</a>
- and its <a href="https://ryanstutorials.net/linuxtutorial/cheatsheet.php" target="_blank">companion cheatsheet</a>
-.</li>
-<li>Getting down to basics: an introduction to the fundamentals of R (<a href="markravinet.github.io/Introduction.html" target="_blank">courtesy of Mark Ravinet</a>
-).</li>
-<li>Gentle introduction to <code>R/Biocondutor</code>: <a href="https://bioconductor.github.io/BiocWorkshops/introduction-to-bioconductor-annotation-resources.html" target="_blank">here</a>
-</li>
-<li>For a full in-depth guide of <code>Bioconductor</code> ecosystem: read the comprehensive <code>R/Bioconductor</code> book from Kasper D. Hansen available under the CC BY-NC-SA 4.0 license <a href="/scATACseq-workshop/
-docs/bioconductor.pdf" target="_blank">[PDF]</a>
-</li>
-</ul>
-<h2 id="local-configuration">Local configuration</h2>
-<ul>
-<li>Install R and other important softwares</li>
-</ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">conda create --name scatac
-conda activate scatac
-conda install -c conda-forge -c bioconda <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    r-base r-essentials r-devtools r-tidyverse r-biocmanager r-polyclip r-rcpparmadillo <span style="color:#ae81ff">\
-</span><span style="color:#ae81ff"></span>    trim-galore bowtie2 samtools deeptools meme macs2 igv sinto yapc htseq subread ucsc-bedgraphtobigwig bedtools
-conda install -c anaconda hdf5
-</code></pre></div><ul>
-<li>The following R packages have also been installed (along with their many dependencies, of course!):</li>
-</ul>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh">Rscript -e <span style="color:#e6db74">&#34;
-</span><span style="color:#e6db74">## CRAN packages
-</span><span style="color:#e6db74">install.packages(&#39;vroom&#39;, repos = &#39;https://cran.irsn.fr&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;hdf5r&#39;, dependencies=TRUE, repos = &#39;https://cran.irsn.fr&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;umap&#39;, repos = &#39;https://cran.irsn.fr&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;corrplot&#39;, repos = &#39;https://cran.irsn.fr&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;gam&#39;, repos = &#39;https://cran.irsn.fr&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;ggbeeswarm&#39;, repos = &#39;https://cran.irsn.fr&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;ggthemes&#39;, repos = &#39;https://cran.irsn.fr&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;Matrix&#39;, repos = &#39;https://cran.irsn.fr&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;rgl&#39;, dependencies=TRUE, repos = &#39;https://cran.irsn.fr&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;Signac&#39;, repos = &#39;https://cran.irsn.fr&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;Seurat&#39;, repos = &#39;https://cran.irsn.fr&#39;)
-</span><span style="color:#e6db74">install.packages(&#39;BiocManager&#39;, repos = &#39;https://cran.irsn.fr&#39;)
-</span><span style="color:#e6db74">
-</span><span style="color:#e6db74">## Bioconductor Packages
-</span><span style="color:#e6db74">BiocManager::install(&#39;SingleCellExperiment&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;scran&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;scater&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;DESeq2&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;chromVAR&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;pheatmap&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;JASPAR2020&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;motifmatchr&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;AnnotationHub&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;plyranges&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;VplotR&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;annotatr&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;rtracklayer&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;biovizBase&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;gprofiler2&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;DOSE&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;clusterProfiler&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;EnsDb.Mmusculus.v79&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;EnsDb.Hsapiens.v79&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;TxDb.Hsapiens.UCSC.hg38.knownGene&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;TxDb.Mmusculus.UCSC.mm10.knownGene&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;org.Hs.eg.db&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;org.Mm.eg.db&#39;, update = FALSE)
-</span><span style="color:#e6db74">BiocManager::install(&#39;BSgenome.Celegans.UCSC.ce11&#39;, update = FALSE)
-</span><span style="color:#e6db74">&#34;</span>
-</code></pre></div><ul>
+<h2 id="goals">Goals</h2>
+<ol>
 <li>
-<p>Additional dependencies:</p>
-<ul>
-<li>cellranger-atac</li>
-<li>Loupe</li>
-</ul>
+<p>Import, filter, normalize and cluster cells from the T-cell exhaustion dataset</p>
 </li>
-</ul>
+<li>
+<p>Run chromVAR to identify TF activity in each cell cluster</p>
+</li>
+<li>
+<p>Using knowledge on TFs used in different cell types, suggest cell cluster annotation of the dataset</p>
+</li>
+<li>
+<p>Confirm this by computing gene activity scores and check known markers</p>
+</li>
+<li>
+<p>Integrate scRNAseq and scATACseq to validate cluster annotations</p>
+</li>
+</ol>
 
 
 <footer class="footline">
@@ -538,59 +479,6 @@ conda install -c anaconda hdf5
             
                 
                     
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
                         
                         
                     
@@ -633,38 +521,6 @@ conda install -c anaconda hdf5
                     
             
         
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
                     
             
         
@@ -737,6 +593,94 @@ conda install -c anaconda hdf5
             
             
                 
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
                     
                 
                 
@@ -758,10 +702,10 @@ conda install -c anaconda hdf5
 	 
 	 
 		
-			<a class="nav nav-prev" href="/scATACseq-workshop/introduction/02_program/" title="1. Program"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/scATACseq-workshop/homeworks/homework_2/" title="Homework 2"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/scATACseq-workshop/hands-on-sessions/" title="1. Hands-on sessions" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/scATACseq-workshop/extra-resources/" title="Extra resources" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

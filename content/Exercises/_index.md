@@ -8,7 +8,7 @@ title: "2. Exercises"
 
 - Check fragment size distribution in bulk ATAC-seq
 
-```{r }
+```r
 library(tidyverse)
 library(plyranges)
 fragments <- VplotR::importPEBamFiles(
@@ -28,7 +28,7 @@ p1<-ggplot(df, aes(x = ?...?, y = ?...?)) +
 
 - Check coverage of each cluster in `Loupe` at relevant loci to propose an annotation for each cluster. 
 
-```shell
+```sh
 # Check e.g. `CD19`, `CD8`, `CD4`, `CD3`
 ```
 
@@ -38,7 +38,7 @@ p1<-ggplot(df, aes(x = ?...?, y = ?...?)) +
 
 - Inspect genes closest to the most DA peaks (in DA analysis between clusters 10+16 and 4+5). Propose a function for cells in these groups.
 
-```{r }
+```r
 da_peaks <- readRDS('data/MouseBrain/da_peaks_10-16_vs_4-5.rds')
 peaks <- rownames(da_peaks)[da_peaks$?...? <= 0.01 & da_peaks$?...? >= 1.5]
 peaks <- GenomicRanges::GRanges(str_replace(peaks, '-', ':'))
@@ -49,7 +49,7 @@ Annotation(brain)[nearest(?...?, Annotation(?...?))]$?...?
 
 - Compare clustering to provided cell type activity for ce11 promoters. Comment. 
 
-```{r }
+```r
 dds <- readRDS('data/ATAC_worm/quantif.rds')
 rlogs <- readRDS('?...?')
 clusts <- cluster::pam(select(rlogs, -?...?), k = 9)
@@ -66,7 +66,7 @@ table(rowData(dds)$which.tissues[!rowData(dds)$allZero], clusts$?...?)
 
 - Try different thresholds for tSNE embeddings. Comment. 
 
-```{r }
+```r
 set.seed(2021)
 dev <- readRDS('data/scATAC_LSC-LMPP-mono/dev.rds')
 p <- cowplot::plot_grid(

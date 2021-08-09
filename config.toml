@@ -14,15 +14,18 @@ defaultContentLanguageInSubdir= true
   description = "Analysis of bulk and single-cell ATAC-seq datasets"
   author = "Jacques Serizay"
   showVisitedLinks = false
-  disableBreadcrumb = true
-  disableNextPrev = true
+  disableBreadcrumb = false
+  disableNextPrev = false
   disableLandingPageButton = true
-  disableMermaid = false
-  customMermaidURL = "https://unpkg.com/mermaid@8.8.0/dist/mermaid.min.js"
   titleSeparator = "::"
   themeVariant = "red"
   ordersectionsby = "title"
   disableSearch = true
+  disableInlineCopyToClipBoard = true
+  custom_css = ["css/custom_css.css"]
 
 [blackfriday]
   hrefTargetBlank = true
+
+[markup.highlight]
+  style = "monokai"

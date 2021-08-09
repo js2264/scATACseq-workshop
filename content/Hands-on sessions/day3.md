@@ -99,7 +99,7 @@ Data is obtained from `Corces et al., Nat. Genet. 2018` (DOI: [10.1038/ng.3646](
 
 ### Download raw data 
 
-```shell
+```sh
 ## -- Downloading tracks 
 mkdir data/scATAC_LSC-LMPP-mono
 cd data/scATAC_LSC-LMPP-mono
@@ -110,7 +110,7 @@ cd ../..
 
 ### Process raw data 
 
-```shell
+```sh
 ## -- Process data 
 GENOME=~/genomes/hg38/hg38.fa
 CPU=16

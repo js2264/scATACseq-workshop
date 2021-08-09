@@ -12,26 +12,30 @@
     <title>Day 03 :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
-    <link href="/scATACseq-workshop/css/nucleus.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hybrid.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/featherlight.min.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/auto-complete.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/theme.css?1628453292" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hugo-theme.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/nucleus.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1628535635" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/theme-red.css?1628453292" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme-red.css?1628535635" rel="stylesheet">
     
-    
+    <link href="/scATACseq-workshop/css/custom_css.css?1628535635" rel="stylesheet">
 
-    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628535635"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
           display:none !important;
       }
+      
+        :not(pre) > code + span.copy-to-clipboard {
+            display: none;
+        }
       
     </style>
     
@@ -275,6 +279,79 @@
       </a>
       
       
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_1/" title="Homework 1" class="dd-item ">
+        <a href="/scATACseq-workshop/homeworks/homework_1/">
+        Homework 1
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_2/" title="Homework 2" class="dd-item ">
+        <a href="/scATACseq-workshop/homeworks/homework_2/">
+        Homework 2
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_3/" title="Homework 3" class="dd-item ">
+        <a href="/scATACseq-workshop/homeworks/homework_3/">
+        Homework 3
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
     </li>
   
  
@@ -429,14 +506,14 @@ enrichments <span style="color:#f92672">%&gt;%</span> <span style="color:#a6e22e
 <p>Data is obtained from <code>Corces et al., Nat. Genet. 2018</code> (DOI: <a href="https://doi.org/10.1038/ng.3646" target="_blank">10.1038/ng.3646</a>
 )</p>
 <h3 id="download-raw-data">Download raw data</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e">## -- Downloading tracks </span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## -- Downloading tracks </span>
 mkdir data/scATAC_LSC-LMPP-mono
 cd data/scATAC_LSC-LMPP-mono
 cat download.txt | parallel --bar -j <span style="color:#ae81ff">16</span> <span style="color:#f92672">{}</span>
 mv SRR* fastq/
 cd ../..
 </code></pre></div><h3 id="process-raw-data">Process raw data</h3>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-shell" data-lang="shell"><span style="color:#75715e">## -- Process data </span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-sh" data-lang="sh"><span style="color:#75715e">## -- Process data </span>
 GENOME<span style="color:#f92672">=</span>~/genomes/hg38/hg38.fa
 CPU<span style="color:#f92672">=</span><span style="color:#ae81ff">16</span>
 
@@ -756,6 +833,54 @@ p <span style="color:#f92672">&lt;-</span> cowplot<span style="color:#f92672">::
                     
 
                     
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
             
         
                     
@@ -783,6 +908,13 @@ p <span style="color:#f92672">&lt;-</span> cowplot<span style="color:#f92672">::
 
 	 
 	 
+		
+			<a class="nav nav-prev" href="/scATACseq-workshop/hands-on-sessions/day2/" title="Day 02"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/scATACseq-workshop/exercises/" title="2. Exercises" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
     </div>
 
     </section>
@@ -790,19 +922,19 @@ p <span style="color:#f92672">&lt;-</span> cowplot<span style="color:#f92672">::
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/scATACseq-workshop/js/clipboard.min.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/featherlight.min.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/highlight.pack.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1628535635"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/learn.js?1628453292"></script>
-    <script src="/scATACseq-workshop/js/hugo-learn.js?1628453292"></script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1628535635"></script>
     
         
-            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628453292"></script>
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628535635"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

@@ -1,0 +1,22 @@
+pre {
+    padding: 5px;
+    border-radius: 10px;
+    line-height: 1.15;
+}
+
+.language-r,.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 0.5em;
+    color: #e4ebff;
+    background: #282c34;
+    line-height: 1.30;
+}
+
+pre .copy-to-clipboard {
+    right: -200000px;
+}
+
+code {
+    background: #282C3432;
+}
