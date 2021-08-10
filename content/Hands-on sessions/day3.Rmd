@@ -1,12 +1,19 @@
 ---
 title: "Day 03"
+output:
+  blogdown::html_page:
+    highlight: tango
 ---
+
+```{r echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
 
 ## Hands-on session 5: Motif and TF analysis of peak clusters 
 
 ### Scan genome for JASPAR motifs
 
-```r
+```{r}
 motifs <- TFBSTools::getMatrixSet(
     JASPAR2020::JASPAR2020,
     list(species = 6239, all_versions = FALSE)
@@ -24,7 +31,7 @@ motifs_hits <- BiocParallel::bplapply(motifs, function(motif) {
 
 ### For each set of promoters, check the enrichment of each TF motif in it
 
-```r
+```{r}
 library(plyranges)
 ce11_proms <- SummarizedExperiment::rowRanges(readRDS('data/ATAC_worm/quantif.rds'))
 enrichments <- BiocParallel::bplapply(names(motifs_hits), function(TF) {
@@ -59,7 +66,7 @@ enrichments %>% filter(pval < 0.01, odd > 3) %>% arrange(tissue)
 
 ### Check promoter groups against a list of TF binding locations (by ChIP)
 
-```r
+```{r}
 beds <- list.files('data/ATAC_worm/ChIP', full.names = TRUE)
 TF_peaks <- lapply(beds, rtracklayer::import)
 names(TF_peaks) <- basename(beds) %>% str_replace_all('.bed|', '')
@@ -99,7 +106,7 @@ Data is obtained from `Corces et al., Nat. Genet. 2018` (DOI: [10.1038/ng.3646](
 
 ### Download raw data 
 
-```sh
+```{sh}
 ## -- Downloading tracks 
 mkdir data/scATAC_LSC-LMPP-mono
 cd data/scATAC_LSC-LMPP-mono
@@ -110,7 +117,7 @@ cd ../..
 
 ### Process raw data 
 
-```sh
+```{sh}
 ## -- Process data 
 GENOME=~/genomes/hg38/hg38.fa
 CPU=16
@@ -149,7 +156,7 @@ bamCoverage \
 
 ### Get a SummarizedExperiment of scATACseq counts over DHS sites
 
-```r
+```{r}
 library(tidyverse)
 library(SummarizedExperiment)
 library(plyranges)
@@ -226,7 +233,7 @@ saveRDS(sumExp, 'data/scATAC_LSC-LMPP-mono/sumExp.rds')
 
 ### Filter cells and promoters
 
-```r
+```{r}
 sumExp <- chromVAR::filterSamples(
     sumExp,
     min_depth = 1000, 
@@ -238,13 +245,13 @@ sumExp <- sumExp[rowSums(assay(sumExp)) > 10, ]
 
 ### Add GC bias to promoters 
 
-```r
+```{r}
 sumExp <- chromVAR::addGCBias(sumExp, genome = BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38)
 ```
 
 ### Search for motifs with high deviation from background distribution 
 
-```r
+```{r}
 motifs <- TFBSTools::getMatrixSet(
     JASPAR2020::JASPAR2020,
     list(species = 9606, all_versions = FALSE)
@@ -257,7 +264,7 @@ saveRDS(dev, 'data/scATAC_LSC-LMPP-mono/dev.rds')
 
 ### Check TF enrichment in different cell types 
 
-```r
+```{r}
 variability <- chromVAR::computeVariability(dev)
 p <- chromVAR::plotVariability(variability, use_plotly = FALSE) 
 tsne_results <- chromVAR::deviationsTsne(dev, threshold = 1.5)

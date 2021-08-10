@@ -1,6 +1,13 @@
 ---
 title: "Homework 2"
+output:
+  blogdown::html_page:
+    highlight: tango
 ---
+
+```{r echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
 
 ## Goals
 
@@ -23,7 +30,7 @@ title: "Homework 2"
 scATACseq for mouse E18 5K brain can be downloaded from 
 [10X Genomics](https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k). 
 
-```sh
+```{sh}
 mkdir -p data/Homework_2/scATAC
 curl https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_E18_brain_fresh_5k/atac_v1_E18_brain_fresh_5k_analysis.tar.gz -o data/Homework_2/scATAC/atac_v1_E18_brain_fresh_5k_analysis.tar.gz
 curl https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_E18_brain_fresh_5k/atac_v1_E18_brain_fresh_5k_filtered_peak_bc_matrix.h5 -o data/Homework_2/scATAC/atac_v1_E18_brain_fresh_5k_filtered_peak_bc_matrix.h5
@@ -41,7 +48,7 @@ curl https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_v1_E18_brain_fresh_
 
 ### Import data in R 
 
-```r
+```{r}
 library(Signac)
 library(Seurat)
 library(tidyverse)
@@ -59,13 +66,14 @@ brain_assay <- Signac::CreateChromatinAssay(
 
 ## -- Read metadata
 metadata <- vroom::vroom(
-    file = "data/Homework_2/atac_v1_adult_brain_fresh_5k_singlecell.csv",
+    file = "data/Homework_2/scATAC/atac_v1_E18_brain_fresh_5k_singlecell.csv",
     col_names = TRUE
 ) %>% 
     filter(barcode != 'NO_BARCODE') %>% 
     mutate(cell = barcode) %>%
+    filter(cell %in% colnames(brain_assay)) %>%
     column_to_rownames('barcode') %>% 
-    as.data.frame()
+    as.data.frame() 
 
 ## -- Create Seurat object
 brain <- Seurat::CreateSeuratObject(
@@ -76,6 +84,7 @@ brain <- Seurat::CreateSeuratObject(
 )
 
 ## -- Add genome annotations
+AnnotationHubquery(AnnotationHub::AnnotationHub(), c('annotations', 'gencode', 'GRCm38'))
 Annotation(brain) <- AnnotationHub::AnnotationHub()[['AH49547']] %>% 
     filter(gene_type == 'protein_coding', type == 'gene') %>% 
     mutate(gene_biotype = gene_type)
@@ -83,22 +92,20 @@ Annotation(brain) <- AnnotationHub::AnnotationHub()[['AH49547']] %>%
 
 ### QCing data 
 
-```r
+```{r}
 ## -- Nucleosome signal 
 brain <- NucleosomeSignal(object = brain)
 brain$nucleosome_group <- ifelse(brain$nucleosome_signal > 4, 'NS > 4', 'NS < 4')
-range(brain$nucleosome_group)
+range(brain$nucleosome_signal)
 table(brain$nucleosome_group)
 
 ## -- Frag. size distribution
 frags <- vroom::vroom('/data/20210804_scATACseq-workshop/data/MouseBrain/atac_v1_adult_brain_fresh_5k_fragments.tsv.gz', col_names = FALSE) %>% 
     setNames(c('chr', 'start', 'stop', 'cell', 'cluster'))
-frags_chr12 <- filter(frags, chr == 'chr12', start < 50000000, cluster %in% c(1:10))
-x <- left_join(frags_chr12, dplyr::select(brain@meta.data, cell, nucleosome_group)) %>% 
-    mutate(width = stop - start) 
-p <- ggplot(x, aes(x = width)) + 
+p <-slice_head(frags, n = 1000000) %>% 
+    mutate(width = stop - start) %>%
+    ggplot(aes(x = width)) + 
     geom_bar() + 
-    facet_wrap(~nucleosome_group+cluster, scales = 'free', ncol = 10) + 
     xlim(c(0, 800))
 
 ## -- TSS enrichment
@@ -111,9 +118,7 @@ df <- frags_chr12 %>%
     join_overlap_left(plyranges::select(mm_promoters, prom_id)) %>% # Link each fragment to overlapping promoter
     as_tibble() %>% 
     drop_na(prom_id) %>% # Remove fragments which are not overlapping any promoter
-    left_join(
-        as_tibble(mm_promoters), by = c('prom_id')
-    ) %>% 
+    left_join(as_tibble(mm_promoters), by = c('prom_id')) %>% 
     mutate(
         midprom = start.y + (end.y - start.y)/2, 
         distance = midprom - start.x
@@ -131,7 +136,7 @@ p<- ggplot(df, aes(x = distance, y = n)) +
 
 ### Subsetting data
 
-```r
+```{r}
 brain$FRiP <- brain$peak_region_fragments / brain$passed_filters * 100
 brain$FRiBl <- brain$blacklist_region_fragments / brain$peak_region_fragments
 brain <- subset(
@@ -151,7 +156,7 @@ brain <- brain[
 
 ### Normalizing and reduce dimensionality data 
 
-```r
+```{r}
 brain <- Signac::RunTFIDF(brain) # Normalize data
 brain <- Signac::FindTopFeatures(brain, min.cutoff = 'q0') # Find variable features
 brain <- Signac::RunSVD(object = brain) # Perform dimensionality reduction
@@ -161,7 +166,7 @@ brain <- Signac::RunSVD(object = brain) # Perform dimensionality reduction
 
 Now that cells are embedded in a lower dimensional space, they can be graph-clustered just like "regular" cells from scRNAseq. 
 
-```r
+```{r}
 brain <- FindNeighbors(object = brain, reduction = 'lsi', dims = 2:30)
 brain <- FindClusters(object = brain, algorithm = 3, resolution = 1.2, verbose = FALSE)
 brain <- RunUMAP(brain, reduction = 'lsi', dims = 2:30)
@@ -179,7 +184,7 @@ Seurat::DimPlot(brain, group.by = 'ident', label = 'ident')
 scRNAseq for mouse E18 5K brain can be downloaded from 
 [10X Genomics](https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K). 
 
-```sh
+```{sh}
 mkdir data/Homework_2/scRNA
 curl https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_web_summary.html -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_web_summary.html
 curl https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_metrics_summary.csv -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_metrics_summary.csv
@@ -192,3 +197,7 @@ curl https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons
 curl https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_sample_molecule_info.h5 -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_molecule_info.h5
 curl https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_analysis.tar.gz -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_analysis.tar.gz
 ```
+
+## 4. Functional analysis of DA peaks
+
+

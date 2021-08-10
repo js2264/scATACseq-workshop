@@ -1,6 +1,13 @@
 ---
 title: " Bulk and single-cell ATAC-seq analysis"
+output:
+  blogdown::html_page:
+    highlight: tango
 ---
+
+```{r echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
 
 ## Course content: 
 
@@ -8,7 +15,7 @@ The workshop content is available [at this adress: https://github.com/js2264/scA
 
 You can clone it locally with `git`: 
 
-```sh
+```{sh}
 git clone https://github.com/js2264/scATACseq-workshop.git
 ```
 

@@ -12,21 +12,21 @@
     <title>3. Homeworks :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
-    <link href="/scATACseq-workshop/css/nucleus.css?1628535635" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628535635" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hybrid.css?1628535635" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/featherlight.min.css?1628535635" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628535635" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/auto-complete.css?1628535635" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628535635" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/theme.css?1628535635" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hugo-theme.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/nucleus.css?1628600323" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628600323" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1628600323" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1628600323" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628600323" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1628600323" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628600323" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1628600323" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1628600323" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/theme-red.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme-red.css?1628600323" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/custom_css.css?1628535635" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/custom_css.css?1628600323" rel="stylesheet">
 
-    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628600323"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -316,27 +316,6 @@
  
   
     
-      <li data-nav-id="/scATACseq-workshop/homeworks/homework_2/" title="Homework 2" class="dd-item ">
-        <a href="/scATACseq-workshop/homeworks/homework_2/">
-        Homework 2
-        
-        </a>
-    </li>
-     
-  
- 
-
-            
-          
-            
-            
-
-
-
-
- 
-  
-    
       <li data-nav-id="/scATACseq-workshop/homeworks/homework_3/" title="Homework 3" class="dd-item ">
         <a href="/scATACseq-workshop/homeworks/homework_3/">
         Homework 3
@@ -425,51 +404,65 @@
 
 
 
-	<h2 id="homeworks-day-1">Homeworks: day 1</h2>
-<p><a href="homework_1" target="_blank">Instructions</a>
-</p>
+	
+<script src="/scATACseq-workshop/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="homeworks-day-1" class="section level2">
+<h2>Homeworks: day 1</h2>
+<p><a href="homework_1">Instructions</a></p>
 <ul>
-<li>Process bulk ATAC-seq for PBMCs (GSE111013), perform QCs and compare them to single-cell QCs</li>
-<li>Split bam file from mouse PBMCs scATACseq into bams / cell type using <code>sinto</code></li>
-<li>Make some celltype-specific pseudo-bulk bigwig tracks</li>
+<li>Process bulk ATAC-seq for PBMCs (GSE111013), perform QCs and compare them to single-cell QCs<br />
+</li>
+<li>Split bam file from mouse PBMCs scATACseq into bams / cell type using <code>sinto</code><br />
+</li>
+<li>Make some celltype-specific pseudo-bulk bigwig tracks<br />
+</li>
 <li>Compare bulk and pseudo-bulk tracks in IGV; try to infer cell type for some of the cell clusters in scATACseq</li>
 </ul>
 <blockquote>
 <p>Links:</p>
 </blockquote>
 <ul>
-<li><a href="https://doi.org/10.1038/s41467-019-14081-6" target="_blank">Bulk ATAC-seq paper</a>
-</li>
-<li><a href="https://support.10xgenomics.com/single-cell-atac/datasets/2.0.0/atac_pbmc_5k_nextgem" target="_blank">5K human PBMCs, 10X Genomics scATACseq dataset</a>
-</li>
+<li><a href="https://doi.org/10.1038/s41467-019-14081-6">Bulk ATAC-seq paper</a></li>
+<li><a href="https://support.10xgenomics.com/single-cell-atac/datasets/2.0.0/atac_pbmc_5k_nextgem">5K human PBMCs, 10X Genomics scATACseq dataset</a></li>
 </ul>
-<h2 id="homeworks-day-2">Homeworks: day 2</h2>
+</div>
+<div id="homeworks-day-2" class="section level2">
+<h2>Homeworks: day 2</h2>
 <ul>
-<li>Import counts from mouse E18 brain scATACseq (5K) (provided by 10X Genomics) in R and process them</li>
-<li>Transfer annotations from PBMC 10X scRNAseq to PBMC 10X scATACseq (pre-processed scRNAseq available in <code>data/MouseBrain/mPBMC_scRNAseq.rds</code>)</li>
+<li>Import counts from mouse E18 brain scATACseq (5K) (provided by 10X Genomics) in R and process them<br />
+</li>
+<li>Transfer annotations from PBMC 10X scRNAseq to PBMC 10X scATACseq (pre-processed scRNAseq available in <code>data/MouseBrain/mPBMC_scRNAseq.rds</code>)<br />
+</li>
 <li>Find genes associated to DA peaks and run GO over-enrichment / gene set enrichment analysis</li>
 </ul>
 <blockquote>
 <p>Links:</p>
 </blockquote>
 <ul>
-<li><a href="https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k">https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k</a></li>
-<li><a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K">https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K</a></li>
+<li><a href="https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k" class="uri">https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k</a></li>
+<li><a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K" class="uri">https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K</a></li>
 </ul>
-<h2 id="homeworks-day-3">Homeworks: day 3</h2>
+</div>
+<div id="homeworks-day-3" class="section level2">
+<h2>Homeworks: day 3</h2>
 <ul>
-<li>Import, filter, normalize and cluster cells from the T-cell exhaustion dataset</li>
-<li>Run chromVAR to identify TF activity in each cell cluster</li>
-<li>Using knowledge on TFs used in different cell types, suggest cell cluster annotation of the dataset</li>
+<li>Import, filter, normalize and cluster cells from the T-cell exhaustion dataset<br />
+</li>
+<li>Run chromVAR to identify TF activity in each cell cluster<br />
+</li>
+<li>Using knowledge on TFs used in different cell types, suggest cell cluster annotation of the dataset<br />
+</li>
 <li>Confirm this by computing gene activity scores and check known markers</li>
 </ul>
 <blockquote>
 <p>Links:</p>
 </blockquote>
 <ul>
-<li>DOI: <a href="https://doi.org/10.1038/s41587-019-0206-z" target="_blank">10.1038/s41587-019-0206-z</a>
-</li>
+<li>DOI: <a href="https://doi.org/10.1038/s41587-019-0206-z">10.1038/s41587-019-0206-z</a></li>
 </ul>
+</div>
 
 
 
@@ -685,22 +678,6 @@
             
         
                     
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
             
         
                     
@@ -742,19 +719,19 @@
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/scATACseq-workshop/js/clipboard.min.js?1628535635"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628535635"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628535635"></script>
-    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628535635"></script>
-    <script src="/scATACseq-workshop/js/featherlight.min.js?1628535635"></script>
-    <script src="/scATACseq-workshop/js/highlight.pack.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1628600323"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628600323"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628600323"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628600323"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1628600323"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1628600323"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628535635"></script>
-    <script src="/scATACseq-workshop/js/learn.js?1628535635"></script>
-    <script src="/scATACseq-workshop/js/hugo-learn.js?1628535635"></script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628600323"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1628600323"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1628600323"></script>
     
         
-            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628535635"></script>
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628600323"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

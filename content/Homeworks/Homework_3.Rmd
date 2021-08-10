@@ -1,6 +1,13 @@
 ---
 title: "Homework 3"
+output:
+  blogdown::html_page:
+    highlight: tango
 ---
+
+```{r echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
 
 ## Goals
 

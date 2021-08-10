@@ -1,17 +1,19 @@
 pre {
-    padding: 5px;
     border-radius: 10px;
-    line-height: 1.15;
+    background: #ffffff;
 }
 
-.language-r,.hljs {
+.language-r, .hljs, .language-sh, bash{
     display: block;
     overflow-x: auto;
-    padding: 0.5em;
-    color: #e4ebff;
-    background: #282c34;
+    padding: 2em;
+    color: #8f8f8f;
+    background: #f3f3f3;
     line-height: 1.30;
+    border: 1px black;
+    border-radius: 10px;
 }
+
 
 pre .copy-to-clipboard {
     right: -200000px;

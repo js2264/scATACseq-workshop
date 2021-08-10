@@ -1,6 +1,13 @@
 ---
 title: "1. Hands-on sessions"
+output:
+  blogdown::html_page:
+    highlight: tango
 ---
+
+```{r echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
 
 ## Day 1 
 

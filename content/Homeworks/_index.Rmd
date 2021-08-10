@@ -1,5 +1,8 @@
 ---
 title: "3. Homeworks"
+output:
+  blogdown::html_page:
+    highlight: tango
 ---
 
 ## Homeworks: day 1

@@ -1,6 +1,13 @@
 ---
 title: "Homework 1"
+output:
+  blogdown::html_page:
+    highlight: tango
 ---
+
+```{r echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
 
 ## Goals
 
@@ -25,7 +32,7 @@ Data was generated in [this study: DOI 10.1038/s41467-019-14081-6](https://doi.o
 First, we need to fetch to raw reads. You can go to the [SRA Run Selector](https://trace.ncbi.nlm.nih.gov/Traces/study/?acc=GSE111013&o=acc_s%3Aa) 
 and search for your `GSE` of interest. Try and download reads for samples `SRR6762787`, `SRR6762790` and `SRR6762793`.
 
-```sh
+```{sh}
 https://trace.ncbi.nlm.nih.gov/Traces/study/?acc=GSE111013&o=acc_s%3Aa
 ```
 
@@ -33,7 +40,7 @@ Alternatively, I like to use another web-based approach: the [sra-explorer](http
 It allows you to search for individual experiments using GEO ids, SRA ids, and much more, and reports download links for 
 your samples of interest. 
 
-```sh
+```{sh}
 mkdir -p data/Homework_1/fastq
 curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/007/SRR6762787/SRR6762787.fastq.gz -o data/Homework_1/fastq/Bcells.fq.gz
 curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/000/SRR6762790/SRR6762790.fastq.gz -o data/Homework_1/fastq/CD4Tcells.fq.gz
@@ -42,7 +49,7 @@ curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/003/SRR6762793/SRR6762793.fast
 
 Yet another approach is to use the recent `ffq` tool. It's quite effective, though it is not very fast... 
 
-```sh
+```{sh}
 conda install -c conda-forge -c bioconda ffq
 ffq SRR6762787 SRR6762790 SRR6762793 | grep "url"
 ```
@@ -58,7 +65,7 @@ If you don't have a human reference yet, you will need to build one for Bowtie2!
 We recommend fetching assembly and annotations from Ensembl. 
 This step will take ~ 15 min at least, but you'll only have to do it once!. 
 
-```sh
+```{sh}
 mkdir ~/genomes/GRCh38/
 curl -L http://ftp.ensembl.org/pub/release-98/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz -o ~/genomes/GRCh38/GRCh38.fa.gz
 gunzip ~/genomes/GRCh38/*
@@ -81,7 +88,7 @@ to map single-end reads. Commands for trimming, mapping, filtering and track
 generation will all be affected !! Check the manual for each command if you are 
 unsure of some flags. 
 
-```sh
+```{sh}
 mkdir data/Homework_1/bam
 mkdir data/Homework_1/bw
 GENOME=~/genomes/GRCh38/GRCh38.fa
@@ -117,7 +124,7 @@ predict the fragment size model, rather than `bamCoverage`. `macs2` can compute 
 peaks and normalized coverage. Check `macs2 callpeak` help to see which flags are important to generate 
 a depth-normalized coverage track.
 
-```sh
+```{sh}
 for SAMPLE in CD4Tcells CD8Tcells
 do
 
@@ -144,7 +151,7 @@ We can define TSSs and promoters manually from gene annotations.
 We recommend you fetch gene annotations using `AnnotationHub`. 
 Keep in mind that you obtained the `GRCh38` reference from Ensembl `v98`!!
  
-```r
+```{r}
 library(AnnotationDbi)
 library(tidyverse)
 library(plyranges)
@@ -175,7 +182,7 @@ Try and import reads "manually". Search for the right function from `GenomicAlig
 
 Try also to import `macs2` peaks in R. You can leverage the convenient `rtracklayer` package for this!
 
-```r
+```{r}
 library(GenomicAlignments)
 library(rtracklayer)
 samples <- c('Bcells', 'CD4Tcells', 'CD8Tcells')
@@ -203,7 +210,7 @@ which reads are overlapping with annotated peaks.
 
 Careful with reads which may overlap several peaks simultaneously !!
 
-```r
+```{r}
 Bcells_reads <- bams[['Bcells']]
 # nInPeaks <- length(queryHits(findOverlaps(Bcells_reads, peaks[['Bcells']])))
 nInPeaks <- length(unique(queryHits(findOverlaps(Bcells_reads, peaks[['Bcells']]))))
@@ -225,7 +232,7 @@ If you feel confident handling `GRanges` objects, try to leverage functions from
 `plyranges` to perform as much of the computation in a tidy workflow and 
 building on top of the `GRanges` structure. 
 
-```r
+```{r}
 ## -- Manual way
 Bcells_reads <- bams[['Bcells']]
 Bcells_reads <- resize(Bcells_reads, width = 1, fix = 'start')
@@ -261,7 +268,7 @@ TSSES is another inmportant metric. Again, try both approaches: (1) using "dirty
 A summaryzing plot is also typically shown to illustrate the "shape" of the TSS 
 enrichment. 
 
-```r
+```{r}
 ## -- Manual way
 Bcells_reads <- bams[['Bcells']]
 Bcells_reads <- resize(Bcells_reads, width = 1, fix = 'start')
@@ -309,7 +316,7 @@ How do you find the "tidy" approach, compared to the manual one without `plyrang
 Try leveraging `BiocParallel` package. It provides `apply()`-like functions, and can run computation in 
 parallel using the `BPPARAM` argument. 
 
-```r
+```{r}
 library(BiocParallel)
 pl <- bplapply(BPPARAM = MulticoreParam(workers = 3), samples, function(sample) {
     reads <- bams[[sample]]
@@ -377,7 +384,7 @@ a better quality than others, when loading the tracks in IGV?
 scATACseq for human 5K PBMCs can be downloaded from 
 [10X Genomics](https://support.10xgenomics.com/single-cell-atac/datasets/2.0.0/atac_pbmc_5k_nextgem). 
 
-```sh
+```{sh}
 mkdir -p data/Homework_1/scATAC
 curl https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_analysis.tar.gz -o data/Homework_1/scATAC/atac_pbmc_5k_nextgem_analysis.tar.gz
 curl https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_possorted_bam.bam -o data/Homework_1/scATAC/atac_pbmc_5k_nextgem_possorted_bam.bam
@@ -399,7 +406,7 @@ Now that you have chosen which cluster strategy you are going to use by inspecti
 can you find where the different clustering results are stored in the `scATAC` directory? 
 Can you locate the clustering results from `kmeans` clustering with `k = 5`? How many cells are in each cluster?
 
-```sh
+```{sh}
 sed '1d' data/Homework_1/scATAC/analysis/clustering/kmeans_5_clusters/clusters.csv | cut -f2 -d, | sort | uniq -c
 ```
 
@@ -409,7 +416,7 @@ Do we have the required files for `sinto` to work? What about the sorting of the
 Which bam tag is storing the cell barcode information, in the bam file generated by `cellranger-atac count`? 
 
 
-```sh
+```{sh}
 samtools view -h data/Homework_1/scATAC/atac_pbmc_5k_nextgem_possorted_bam.bam | head -n 220 | grep -Pv "^@SQ"
 samtools view data/Homework_1/scATAC/atac_pbmc_5k_nextgem_possorted_bam.bam | head -n 1 
 ```
@@ -422,7 +429,7 @@ the generated data is going to take at least this much disk space in the current
 
 `sinto` will take about 15 min to run for the 5K cells dataset. 
 
-```sh
+```{sh}
 currdir=`pwd`
 cd data/Homework_1/scATAC
 sed '1d' analysis/clustering/kmeans_5_clusters/clusters.csv | sed 's/,/\t/' > clusters.tsv
@@ -444,7 +451,7 @@ bam files?
 
 Watch out, this file is now paired-end !
 
-```sh
+```{sh}
 mkdir -p data/Homework_1/scATAC/peaks
 mkdir -p data/Homework_1/scATAC/bw
 CLUSTER=5
@@ -461,7 +468,7 @@ bedGraphToBigWig data/Homework_1/scATAC/peaks/"${CLUSTER}"_treat_pileup.bdg ~/ge
 
 > With bedtools
 
-```sh
+```{sh}
 CLUSTER=5
 genomeCoverageBed -ibam -d -bg -pc -i data/Homework_1/scATAC/"${CLUSTER}".bam | sort -k1,1 -k2,2n > tmp.bdg
 bedGraphToBigWig tmp.bdg ~/genomes/GRCh38/GRCh38.sizes.genome.modified data/Homework_1/scATAC/bw/"${CLUSTER}"_bedtools.bw
@@ -469,7 +476,7 @@ bedGraphToBigWig tmp.bdg ~/genomes/GRCh38/GRCh38.sizes.genome.modified data/Home
 
 > With deeptools bamCoverage
 
-```sh
+```{sh}
 CLUSTER=5
 samtools index data/Homework_1/scATAC/"${CLUSTER}".bam
 bamCoverage \
@@ -483,7 +490,7 @@ bamCoverage \
 
 > With tracklayer in R 
 
-```r
+```{r}
 library(GenomicAlignments)
 for (sample in 1:5) {
     bam <- glue::glue('data/Homework_1/scATAC/{sample}.bam')
@@ -500,7 +507,7 @@ Should the sequencing depth be taken into account here?
 How can we normalize the coverage signal in this context? 
 Using the `R` method, try to normalize by the number of cells in each cluster.
 
-```r
+```{r}
 library(GenomicAlignments)
 for (sample in 1:5) {
     bam <- glue::glue('data/Homework_1/scATAC/{sample}.bam')

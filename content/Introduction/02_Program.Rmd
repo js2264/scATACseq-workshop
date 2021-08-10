@@ -1,6 +1,13 @@
 ---
 title: "1. Program"
+output:
+  blogdown::html_page:
+    highlight: tango
 ---
+
+```{r echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
 
 ## Session 1: Processing bulk and single-cell ATAC-seq reads
 

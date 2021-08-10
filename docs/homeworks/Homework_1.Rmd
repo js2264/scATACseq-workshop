@@ -1,0 +1,529 @@
+---
+title: "Homework 1"
+output:
+  blogdown::html_page:
+    highlight: tango
+---
+
+```{r echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+## Goals
+
+1. Process bulk ATAC-seq for PBMCs (`GSE111013`), perform QCs and compare them to the bulk ATAC-seq QCs seen during demonstration session 1
+
+> We recommend focusing on few datasets from healthy donors, e.g. `SRR6762787`, `SRR6762790` and `SRR6762793`. 
+
+2. Split bam file from human 5,000 PBMCs scATACseq into bams / cell type using `sinto`
+
+> Processed data can be obtained directly from [10X Genomics](https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_web_summary.html)
+
+3. Make some celltype-specific pseudo-bulk bigwig tracks
+
+4. Compare bulk and pseudo-bulk tracks in IGV; try to infer cell type for some of the cell clusters in scATACseq
+
+## 1. Process bulk ATAC-seq from human B cells, CD4+ and CD8+ T cells
+
+Data was generated in [this study: DOI 10.1038/s41467-019-14081-6](https://doi.org/10.1038/s41467-019-14081-6). 
+
+### Download data 
+
+First, we need to fetch to raw reads. You can go to the [SRA Run Selector](https://trace.ncbi.nlm.nih.gov/Traces/study/?acc=GSE111013&o=acc_s%3Aa) 
+and search for your `GSE` of interest. Try and download reads for samples `SRR6762787`, `SRR6762790` and `SRR6762793`.
+
+```{sh}
+https://trace.ncbi.nlm.nih.gov/Traces/study/?acc=GSE111013&o=acc_s%3Aa
+```
+
+Alternatively, I like to use another web-based approach: the [sra-explorer](https://sra-explorer.info/#) website. 
+It allows you to search for individual experiments using GEO ids, SRA ids, and much more, and reports download links for 
+your samples of interest. 
+
+```{sh}
+mkdir -p data/Homework_1/fastq
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/007/SRR6762787/SRR6762787.fastq.gz -o data/Homework_1/fastq/Bcells.fq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/000/SRR6762790/SRR6762790.fastq.gz -o data/Homework_1/fastq/CD4Tcells.fq.gz
+curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/003/SRR6762793/SRR6762793.fastq.gz -o data/Homework_1/fastq/CD8Tcells.fq.gz
+```
+
+Yet another approach is to use the recent `ffq` tool. It's quite effective, though it is not very fast... 
+
+```{sh}
+conda install -c conda-forge -c bioconda ffq
+ffq SRR6762787 SRR6762790 SRR6762793 | grep "url"
+```
+
+### Map raw data onto hg19
+
+Note that in the next step (focusing on scATACseq), the reads were aligned to the `GRCh38` reference. For tracks to be comparable, 
+we will align bulk ATAC-seq data onto `GRCh38` reference as well. 
+
+> Build GRCh38 genome reference
+
+If you don't have a human reference yet, you will need to build one for Bowtie2! 
+We recommend fetching assembly and annotations from Ensembl. 
+This step will take ~ 15 min at least, but you'll only have to do it once!. 
+
+```{sh}
+mkdir ~/genomes/GRCh38/
+curl -L http://ftp.ensembl.org/pub/release-98/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz -o ~/genomes/GRCh38/GRCh38.fa.gz
+gunzip ~/genomes/GRCh38/*
+bowtie2-build --large-index --threads 16 ~/genomes/GRCh38/GRCh38.fa ~/genomes/GRCh38/GRCh38.fa
+samtools faidx ~/genomes/GRCh38/GRCh38.fa
+cut -f1,2 ~/genomes/GRCh38/GRCh38.fa.fai > ~/genomes/GRCh38/GRCh38.sizes.genome
+cat ~/genomes/GRCh38/GRCh38.sizes.genome \
+    | sed -E 's/^([0-9]+|[XY])/chr\1/' \
+    | sed -E 's/^MT/chrM/' \
+    > ~/genomes/GRCh38/GRCh38.sizes.genome.modified
+```
+
+> Align reads to GRCh38 reference
+
+Note that in this study, the ATAC-seq experiments were sequenced in single-end mode. 
+This is not a major issue, though it limits QCs as fragment sizes are not available.
+
+Try and adapt the different mapping steps used during the demonstration session 
+to map single-end reads. Commands for trimming, mapping, filtering and track 
+generation will all be affected !! Check the manual for each command if you are 
+unsure of some flags. 
+
+```{sh}
+mkdir data/Homework_1/bam
+mkdir data/Homework_1/bw
+GENOME=~/genomes/GRCh38/GRCh38.fa
+CPU=16
+
+for SAMPLE in Bcells CD4Tcells CD8Tcells
+do
+
+    READS=data/Homework_1/fastq/"${SAMPLE}".fq.gz
+    TRIMMEDREADS=data/Homework_1/fastq/"${SAMPLE}"_trimmed.fq.gz
+    SAMFILE=data/Homework_1/bam/"${SAMPLE}".sam
+    FILTEREDBAM=data/Homework_1/bam/"${SAMPLE}".bam
+    TRACK=data/Homework_1/bw/"${SAMPLE}".bw
+
+    ## -- Trim reads and run QC
+    trim_galore --fastqc --cores 4 --output_dir data/Homework_1/fastq/ "${READS}"
+
+    ## -- Map reads in single-end mode
+    bowtie2 --threads "${CPU}" -x "${GENOME}" -U "${TRIMMEDREADS}" > "${SAMFILE}"
+
+    ## -- Filter reads 
+    samtools sort -@ "${CPU}" -T "${SAMFILE}"_sorting "${SAMFILE}" | \
+    samtools markdup -@ "${CPU}" -r -T "${SAMFILE}"_markdup - - | \
+    samtools view -@ "${CPU}" -F 4 -q 10 -1 -b - | \
+    samtools sort -@ "${CPU}" --output-fmt bam -l 9 -T "${SAMFILE}"_sorting2 -o "${FILTEREDBAM}"
+    samtools index -@ "${CPU}" "${FILTEREDBAM}"
+
+done
+```
+
+Because we have single-end reads only, we recommend to rely on `macs2` to 
+predict the fragment size model, rather than `bamCoverage`. `macs2` can compute both 
+peaks and normalized coverage. Check `macs2 callpeak` help to see which flags are important to generate 
+a depth-normalized coverage track.
+
+```{sh}
+for SAMPLE in CD4Tcells CD8Tcells
+do
+
+    ## -- Generate track and peaks simultaneously with MACS2
+    macs2 callpeak \
+        -t data/Homework_1/bam/"${SAMPLE}".bam \
+        --gsize hs \
+        --outdir data/Homework_1/bw \
+        --name "${SAMPLE}" \
+        --bdg --SPMR 
+    
+    ## -- Convert macs2 bdg track to bigwig 
+    sed -i 's/,/./' data/Homework_1/bw/"${SAMPLE}"_treat_pileup.bdg
+    bedGraphToBigWig data/Homework_1/bw/"${SAMPLE}"_treat_pileup.bdg ~/genomes/GRCh38/GRCh38.sizes.genome data/Homework_1/bw/"${SAMPLE}".bw
+
+done
+```
+
+### QC the 3 different samples in R
+
+> Get human gene features
+
+We can define TSSs and promoters manually from gene annotations. 
+We recommend you fetch gene annotations using `AnnotationHub`. 
+Keep in mind that you obtained the `GRCh38` reference from Ensembl `v98`!!
+ 
+```{r}
+library(AnnotationDbi)
+library(tidyverse)
+library(plyranges)
+library(annotatr)
+
+## -- Import genomic features
+AnnotationHub::query(AnnotationHub::AnnotationHub(), c('ensembl', '98', 'GRCh38', 'gtf'))
+hg_genes <- AnnotationHub::AnnotationHub()[['AH75393']] %>% 
+    filter(type == 'gene', gene_biotype == 'protein_coding') %>% 
+    filter(!(grepl('GL|KI', seqnames)))
+hg_TSSs <- hg_genes %>% 
+    anchor_start() %>% 
+    resize(width = 1) %>% 
+    unanchor()
+hg_promoters <- hg_TSSs %>%
+    flank_upstream(4000) %>% 
+    shift_downstream(2000) %>% 
+    mutate(ID = paste0('prom_', 1:n()))
+```
+
+> Import the 3 bam files in R
+
+`VplotR` provides the `importPEBamFiles()` function, which wraps 
+`GenomicAlignments::readGAlignmentPairs()` to import paired-end ATAC-seq data 
+as fragments and shift them. 
+In this study, since we are working with single-end data, we cannot rely on it. 
+Try and import reads "manually". Search for the right function from `GenomicAlignments` package! 
+
+Try also to import `macs2` peaks in R. You can leverage the convenient `rtracklayer` package for this!
+
+```{r}
+library(GenomicAlignments)
+library(rtracklayer)
+samples <- c('Bcells', 'CD4Tcells', 'CD8Tcells')
+bams <- lapply(samples, function(sample) {
+    bfile <- paste0('data/Homework_1/bam/', sample, '.bam')
+    ga <- readGAlignments(bfile)
+    gr <- as(ga, 'GRanges')
+    return(gr)
+})
+lengths(bams)
+peaks <- lapply(samples, function(sample) {
+    peaks <- import(paste0('data/Homework_1/bw/', sample, '_peaks.narrowPeak'))
+    peak_summits <- import(paste0('data/Homework_1/bw/', sample, '_summits.bed'))
+    peaks$summit <- start(peak_summits)
+    return(peaks)
+})
+lengths(peaks)
+names(bams) <- names(peaks) <- samples
+```
+
+> Compute FRiP 
+
+FRiP is the easiest metric to compute in ATAC QC: one just needs to identify 
+which reads are overlapping with annotated peaks. 
+
+Careful with reads which may overlap several peaks simultaneously !!
+
+```{r}
+Bcells_reads <- bams[['Bcells']]
+# nInPeaks <- length(queryHits(findOverlaps(Bcells_reads, peaks[['Bcells']])))
+nInPeaks <- length(unique(queryHits(findOverlaps(Bcells_reads, peaks[['Bcells']]))))
+nTot <- length(Bcells_reads)
+nInPeaks/nTot
+```
+
+> Check distance from Tn5 "cut" sites to TSS
+
+The "cut" site is at the first base of the single-end read.
+We can calculate the distance from the start of each ATAC read to the nearest TSS, 
+and check the cumulative distribution of distances. 
+
+Start first by trying to manually compute the distance using the standard 
+`distanceToNearest()` function from `IRanges`, then build a data.frame and 
+plot results manually. 
+
+If you feel confident handling `GRanges` objects, try to leverage functions from 
+`plyranges` to perform as much of the computation in a tidy workflow and 
+building on top of the `GRanges` structure. 
+
+```{r}
+## -- Manual way
+Bcells_reads <- bams[['Bcells']]
+Bcells_reads <- resize(Bcells_reads, width = 1, fix = 'start')
+dists <- distanceToNearest(Bcells_reads, hg_TSSs, ignore.strand = TRUE)
+dists <- elementMetadata(dists)$distance
+dists <- round(dists/10, 0)*10
+dists <- data.frame(table(dists))
+dists$cumsum <- cumsum(dists$Freq)
+dists$log10dists <- log10(as.numeric(as.character(dists$dists)))
+plot(x = dists$log10dists, y = dists$cumsum)
+
+## -- "Tidy" way, using `plyranges` and `tidyverse` functions
+df<-bams[['Bcells']] %>% 
+    resize(width = 1, fix = 'start') %>%
+    add_nearest_distance(hg_TSSs) %>%
+    mutate(distance = round(distance/10, 0)*10) %>%
+    as_tibble() %>% 
+    count(distance) %>% 
+    mutate(cumsum = cumsum(n), pct = cumsum/max(cumsum))
+p<- ggplot(df, aes(x = distance, y = pct)) + 
+    geom_line() + 
+    theme_minimal() + 
+    scale_x_log10(limits = c(1, 1e7)) +
+    theme(legend.position = 'none') + 
+    labs(title = 'Cumulative distribution of Bcells ATAC-seq reads', x = 'Distance from TSS', y = 'Cum. %')
+```
+
+> Compute promoter (TSS) Enrichment Score
+
+TSSES is another inmportant metric. Again, try both approaches: (1) using "dirty" 
+(but efficient!) successives functions, or (2) a "tidy" approach relying on `plyranges`. 
+
+A summaryzing plot is also typically shown to illustrate the "shape" of the TSS 
+enrichment. 
+
+```{r}
+## -- Manual way
+Bcells_reads <- bams[['Bcells']]
+Bcells_reads <- resize(Bcells_reads, width = 1, fix = 'start')
+Bcells_reads_noMT <- Bcells_reads[seqnames(Bcells_reads) != "MT"]
+ov <- findOverlaps(Bcells_reads_noMT, hg_promoters, ignore.strand = TRUE)
+midprom <- start(hg_promoters[subjectHits(ov)]) + (end(hg_promoters[subjectHits(ov)]) - start(hg_promoters[subjectHits(ov)])) / 2
+distance <- start(Bcells_reads_noMT[queryHits(ov)]) - midprom
+binned_distance <- round(distance/100, 0)*100
+dists <- data.frame(table(binned_distance))
+bg <- mean(dists$Freq[abs(as.numeric(as.character(dists$binned_distance))) == 2000], na.rm = TRUE)
+dists$enrich <- dists$Freq/bg
+TSSES <- round(dists$enrich[as.numeric(as.character(dists$binned_distance)) == 0], 2)
+plot(x = as.numeric(as.character(dists$binned_distance)), y = dists$enrich, type = 'l')
+
+## -- "Tidy" way, using `plyranges` and `tidyverse` functions
+df<-bams[['Bcells']] %>% 
+    resize(width = 1, fix = 'start') %>% 
+    join_overlap_left(hg_promoters) %>% 
+    plyranges::select(ID) %>%
+    filter(!is.na(ID), seqnames != 'MT') %>%
+    as_tibble() %>% 
+    left_join(as_tibble(hg_promoters) %>% dplyr::select(start, end, ID), by = 'ID') %>% 
+    mutate(
+        prom_mid = start.y + (end.y - start.y) / 2, 
+        distance = start.x - prom_mid, 
+        binned_distance = round(distance/100, 0)*100
+    ) %>%
+    count(binned_distance) %>%
+    mutate(
+        bg = sum(.data$n[abs(.data$binned_distance) == 2000]), 
+        enrich_score = n/bg
+    )
+TSSES <- round(df[df$binned_distance == 0, 'enrich_score'], 2)
+p<- ggplot(df, aes(x = binned_distance, y = enrich_score)) + 
+    geom_line() + 
+    theme_minimal() + 
+    theme(legend.position = 'none') + 
+    labs(title = glue::glue('TSS enrichment score (Signal-to-noise ratio): {TSSES}'), x = 'Distance from TSS', y = 'Enrich. score')
+```
+
+How do you find the "tidy" approach, compared to the manual one without `plyranges`? What are the pros/cons of each approach? 
+
+> Can you wrap the 3 samples together? 
+
+Try leveraging `BiocParallel` package. It provides `apply()`-like functions, and can run computation in 
+parallel using the `BPPARAM` argument. 
+
+```{r}
+library(BiocParallel)
+pl <- bplapply(BPPARAM = MulticoreParam(workers = 3), samples, function(sample) {
+    reads <- bams[[sample]]
+    reads_1bp <- resize(reads, width = 1, fix = 'start')
+    peaks <- peaks[[sample]]
+    ## FRiP
+    df<-add_nearest_distance(reads, peaks) %>%
+        as_tibble() %>% 
+        mutate(isInPeak = distance == 0) %>% 
+        drop_na(isInPeak)
+    pct <- round(sum(df$isInPeak == 1) / nrow(df) * 100, 2)
+    p1<-ggplot(df, aes(y = isInPeak)) + 
+        geom_bar() + 
+        theme_minimal() + 
+        theme(legend.position = 'none') + 
+        labs(title = glue::glue('{sample}: Fraction of reads in peaks (FRiP): {pct}'), x = '# of ATAC-seq reads', y = 'Fragment within peak')
+    ## Distance from TSSs
+    df<-reads_1bp %>% 
+        add_nearest_distance(hg_TSSs) %>%
+        mutate(distance = round(distance/10, 0)*10) %>%
+        as_tibble() %>% 
+        count(distance) %>% 
+        mutate(cumsum = cumsum(n), pct = cumsum/max(cumsum))
+    p2<-ggplot(df, aes(x = distance, y = pct)) + 
+        geom_line() + 
+        theme_minimal() + 
+        scale_x_log10(limits = c(1, 1e7)) +
+        theme(legend.position = 'none') + 
+        labs(title = glue::glue('{sample}: Cumulative distribution of ATAC-seq reads'), x = 'Distance from TSS', y = 'Cum. %')
+    ## TSSES
+    df<-reads_1bp %>% 
+        join_overlap_left(hg_promoters) %>% 
+        plyranges::select(ID) %>%
+        filter(!is.na(ID), seqnames != 'MT') %>%
+        as_tibble() %>% 
+        left_join(as_tibble(hg_promoters) %>% dplyr::select(start, end, ID), by = 'ID') %>% 
+        mutate(
+            prom_mid = start.y + (end.y - start.y) / 2, 
+            distance = start.x - prom_mid, 
+            binned_distance = round(distance/100, 0)*100
+        ) %>%
+        count(binned_distance) %>%
+        mutate(
+            bg = sum(.data$n[abs(.data$binned_distance) == 2000]), 
+            enrich_score = n/bg
+        )
+    TSSES <- round(df[df$binned_distance == 0, 'enrich_score'], 2)
+    p3<-ggplot(df, aes(x = binned_distance, y = enrich_score)) + 
+        geom_line() + 
+        theme_minimal() + 
+        theme(legend.position = 'none') + 
+        labs(title = glue::glue('{sample}: TSS enrichment score (Signal-to-noise ratio): {TSSES}'), x = 'Distance from TSS', y = 'Enrich. score')
+    cowplot::plot_grid(p1, p2, p3, nrow = 1)
+})
+cowplot::plot_grid(plotlist = pl, nrow = 3)
+```
+
+Comment the differences. Can you visually appreciate whether some samples are 
+a better quality than others, when loading the tracks in IGV? 
+
+## 2. Split bam file from human 5,000 PBMCs scATACseq into bams / cell type
+
+### Download data 
+
+scATACseq for human 5K PBMCs can be downloaded from 
+[10X Genomics](https://support.10xgenomics.com/single-cell-atac/datasets/2.0.0/atac_pbmc_5k_nextgem). 
+
+```{sh}
+mkdir -p data/Homework_1/scATAC
+curl https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_analysis.tar.gz -o data/Homework_1/scATAC/atac_pbmc_5k_nextgem_analysis.tar.gz
+curl https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_possorted_bam.bam -o data/Homework_1/scATAC/atac_pbmc_5k_nextgem_possorted_bam.bam
+curl https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_possorted_bam.bam.bai -o data/Homework_1/scATAC/atac_pbmc_5k_nextgem_possorted_bam.bam.bai
+curl https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_web_summary.html -o data/Homework_1/scATAC/atac_pbmc_5k_nextgem_web_summary.html
+curl https://cf.10xgenomics.com/samples/cell-atac/2.0.0/atac_pbmc_5k_nextgem/atac_pbmc_5k_nextgem_cloupe.cloupe -o data/Homework_1/scATAC/atac_pbmc_5k_nextgem_cloupe.cloupe
+```
+
+### Check the clusters found by cellranger
+
+Different cluster strategies are ran by `cellranger-atac`. 
+Check the HTML report: by default, the graph-based clustering results are shown. What do you think of them? 
+Load the `cloupe` file in `Loupe` to check other clustering results. 
+Is there another clustering approach that may look better-suited? 
+
+### Split bam file into cluster-specific bam files using sinto
+
+Now that you have chosen which cluster strategy you are going to use by inspecting data in Loupe, 
+can you find where the different clustering results are stored in the `scATAC` directory? 
+Can you locate the clustering results from `kmeans` clustering with `k = 5`? How many cells are in each cluster?
+
+```{sh}
+sed '1d' data/Homework_1/scATAC/analysis/clustering/kmeans_5_clusters/clusters.csv | cut -f2 -d, | sort | uniq -c
+```
+
+Read [`sinto`](https://timoast.github.io/sinto/basic_usage.html) documentation. Which subcommand 
+is going to be useful to split a single scATACseq bam file into cluster-specific bam files? 
+Do we have the required files for `sinto` to work? What about the sorting of the original bam file?
+Which bam tag is storing the cell barcode information, in the bam file generated by `cellranger-atac count`? 
+
+
+```{sh}
+samtools view -h data/Homework_1/scATAC/atac_pbmc_5k_nextgem_possorted_bam.bam | head -n 220 | grep -Pv "^@SQ"
+samtools view data/Homework_1/scATAC/atac_pbmc_5k_nextgem_possorted_bam.bam | head -n 1 
+```
+
+Try and separate the `bam` file into individual bigwig files using `sinto`. 
+Watch out the space needed by `sinto`! `sinto` does not provide any way to 
+indicate the temporary/destination directory to use, it simply creates the bam files
+according to barcodes in the working directory. Since the original `bam` file is ~15Gb, 
+the generated data is going to take at least this much disk space in the current directory!
+
+`sinto` will take about 15 min to run for the 5K cells dataset. 
+
+```{sh}
+currdir=`pwd`
+cd data/Homework_1/scATAC
+sed '1d' analysis/clustering/kmeans_5_clusters/clusters.csv | sed 's/,/\t/' > clusters.tsv
+sinto filterbarcodes \
+    -b atac_pbmc_5k_nextgem_possorted_bam.bam \
+    --cells clusters.tsv \
+    -p 12 
+cd $currdir
+```
+
+## 3. Make pseudo-bulk bigwig tracks
+
+Are the generated bam files ready to be converted into coverage track? 
+Are there any processing step we should take care of (e.g. mapping, filtering)? 
+Which method can be used at this stage, to generate a depth-normalized track from 
+bam files? 
+
+> With macs2 
+
+Watch out, this file is now paired-end !
+
+```{sh}
+mkdir -p data/Homework_1/scATAC/peaks
+mkdir -p data/Homework_1/scATAC/bw
+CLUSTER=5
+macs2 callpeak \
+    -t data/Homework_1/scATAC/"${CLUSTER}".bam \
+    --format BAMPE \
+    --gsize hs \
+    --outdir data/Homework_1/scATAC/peaks/ \
+    --name "${CLUSTER}" \
+    --bdg --SPMR 
+sed -i 's/,/./' data/Homework_1/scATAC/peaks/"${CLUSTER}"_treat_pileup.bdg
+bedGraphToBigWig data/Homework_1/scATAC/peaks/"${CLUSTER}"_treat_pileup.bdg ~/genomes/GRCh38/GRCh38.sizes.genome.modified data/Homework_1/scATAC/bw/"${CLUSTER}"_macs2.bw
+```
+
+> With bedtools
+
+```{sh}
+CLUSTER=5
+genomeCoverageBed -ibam -d -bg -pc -i data/Homework_1/scATAC/"${CLUSTER}".bam | sort -k1,1 -k2,2n > tmp.bdg
+bedGraphToBigWig tmp.bdg ~/genomes/GRCh38/GRCh38.sizes.genome.modified data/Homework_1/scATAC/bw/"${CLUSTER}"_bedtools.bw
+```
+
+> With deeptools bamCoverage
+
+```{sh}
+CLUSTER=5
+samtools index data/Homework_1/scATAC/"${CLUSTER}".bam
+bamCoverage \
+    --bam data/Homework_1/scATAC/"${CLUSTER}".bam \
+    --outFileName data/Homework_1/scATAC/bw/"${CLUSTER}"_deeptools.bw \
+    --binSize 1 \
+    --numberOfProcessors 16 \
+    --extendReads \
+    --ignoreDuplicates
+```
+
+> With tracklayer in R 
+
+```{r}
+library(GenomicAlignments)
+for (sample in 1:5) {
+    bam <- glue::glue('data/Homework_1/scATAC/{sample}.bam')
+    track <- glue::glue('data/Homework_1/scATAC/bw/{sample}_R.bw')
+    ncells <- sum(read.table('data/Homework_1/scATAC/clusters.tsv')$V2 == sample)
+    ga <- readGAlignments(bam)
+    gr <- as(ga, 'GRanges')
+    gr.cov <- IRanges::coverage(gr)
+    rtracklayer::export.bw(gr.cov, track)
+}
+```
+
+Should the sequencing depth be taken into account here? 
+How can we normalize the coverage signal in this context? 
+Using the `R` method, try to normalize by the number of cells in each cluster.
+
+```{r}
+library(GenomicAlignments)
+for (sample in 1:5) {
+    bam <- glue::glue('data/Homework_1/scATAC/{sample}.bam')
+    track <- glue::glue('data/Homework_1/scATAC/bw/{sample}_R_cellnb-normalized.bw')
+    ncells <- sum(read.table('data/Homework_1/scATAC/clusters.tsv')$V2 == sample)
+    ga <- readGAlignments(bam)
+    gr <- as(ga, 'GRanges')
+    gr.cov <- IRanges::coverage(gr) / (ncells*2) * 100
+    rtracklayer::export.bw(gr.cov, track)
+}
+```
+
+## 4. Compare bulk and pseudo-bulk tracks
+
+Load tracks from bulk ATAC-seq (B cells, CD4+ T cells and CD8+ T cells) in IGV, 
+along with the 5 pseudo-bulk tracks from scATACseq. 
+Look at relevant loci (`CD4`, `CD8A`, `CD8B`, ...). Which cluster could correspond 
+to B cells? To T cells? 
+

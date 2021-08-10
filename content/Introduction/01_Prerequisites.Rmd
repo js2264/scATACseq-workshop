@@ -1,6 +1,13 @@
 ---
 title: "2. Prerequisites and required machine configuration"
+output:
+  blogdown::html_page:
+    highlight: tango
 ---
+
+```{r echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
 
 ## Prerequisites
 
@@ -15,7 +22,7 @@ The course is intended for those who have basic familiarity with `Unix` and the 
 
 - Install R and other important softwares 
 
-```sh
+```
 conda create --name scatac
 conda activate scatac
 conda install -c conda-forge -c bioconda \
@@ -26,7 +33,7 @@ conda install -c anaconda hdf5
 
 - The following R packages have also been installed (along with their many dependencies, of course!): 
 
-```sh
+```
 Rscript -e "
 ## CRAN packages
 install.packages('vroom', repos = 'https://cran.irsn.fr')
