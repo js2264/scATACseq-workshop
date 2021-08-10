@@ -276,3 +276,17 @@ p <- cowplot::plot_grid(
 )
 ```
 
+### Exercises session 6
+
+- Try different thresholds for tSNE embeddings. Comment. 
+
+```{txt}
+set.seed(2021)
+dev <- readRDS('data/scATAC_LSC-LMPP-mono/dev.rds')
+p <- cowplot::plot_grid(
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]],
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.25, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]],
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.5, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]],
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.75, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]]
+)
+```

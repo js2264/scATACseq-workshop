@@ -73,14 +73,14 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <p>Processed data for mouse E18 brain scATACseq can be obtained directly from <a href="https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k">10X Genomics</a></p>
 </blockquote>
 <ol start="2" style="list-style-type: decimal">
-<li><p>Compare <code>Signac</code> processing and <code>SingleCellExperiment</code> processing</p></li>
-<li><p>Transfer annotations from mouse E18 brain scRNAseq (5K) to mouse E18 brain scATACseq</p></li>
+<li>Transfer annotations from mouse E18 brain scRNAseq (5K) to mouse E18 brain scATACseq</li>
 </ol>
 <blockquote>
 <p>Processed data for mouse E18 brain scRNAseq can be obtained directly from <a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K">10X Genomics</a></p>
 </blockquote>
-<ol start="4" style="list-style-type: decimal">
-<li>Find genes associated to DA peaks and run GO over-enrichment / gene set enrichment analysis</li>
+<ol start="3" style="list-style-type: decimal">
+<li><p>Find genes associated to DA peaks and run GO over-enrichment / gene set enrichment analysis</p></li>
+<li><p>Compare <code>Signac</code> processing and <code>SingleCellExperiment</code> processing</p></li>
 </ol>
 </div>
 <div id="process-mouse-e18-brain-5k-scatacseq-data" class="section level2">
@@ -105,6 +105,8 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 </div>
 <div id="import-data-in-r" class="section level3">
 <h3>Import data in R</h3>
+<p>First, the count matrix has to be imported. Use <code>Seurat</code> to do import the filtered <em>peak</em> count matrix.
+How many peaks were found?</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">library</span>(Signac)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="kw">library</span>(Seurat)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="kw">library</span>(tidyverse)</span>
@@ -119,129 +121,353 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a>    <span class="dt">genome =</span> <span class="st">&quot;mm10&quot;</span>,</span>
 <span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a>    <span class="dt">min.cells =</span> <span class="dv">1</span></span>
 <span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a>)</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="co">## -- Read metadata</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>metadata &lt;-<span class="st"> </span>vroom<span class="op">::</span><span class="kw">vroom</span>(</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>    <span class="dt">file =</span> <span class="st">&quot;data/Homework_2/scATAC/atac_v1_E18_brain_fresh_5k_singlecell.csv&quot;</span>,</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a>    <span class="dt">col_names =</span> <span class="ot">TRUE</span></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(barcode <span class="op">!=</span><span class="st"> &#39;NO_BARCODE&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">cell =</span> barcode) <span class="op">%&gt;%</span></span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(cell <span class="op">%in%</span><span class="st"> </span><span class="kw">colnames</span>(brain_assay)) <span class="op">%&gt;%</span></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a><span class="st">    </span><span class="kw">column_to_rownames</span>(<span class="st">&#39;barcode&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a><span class="st">    </span><span class="kw">as.data.frame</span>() </span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a></span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a><span class="co">## -- Create Seurat object</span></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a>brain &lt;-<span class="st"> </span>Seurat<span class="op">::</span><span class="kw">CreateSeuratObject</span>(</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a>    <span class="dt">counts =</span> brain_assay,</span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a>    <span class="dt">assay =</span> <span class="st">&#39;peaks&#39;</span>,</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a>    <span class="dt">project =</span> <span class="st">&#39;ATAC&#39;</span>,</span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a>    <span class="dt">meta.data =</span> metadata</span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a>)</span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a></span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true"></a><span class="co">## -- Add genome annotations</span></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a><span class="kw">AnnotationHubquery</span>(AnnotationHub<span class="op">::</span><span class="kw">AnnotationHub</span>(), <span class="kw">c</span>(<span class="st">&#39;annotations&#39;</span>, <span class="st">&#39;gencode&#39;</span>, <span class="st">&#39;GRCm38&#39;</span>))</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a><span class="kw">Annotation</span>(brain) &lt;-<span class="st"> </span>AnnotationHub<span class="op">::</span><span class="kw">AnnotationHub</span>()[[<span class="st">&#39;AH49547&#39;</span>]] <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(gene_type <span class="op">==</span><span class="st"> &#39;protein_coding&#39;</span>, type <span class="op">==</span><span class="st"> &#39;gene&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">gene_biotype =</span> gene_type)</span></code></pre></div>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a>brain_assay</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a><span class="kw">dim</span>(brain_assay)</span></code></pre></div>
+<p>Cell metadata also needs to be read. Metadata is stored in a regular <code>csv</code> file.
+You can import it in R using <code>read.csv()</code> from <code>base R</code>, but <code>vroom</code> package wil take
+care of finding the best and fastest way to read it. It is especially useful for reading
+large rectangular data in R.</p>
+<p>How many cell barcode are there in total, in the <code>*_singlecell.csv</code> file? Should
+we take this into consideration and filter some out?</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="co">## -- Read metadata</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>metadata &lt;-<span class="st"> </span>vroom<span class="op">::</span><span class="kw">vroom</span>(</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>    <span class="dt">file =</span> <span class="st">&quot;data/Homework_2/scATAC/atac_v1_E18_brain_fresh_5k_singlecell.csv&quot;</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>    <span class="dt">col_names =</span> <span class="ot">TRUE</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(barcode <span class="op">!=</span><span class="st"> &#39;NO_BARCODE&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">cell =</span> barcode) <span class="op">%&gt;%</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(cell <span class="op">%in%</span><span class="st"> </span><span class="kw">colnames</span>(brain_assay)) <span class="op">%&gt;%</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a><span class="st">    </span><span class="kw">column_to_rownames</span>(<span class="st">&#39;barcode&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a><span class="st">    </span><span class="kw">as.data.frame</span>() </span></code></pre></div>
+<p>Now that cells and counts over peaks / cell are created, one can bind them together
+into a <code>Seurat</code> object. Try and create a standard <code>Seurat</code> object containing
+the <code>chromatinAssay</code> object and corresponding cell metadata.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="co">## -- Create Seurat object</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>brain &lt;-<span class="st"> </span>Seurat<span class="op">::</span><span class="kw">CreateSeuratObject</span>(</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>    <span class="dt">counts =</span> brain_assay,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    <span class="dt">assay =</span> <span class="st">&#39;peaks&#39;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    <span class="dt">project =</span> <span class="st">&#39;ATAC&#39;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>    <span class="dt">meta.data =</span> metadata</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="co">## -- Add genome annotations</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>annotations &lt;-<span class="st"> </span><span class="kw">GetGRangesFromEnsDb</span>(<span class="dt">ensdb =</span> EnsDb.Mmusculus.v79<span class="op">::</span>EnsDb.Mmusculus.v79)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a><span class="kw">seqlevelsStyle</span>(annotations) &lt;-<span class="st"> &#39;UCSC&#39;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a><span class="kw">genome</span>(annotations) &lt;-<span class="st"> &quot;mm10&quot;</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a><span class="kw">Annotation</span>(brain) &lt;-<span class="st"> </span>annotations</span></code></pre></div>
 </div>
-<div id="qcing-data" class="section level3">
-<h3>QCing data</h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="co">## -- Nucleosome signal </span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">NucleosomeSignal</span>(<span class="dt">object =</span> brain)</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>brain<span class="op">$</span>nucleosome_group &lt;-<span class="st"> </span><span class="kw">ifelse</span>(brain<span class="op">$</span>nucleosome_signal <span class="op">&gt;</span><span class="st"> </span><span class="dv">4</span>, <span class="st">&#39;NS &gt; 4&#39;</span>, <span class="st">&#39;NS &lt; 4&#39;</span>)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="kw">range</span>(brain<span class="op">$</span>nucleosome_signal)</span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="kw">table</span>(brain<span class="op">$</span>nucleosome_group)</span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="co">## -- Frag. size distribution</span></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>frags &lt;-<span class="st"> </span>vroom<span class="op">::</span><span class="kw">vroom</span>(<span class="st">&#39;/data/20210804_scATACseq-workshop/data/MouseBrain/atac_v1_adult_brain_fresh_5k_fragments.tsv.gz&#39;</span>, <span class="dt">col_names =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a><span class="st">    </span><span class="kw">setNames</span>(<span class="kw">c</span>(<span class="st">&#39;chr&#39;</span>, <span class="st">&#39;start&#39;</span>, <span class="st">&#39;stop&#39;</span>, <span class="st">&#39;cell&#39;</span>, <span class="st">&#39;cluster&#39;</span>))</span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a>p &lt;-<span class="kw">slice_head</span>(frags, <span class="dt">n =</span> <span class="dv">1000000</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">width =</span> stop <span class="op">-</span><span class="st"> </span>start) <span class="op">%&gt;%</span></span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> width)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a><span class="st">    </span><span class="kw">geom_bar</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a><span class="st">    </span><span class="kw">xlim</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">800</span>))</span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a></span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a><span class="co">## -- TSS enrichment</span></span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">TSSEnrichment</span>(brain, <span class="dt">fast =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a>brain<span class="op">$</span>high.tss &lt;-<span class="st"> </span><span class="kw">ifelse</span>(brain<span class="op">$</span>TSS.enrichment <span class="op">&gt;</span><span class="st"> </span><span class="dv">2</span>, <span class="st">&#39;High&#39;</span>, <span class="st">&#39;Low&#39;</span>)</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a>df &lt;-<span class="st"> </span>frags_chr12 <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a><span class="st">    </span><span class="kw">left_join</span>(dplyr<span class="op">::</span><span class="kw">select</span>(brain<span class="op">@</span>meta.data, cell, high.tss)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># For each fragment, recover cell TSS enrich. status</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true"></a><span class="st">    </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="kw">c</span>(<span class="st">&#39;seqnames&#39;</span> =<span class="st"> &#39;chr&#39;</span>, <span class="st">&#39;end&#39;</span> =<span class="st"> &#39;stop&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true"></a><span class="st">    </span><span class="kw">as_granges</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true"></a><span class="st">    </span><span class="kw">join_overlap_left</span>(plyranges<span class="op">::</span><span class="kw">select</span>(mm_promoters, prom_id)) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># Link each fragment to overlapping promoter</span></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true"></a><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true"></a><span class="st">    </span><span class="kw">drop_na</span>(prom_id) <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># Remove fragments which are not overlapping any promoter</span></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true"></a><span class="st">    </span><span class="kw">left_join</span>(<span class="kw">as_tibble</span>(mm_promoters), <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&#39;prom_id&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true"></a>        <span class="dt">midprom =</span> start.y <span class="op">+</span><span class="st"> </span>(end.y <span class="op">-</span><span class="st"> </span>start.y)<span class="op">/</span><span class="dv">2</span>, </span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true"></a>        <span class="dt">distance =</span> midprom <span class="op">-</span><span class="st"> </span>start.x</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true"></a>    ) <span class="op">%&gt;%</span></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(high.tss <span class="op">==</span><span class="st"> &#39;High&#39;</span>) <span class="op">%&gt;%</span></span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true"></a><span class="st">    </span><span class="kw">count</span>(distance)</span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true"></a>p&lt;-<span class="st"> </span><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x =</span> distance, <span class="dt">y =</span> n)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true"></a><span class="st">    </span><span class="kw">geom_col</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true"></a><span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&#39;loess&#39;</span>, <span class="dt">span =</span> <span class="fl">0.05</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&#39;none&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&#39;Fragment &quot;cut&quot; sites&#39;</span>, <span class="dt">x =</span> <span class="st">&#39;Distance from TSS&#39;</span>, <span class="dt">y =</span> <span class="st">&#39;# of cut sites&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true"></a><span class="st">    </span><span class="kw">xlim</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1000</span>, <span class="dv">1000</span>))</span></code></pre></div>
+<div id="qc-data" class="section level3">
+<h3>QC data</h3>
+<blockquote>
+<p>Nucleosome signal</p>
+</blockquote>
+<p>Few QC controls can be done. The <code>nucleosome signal</code> metric estimates the
+ratio of nucleosome-spanning fragments vs mononucleosomal fragments, for each cell.
+A low ratio (e.g. <code>&lt; 4</code>) indicates enrichment of fragments over an open
+chromatin locus.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="co">## -- Nucleosome signal </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">NucleosomeSignal</span>(<span class="dt">object =</span> brain)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>brain<span class="op">$</span>nucleosome_group &lt;-<span class="st"> </span><span class="kw">ifelse</span>(brain<span class="op">$</span>nucleosome_signal <span class="op">&gt;</span><span class="st"> </span><span class="dv">4</span>, <span class="st">&#39;NS &gt; 4&#39;</span>, <span class="st">&#39;NS &lt; 4&#39;</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="kw">range</span>(brain<span class="op">$</span>nucleosome_signal)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="kw">table</span>(brain<span class="op">$</span>nucleosome_group)</span></code></pre></div>
+<p>Check the number of fragments / cell overlapping a known DHS locus (check <code>brain</code>
+pre-computed metrics to find the corresponding metric), for cells with varying
+<code>nucleosome_signal</code> scores.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>p&lt;-<span class="st"> </span><span class="kw">tibble</span>(<span class="dt">dnase =</span> brain<span class="op">$</span>DNase_sensitive_region_fragments, <span class="dt">nuc_signal =</span> brain<span class="op">$</span>nucleosome_signal) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>        <span class="dt">nuc_group =</span> <span class="kw">round</span>(nuc_signal <span class="op">/</span><span class="st"> </span><span class="dv">5</span>)<span class="op">*</span><span class="dv">5</span> <span class="op">+</span><span class="st"> </span><span class="dv">1</span>, </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>        <span class="dt">nuc_group =</span> <span class="kw">factor</span>(nuc_group, <span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">max</span>(nuc_group)))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>    ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> nuc_group, <span class="dt">y =</span> dnase)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a><span class="st">    </span><span class="kw">geom_boxplot</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&#39;Av. nucleosome signal&#39;</span>)</span></code></pre></div>
+<blockquote>
+<p>Fragment size distribution</p>
+</blockquote>
+<p>We have covered this already in previous exercises focusing on bulk ATAC.
+It is a metric that one can also evaluate in scATACseq.
+For this, one can import the fragments (from <code>*_fragments.tsv.gz</code> file) in R.
+Here again, we highly recommend the use of <code>vroom</code> package, as the fragment file
+can be several Gb big!</p>
+<p>Try plotting the fragment width for the first 10M fragments.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="co">## -- Frag. size distribution</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="kw">GetFragmentData</span>(<span class="kw">Fragments</span>(brain)[[<span class="dv">1</span>]])</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>frags &lt;-<span class="st"> </span>vroom<span class="op">::</span><span class="kw">vroom</span>(</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>        <span class="kw">GetFragmentData</span>(<span class="kw">Fragments</span>(brain)[[<span class="dv">1</span>]]), </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>        <span class="dt">col_names =</span> <span class="ot">FALSE</span>, </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>        <span class="dt">n_max =</span> <span class="dv">10000000</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>    ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a><span class="st">    </span><span class="kw">setNames</span>(<span class="kw">c</span>(<span class="st">&#39;seqnames&#39;</span>, <span class="st">&#39;start&#39;</span>, <span class="st">&#39;end&#39;</span>, <span class="st">&#39;cell&#39;</span>, <span class="st">&#39;cluster&#39;</span>))</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>p &lt;-frags <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">width =</span> end <span class="op">-</span><span class="st"> </span>start) <span class="op">%&gt;%</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> width)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a><span class="st">    </span><span class="kw">geom_bar</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true"></a><span class="st">    </span><span class="kw">xlim</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">800</span>))</span></code></pre></div>
+<blockquote>
+<p>TSSES</p>
+</blockquote>
+<p>This metric has also already been previously mentionned. It essentially represents
+the signal-to-noise ratio at TSSs.
+It can be estimated from a <code>Seurat</code> object using the <code>Signac::TSSEnrichment()</code> function.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="co">## -- TSS enrichment</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">TSSEnrichment</span>(brain, <span class="dt">fast =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a><span class="kw">quantile</span>(brain<span class="op">$</span>TSS.enrichment, <span class="dt">probs =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>))</span></code></pre></div>
+<p>We can also plot the average coverage at TSSs. Let’s plot it for the first
+10M fragments</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>p&lt;-<span class="st"> </span><span class="kw">as_granges</span>(frags) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a><span class="st">    </span><span class="kw">resize</span>(<span class="dv">1</span>, <span class="dt">fix =</span> <span class="st">&#39;start&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="st">    </span><span class="kw">coverage</span>() <span class="op">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a><span class="st">    &#39;[&#39;</span>(target) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a><span class="st">    </span><span class="kw">data.matrix</span>() <span class="op">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a><span class="st">    </span><span class="kw">setNames</span>(<span class="kw">seq</span>(<span class="op">-</span><span class="fl">999.5</span>, <span class="fl">999.5</span>, <span class="dt">length.out =</span> <span class="dv">2000</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">peak =</span> <span class="kw">seq</span>(<span class="dv">1</span>, <span class="kw">nrow</span>(.)), <span class="dt">strand =</span> <span class="kw">as.character</span>(<span class="kw">strand</span>(target))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a><span class="st">    </span><span class="kw">pivot_longer</span>(<span class="op">-</span><span class="kw">c</span>(peak, strand), <span class="dt">names_to =</span> <span class="st">&#39;distance&#39;</span>, <span class="dt">values_to =</span> <span class="st">&#39;cnt&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">distance =</span> <span class="kw">as.numeric</span>(distance)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">distance =</span> <span class="kw">ifelse</span>(strand <span class="op">==</span><span class="st"> &#39;-&#39;</span>, <span class="op">-</span>distance, distance)) <span class="op">%&gt;%</span></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true"></a><span class="st">    </span><span class="kw">select</span>(<span class="op">-</span>peak, <span class="op">-</span>strand) <span class="op">%&gt;%</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true"></a><span class="st">    </span><span class="kw">group_by</span>(distance) <span class="op">%&gt;%</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true"></a><span class="st">    </span><span class="kw">tally</span>(cnt) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true"></a><span class="st">    </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> distance, <span class="dt">y =</span> n)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true"></a><span class="st">    </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true"></a><span class="st">    </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&#39;loess&#39;</span>, <span class="dt">span =</span> <span class="fl">0.05</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&#39;none&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&#39;Fragment &quot;cut&quot; sites&#39;</span>, <span class="dt">x =</span> <span class="st">&#39;Distance from TSS&#39;</span>, <span class="dt">y =</span> <span class="st">&#39;# of cut sites&#39;</span>)</span></code></pre></div>
 </div>
 <div id="subsetting-data" class="section level3">
 <h3>Subsetting data</h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>brain<span class="op">$</span>FRiP &lt;-<span class="st"> </span>brain<span class="op">$</span>peak_region_fragments <span class="op">/</span><span class="st"> </span>brain<span class="op">$</span>passed_filters <span class="op">*</span><span class="st"> </span><span class="dv">100</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>brain<span class="op">$</span>FRiBl &lt;-<span class="st"> </span>brain<span class="op">$</span>blacklist_region_fragments <span class="op">/</span><span class="st"> </span>brain<span class="op">$</span>peak_region_fragments</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">subset</span>(</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    brain,</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    peak_region_fragments <span class="op">&gt;</span><span class="st"> </span><span class="dv">3000</span> <span class="op">&amp;</span><span class="st"> </span><span class="co"># Keep cells with high number of fragments in peaks</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="st">        </span>peak_region_fragments <span class="op">&lt;</span><span class="st"> </span><span class="dv">100000</span> <span class="op">&amp;</span><span class="st"> </span><span class="co"># Remove cells with number of fragments in peaks too high</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="st">        </span>FRiP <span class="op">&gt;</span><span class="st"> </span><span class="dv">50</span> <span class="op">&amp;</span><span class="st"> </span><span class="co"># Keep cells with high FRiP </span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="st">        </span>FRiBl <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span> <span class="op">&amp;</span><span class="st"> </span><span class="co"># Keep cells with low FRiBl</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="st">        </span>nucleosome_signal <span class="op">&lt;</span><span class="st"> </span><span class="dv">4</span> <span class="op">&amp;</span><span class="st"> </span><span class="co"># Remove cells with high nucleosome signal</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="st">        </span>TSS.enrichment <span class="op">&gt;</span><span class="st"> </span><span class="dv">2</span> <span class="co"># Keep cells with good TSSES</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>)</span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>brain &lt;-<span class="st"> </span>brain[</span>
-<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>    <span class="kw">rowSums</span>(<span class="kw">GetAssayData</span>(brain, <span class="dt">slot =</span> <span class="st">&quot;counts&quot;</span>)) <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span> <span class="op">&amp;</span><span class="st"> </span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true"></a><span class="st">    </span><span class="kw">rowSums</span>(<span class="kw">GetAssayData</span>(brain, <span class="dt">slot =</span> <span class="st">&quot;counts&quot;</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span>, </span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true"></a>]</span></code></pre></div>
+<p>Check the distribution of values for important metrics related to scATAC
+quality. Notably, the # and % of fragments overlapping identified peaks or
+blacklist regions.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">quantile</span>(brain<span class="op">$</span>peak_region_fragments, <span class="dt">probs =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a><span class="kw">quantile</span>(brain<span class="op">$</span>blacklist_region_fragments, <span class="dt">probs =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>brain<span class="op">$</span>FRiP &lt;-<span class="st"> </span>brain<span class="op">$</span>peak_region_fragments <span class="op">/</span><span class="st"> </span>brain<span class="op">$</span>passed_filters <span class="op">*</span><span class="st"> </span><span class="dv">100</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="kw">quantile</span>(brain<span class="op">$</span>FRiP, <span class="dt">probs =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>))</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>brain<span class="op">$</span>FRiBl &lt;-<span class="st"> </span>brain<span class="op">$</span>blacklist_region_fragments <span class="op">/</span><span class="st"> </span>brain<span class="op">$</span>peak_region_fragments</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a><span class="kw">quantile</span>(brain<span class="op">$</span>FRiBl, <span class="dt">probs =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="fl">0.1</span>))</span></code></pre></div>
+<p>Set sensible thresholds to remove cells which do not seem to be high-quality,
+then subset the <code>brain</code> Seurat object using these thresholds.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">subset</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>    brain,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a>    peak_region_fragments <span class="op">&gt;</span><span class="st"> </span><span class="dv">2000</span> <span class="op">&amp;</span><span class="st"> </span><span class="co"># Keep cells with high number of fragments in peaks</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a><span class="st">    </span>peak_region_fragments <span class="op">&lt;</span><span class="st"> </span><span class="dv">100000</span> <span class="op">&amp;</span><span class="st"> </span><span class="co"># Remove cells with number of fragments in peaks too high</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a><span class="st">    </span>FRiP <span class="op">&gt;</span><span class="st"> </span><span class="dv">50</span> <span class="op">&amp;</span><span class="st"> </span><span class="co"># Keep cells with high FRiP </span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a><span class="st">    </span>FRiBl <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.05</span> <span class="op">&amp;</span><span class="st"> </span><span class="co"># Keep cells with low FRiBl</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a><span class="st">    </span>nucleosome_signal <span class="op">&lt;</span><span class="st"> </span><span class="dv">4</span> <span class="op">&amp;</span><span class="st"> </span><span class="co"># Remove cells with high nucleosome signal</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a><span class="st">    </span>TSS.enrichment <span class="op">&gt;</span><span class="st"> </span><span class="dv">2</span> <span class="co"># Keep cells with good TSSES</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true"></a>)</span></code></pre></div>
+<p>Don’t forget to also subset some peaks (which may have been identified from the
+low-quality cells).</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>brain &lt;-<span class="st"> </span>brain[</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>    <span class="kw">rowSums</span>(<span class="kw">GetAssayData</span>(brain, <span class="dt">slot =</span> <span class="st">&quot;counts&quot;</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) <span class="op">&gt;</span><span class="st"> </span><span class="dv">10</span>, <span class="co"># Remove peaks detected in less than 10 cells</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>]</span></code></pre></div>
 </div>
 <div id="normalizing-and-reduce-dimensionality-data" class="section level3">
 <h3>Normalizing and reduce dimensionality data</h3>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>brain &lt;-<span class="st"> </span>Signac<span class="op">::</span><span class="kw">RunTFIDF</span>(brain) <span class="co"># Normalize data</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>brain &lt;-<span class="st"> </span>Signac<span class="op">::</span><span class="kw">FindTopFeatures</span>(brain, <span class="dt">min.cutoff =</span> <span class="st">&#39;q0&#39;</span>) <span class="co"># Find variable features</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>brain &lt;-<span class="st"> </span>Signac<span class="op">::</span><span class="kw">RunSVD</span>(<span class="dt">object =</span> brain) <span class="co"># Perform dimensionality reduction</span></span></code></pre></div>
+<p>Normalization is done using a TF-IDF approach, rather than traditional log-normalization,
+due to excessive sparsity of the scATAC data.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="kw">GetAssayData</span>(brain, <span class="st">&#39;counts&#39;</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="kw">GetAssayData</span>(brain, <span class="st">&#39;data&#39;</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a>brain &lt;-<span class="st"> </span>Signac<span class="op">::</span><span class="kw">RunTFIDF</span>(brain)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="kw">GetAssayData</span>(brain, <span class="st">&#39;counts&#39;</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a><span class="kw">GetAssayData</span>(brain, <span class="st">&#39;data&#39;</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</span></code></pre></div>
+<p>Dimensionality reduction can then be performed using the normalized data.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>brain &lt;-<span class="st"> </span>Signac<span class="op">::</span><span class="kw">FindTopFeatures</span>(brain, <span class="dt">min.cutoff =</span> <span class="st">&#39;q50&#39;</span>) <span class="co"># Find variable features</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>brain &lt;-<span class="st"> </span>Signac<span class="op">::</span><span class="kw">RunSVD</span>(<span class="dt">object =</span> brain) </span></code></pre></div>
 </div>
 <div id="clustering" class="section level3">
 <h3>Clustering</h3>
 <p>Now that cells are embedded in a lower dimensional space, they can be graph-clustered just like “regular” cells from scRNAseq.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">FindNeighbors</span>(<span class="dt">object =</span> brain, <span class="dt">reduction =</span> <span class="st">&#39;lsi&#39;</span>, <span class="dt">dims =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">30</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">FindClusters</span>(<span class="dt">object =</span> brain, <span class="dt">algorithm =</span> <span class="dv">3</span>, <span class="dt">resolution =</span> <span class="fl">1.2</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">RunUMAP</span>(brain, <span class="dt">reduction =</span> <span class="st">&#39;lsi&#39;</span>, <span class="dt">dims =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">30</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>Seurat<span class="op">::</span><span class="kw">DimPlot</span>(brain, <span class="dt">group.by =</span> <span class="st">&#39;ident&#39;</span>, <span class="dt">label =</span> <span class="st">&#39;ident&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">FindNeighbors</span>(<span class="dt">object =</span> brain, <span class="dt">reduction =</span> <span class="st">&#39;lsi&#39;</span>, <span class="dt">dims =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">30</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">FindClusters</span>(<span class="dt">object =</span> brain, <span class="dt">algorithm =</span> <span class="dv">3</span>, <span class="dt">resolution =</span> <span class="fl">1.2</span>, <span class="dt">verbose =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
 </div>
+<div id="visualization" class="section level3">
+<h3>Visualization</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">RunTSNE</span>(brain, <span class="dt">reduction =</span> <span class="st">&#39;lsi&#39;</span>, <span class="dt">dims =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">30</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">RunUMAP</span>(brain, <span class="dt">reduction =</span> <span class="st">&#39;lsi&#39;</span>, <span class="dt">dims =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">30</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a>p1 &lt;-<span class="st"> </span>Seurat<span class="op">::</span><span class="kw">DimPlot</span>(brain, <span class="dt">reduction =</span> <span class="st">&#39;tsne&#39;</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a>p2 &lt;-<span class="st"> </span><span class="kw">CoveragePlot</span>(</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true"></a>    <span class="dt">object =</span> brain,</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true"></a>    <span class="dt">region =</span> <span class="st">&quot;Tjp1&quot;</span>, <span class="co"># Or Gad2 (interneurons), Cq1a (Microglia), Gfap (astrocytes), Tubb3 (neurons)</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true"></a>    <span class="dt">annotation =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true"></a>    <span class="dt">peaks =</span> <span class="ot">FALSE</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true"></a>)</span></code></pre></div>
 </div>
-<div id="compare-signac-processing-and-singlecellexperiment-processing" class="section level2">
-<h2>2. Compare Signac processing and SingleCellExperiment processing</h2>
 </div>
 <div id="integrate-scatacseq-and-scrnaseq" class="section level2">
-<h2>3. Integrate scATACseq and scRNAseq</h2>
+<h2>2. Integrate scATACseq and scRNAseq</h2>
 <div id="download-data-1" class="section level3">
 <h3>Download data</h3>
 <p>scRNAseq for mouse E18 5K brain can be downloaded from
 <a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K">10X Genomics</a>.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="fu">mkdir</span> data/Homework_2/scRNA</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_web_summary.html -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_web_summary.html</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_metrics_summary.csv -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_metrics_summary.csv</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_cloupe.cloupe -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_cloupe.cloupe</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_sample_alignments.bam -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_alignments.bam</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_sample_alignments.bam.bai -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_alignments.bam.bai</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_sample_barcodes.csv -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_barcodes.csv</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_sample_feature_bc_matrix.h5 -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_feature_bc_matrix.h5</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_sample_feature_bc_matrix.tar.gz -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_feature_bc_matrix.tar.gz</span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_sample_molecule_info.h5 -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_molecule_info.h5</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_analysis.tar.gz -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_analysis.tar.gz</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="fu">mkdir</span> data/Homework_2/scRNA</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_web_summary.html -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_web_summary.html</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_metrics_summary.csv -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_metrics_summary.csv</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_cloupe.cloupe -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_cloupe.cloupe</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_sample_alignments.bam -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_alignments.bam</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_sample_alignments.bam.bai -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_alignments.bam.bai</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_sample_barcodes.csv -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_barcodes.csv</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_sample_feature_bc_matrix.h5 -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_feature_bc_matrix.h5</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_sample_feature_bc_matrix.tar.gz -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_feature_bc_matrix.tar.gz</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_sample_molecule_info.h5 -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_molecule_info.h5</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true"></a><span class="ex">curl</span> https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K_count_analysis.tar.gz -o data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_analysis.tar.gz</span></code></pre></div>
+</div>
+<div id="process-data" class="section level3">
+<h3>Process data</h3>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a><span class="kw">library</span>(Seurat)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a>brain_rna &lt;-<span class="st"> </span><span class="kw">Read10X_h5</span>(<span class="st">&quot;data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_feature_bc_matrix.h5&quot;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a><span class="st">    </span><span class="kw">CreateSeuratObject</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a><span class="st">    </span><span class="kw">SCTransform</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">RunPCA</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a><span class="st">    </span><span class="kw">FindNeighbors</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a><span class="st">    </span><span class="kw">FindClusters</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a><span class="st">    </span><span class="kw">RunTSNE</span>()</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true"></a>brain_rna &lt;-<span class="st"> </span><span class="kw">RunUMAP</span>(brain_rna, <span class="dt">reduction =</span> <span class="st">&#39;pca&#39;</span>, <span class="dt">dims =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">50</span>)</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true"></a>p &lt;-<span class="st"> </span><span class="kw">DimPlot</span>(brain_rna, <span class="dt">reduction =</span> <span class="st">&quot;umap&quot;</span>)</span></code></pre></div>
+</div>
+<div id="annotate-scrnaseq-data-with-public-databases" class="section level3">
+<h3>Annotate scRNAseq data with public databases</h3>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a>ref &lt;-<span class="st"> </span>scRNAseq<span class="op">::</span><span class="kw">ZeiselBrainData</span>() <span class="op">%&gt;%</span><span class="st"> </span>scuttle<span class="op">::</span><span class="kw">logNormCounts</span>()</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>ref<span class="op">$</span>level1class[ref<span class="op">$</span>level1class <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;pyramidal CA1&#39;</span>, <span class="st">&#39;pyramidal SS&#39;</span>)] &lt;-<span class="st"> &#39;pyramidal&#39;</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>pred &lt;-<span class="st"> </span>SingleR<span class="op">::</span><span class="kw">SingleR</span>(</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a>    <span class="dt">test =</span> <span class="kw">GetAssayData</span>(brain_rna, <span class="st">&#39;data&#39;</span>), </span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a>    <span class="dt">ref =</span> ref, </span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a>    <span class="dt">labels =</span> ref<span class="op">$</span>level1class, </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true"></a>    <span class="dt">BPPARAM =</span> BiocParallel<span class="op">::</span><span class="kw">MulticoreParam</span>(<span class="dt">workers =</span> <span class="dv">12</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true"></a>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true"></a>brain_rna<span class="op">$</span>annotation &lt;-<span class="st"> </span>pred<span class="op">$</span>pruned.labels</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true"></a>p &lt;-<span class="st"> </span><span class="kw">DimPlot</span>(brain_rna, <span class="dt">reduction =</span> <span class="st">&quot;umap&quot;</span>, <span class="dt">group.by =</span> <span class="st">&#39;annotation&#39;</span>)</span></code></pre></div>
+</div>
+<div id="transfer-annotations-from-scrnaseq-to-scatacseq-datasets" class="section level3">
+<h3>Transfer annotations from scRNAseq to scATACseq datasets</h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="co">## - Compute an &quot;activity score&quot; for each gene in each cell (based on ATAC counts) and store it as a new assay</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>gene_activities &lt;-<span class="st"> </span><span class="kw">GeneActivity</span>(brain, <span class="dt">features =</span> <span class="kw">VariableFeatures</span>(brain_rna))</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>brain<span class="op">@</span>assays[<span class="st">&quot;gene_activity&quot;</span>] &lt;-<span class="st"> </span><span class="kw">CreateAssayObject</span>(<span class="dt">counts =</span> gene_activities)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a><span class="co">## - Normalize this new assay with SCTransform</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true"></a><span class="kw">GetAssayData</span>(brain, <span class="st">&#39;counts&#39;</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true"></a>brain &lt;-<span class="st"> </span><span class="kw">SCTransform</span>(brain, <span class="dt">assay =</span> <span class="st">&#39;gene_activity&#39;</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true"></a></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true"></a><span class="co">## - Normalize this new assay with SCTransform</span></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true"></a>anchors &lt;-<span class="st"> </span><span class="kw">FindTransferAnchors</span>(</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true"></a>    <span class="dt">reference =</span> brain_rna, </span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true"></a>    <span class="dt">query =</span> brain, </span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true"></a>    <span class="dt">features =</span> <span class="kw">VariableFeatures</span>(<span class="dt">object =</span> brain_rna),</span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true"></a>    <span class="dt">reference.assay =</span> <span class="st">&quot;SCT&quot;</span>, </span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true"></a>    <span class="dt">query.assay =</span> <span class="st">&quot;SCT&quot;</span>, </span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true"></a>    <span class="dt">reduction =</span> <span class="st">&quot;cca&quot;</span></span>
+<span id="cb20-17"><a href="#cb20-17" aria-hidden="true"></a>)</span>
+<span id="cb20-18"><a href="#cb20-18" aria-hidden="true"></a></span>
+<span id="cb20-19"><a href="#cb20-19" aria-hidden="true"></a><span class="co">## - Transfer annotations from scRNA to scATAC</span></span>
+<span id="cb20-20"><a href="#cb20-20" aria-hidden="true"></a>pred_labels &lt;-<span class="st"> </span><span class="kw">TransferData</span>(</span>
+<span id="cb20-21"><a href="#cb20-21" aria-hidden="true"></a>    <span class="dt">anchorset =</span> anchors, </span>
+<span id="cb20-22"><a href="#cb20-22" aria-hidden="true"></a>    <span class="dt">refdata =</span> brain_rna<span class="op">$</span>annotation,</span>
+<span id="cb20-23"><a href="#cb20-23" aria-hidden="true"></a>    <span class="dt">weight.reduction =</span> brain[[<span class="st">&#39;lsi&#39;</span>]], </span>
+<span id="cb20-24"><a href="#cb20-24" aria-hidden="true"></a>    <span class="dt">dims =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">30</span></span>
+<span id="cb20-25"><a href="#cb20-25" aria-hidden="true"></a>)</span>
+<span id="cb20-26"><a href="#cb20-26" aria-hidden="true"></a></span>
+<span id="cb20-27"><a href="#cb20-27" aria-hidden="true"></a><span class="co">## - Save transferred annotations</span></span>
+<span id="cb20-28"><a href="#cb20-28" aria-hidden="true"></a>brain<span class="op">$</span>transferred_annotation &lt;-<span class="st"> </span>pred_labels<span class="op">$</span>predicted.id</span>
+<span id="cb20-29"><a href="#cb20-29" aria-hidden="true"></a>brain<span class="op">$</span>transferred_annotation[pred_labels<span class="op">$</span>prediction.score.max <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.8</span>] &lt;-<span class="st"> </span><span class="ot">NA</span></span>
+<span id="cb20-30"><a href="#cb20-30" aria-hidden="true"></a>p &lt;-<span class="st"> </span>Seurat<span class="op">::</span><span class="kw">DimPlot</span>(brain, <span class="dt">reduction =</span> <span class="st">&#39;tsne&#39;</span>, <span class="dt">group.by =</span> <span class="st">&#39;transferred_annotation&#39;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="functional-analysis-of-da-peaks" class="section level2">
-<h2>4. Functional analysis of DA peaks</h2>
+<h2>3. Functional analysis of DA peaks</h2>
+<div id="extract-peaks-enriched-in-astrocytes-vs.-others" class="section level3">
+<h3>Extract peaks enriched in astrocytes vs. others</h3>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="co">## - Find astrocyte-specific peaks </span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a><span class="kw">Idents</span>(brain) &lt;-<span class="st"> </span>brain<span class="op">$</span>transferred_annotation</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a>astrocyte_peaks &lt;-<span class="st"> </span>Seurat<span class="op">::</span><span class="kw">FindMarkers</span>(</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a>    <span class="dt">object =</span> brain,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a>    <span class="dt">assay =</span> <span class="st">&#39;peaks&#39;</span>, </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a>    <span class="dt">ident.1 =</span> <span class="st">&#39;astrocytes_ependymal&#39;</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true"></a>    <span class="dt">ident.2 =</span> <span class="kw">unique</span>(<span class="kw">Idents</span>(brain)[<span class="kw">Idents</span>(brain) <span class="op">!=</span><span class="st"> &#39;astrocytes_ependymal&#39;</span>]),</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true"></a>    <span class="dt">min.pct =</span> <span class="fl">0.15</span>, </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true"></a>    <span class="dt">only.pos =</span> <span class="ot">TRUE</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true"></a>)</span></code></pre></div>
+</div>
+<div id="find-nearest-gene-for-each-astrocyte-specific-peak" class="section level3">
+<h3>Find nearest gene for each astrocyte-specific peak</h3>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="co">## - Link astrocyte peaks to nearest genes</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>mm_genes &lt;-<span class="st"> </span>ensembldb<span class="op">::</span><span class="kw">genes</span>(EnsDb.Mmusculus.v79<span class="op">::</span>EnsDb.Mmusculus.v79) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(gene_biotype <span class="op">==</span><span class="st"> &#39;protein_coding&#39;</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a><span class="kw">seqlevelsStyle</span>(mm_genes) &lt;-<span class="st"> &#39;UCSC&#39;</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a>astrocyte_genes &lt;-<span class="st"> </span>astrocyte_peaks <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(p_val_adj <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>, avg_log2FC <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>, pct<span class="fl">.1</span> <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">rownames</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true"></a><span class="st">    </span><span class="kw">str_replace</span>(<span class="st">&#39;-&#39;</span>, <span class="st">&#39;:&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true"></a><span class="st">    </span><span class="kw">GRanges</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true"></a><span class="st">    </span><span class="kw">join_nearest</span>(mm_genes) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true"></a><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(symbol) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true"></a><span class="st">    </span><span class="kw">unique</span>()</span></code></pre></div>
+</div>
+<div id="perform-go-over-representation-analysis" class="section level3">
+<h3>Perform GO over-representation analysis</h3>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="co">## - Run GO analysis</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a>goa &lt;-<span class="st"> </span>gprofiler2<span class="op">::</span><span class="kw">gost</span>(astrocyte_genes, <span class="dt">organism =</span> <span class="st">&#39;mmusculus&#39;</span>)</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a>goa<span class="op">$</span>result <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(p_value <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>, <span class="kw">grepl</span>(<span class="st">&#39;GO:&#39;</span>, source)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(p_value) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">40</span>)</span></code></pre></div>
+</div>
+<div id="repeat-for-microgli-annotated-cluster" class="section level3">
+<h3>Repeat for microgli-annotated cluster</h3>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="co">## - Find microglia-specific peaks </span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>microglia_peaks &lt;-<span class="st"> </span>Seurat<span class="op">::</span><span class="kw">FindMarkers</span>(</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a>    <span class="dt">object =</span> brain,</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a>    <span class="dt">assay =</span> <span class="st">&#39;peaks&#39;</span>, </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true"></a>    <span class="dt">ident.1 =</span> <span class="st">&#39;microglia&#39;</span>,</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true"></a>    <span class="dt">ident.2 =</span> <span class="kw">unique</span>(<span class="kw">Idents</span>(brain)[<span class="kw">Idents</span>(brain) <span class="op">!=</span><span class="st"> &#39;microglia&#39;</span>]),</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true"></a>    <span class="dt">min.pct =</span> <span class="fl">0.15</span>, </span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true"></a>    <span class="dt">only.pos =</span> <span class="ot">TRUE</span></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true"></a>)</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true"></a></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true"></a><span class="co">## - Link microglia peaks to nearest genes</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true"></a>microglia_genes &lt;-<span class="st"> </span>microglia_peaks <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true"></a><span class="st">    </span><span class="kw">arrange</span>(<span class="kw">desc</span>(avg_log2FC)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(p_val_adj <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>, avg_log2FC <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>, pct<span class="fl">.1</span> <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true"></a><span class="st">    </span><span class="kw">rownames</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true"></a><span class="st">    </span><span class="kw">str_replace</span>(<span class="st">&#39;-&#39;</span>, <span class="st">&#39;:&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true"></a><span class="st">    </span><span class="kw">GRanges</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true"></a><span class="st">    </span><span class="kw">join_nearest</span>(mm_genes) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true"></a><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(symbol) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-20"><a href="#cb24-20" aria-hidden="true"></a><span class="st">    </span><span class="kw">unique</span>()</span>
+<span id="cb24-21"><a href="#cb24-21" aria-hidden="true"></a></span>
+<span id="cb24-22"><a href="#cb24-22" aria-hidden="true"></a>all_genes &lt;-<span class="st"> </span><span class="kw">rownames</span>(brain) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-23"><a href="#cb24-23" aria-hidden="true"></a><span class="st">    </span><span class="kw">str_replace</span>(<span class="st">&#39;-&#39;</span>, <span class="st">&#39;:&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-24"><a href="#cb24-24" aria-hidden="true"></a><span class="st">    </span><span class="kw">GRanges</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-25"><a href="#cb24-25" aria-hidden="true"></a><span class="st">    </span><span class="kw">join_nearest</span>(mm_genes) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-26"><a href="#cb24-26" aria-hidden="true"></a><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(symbol) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-27"><a href="#cb24-27" aria-hidden="true"></a><span class="st">    </span><span class="kw">unique</span>()</span>
+<span id="cb24-28"><a href="#cb24-28" aria-hidden="true"></a></span>
+<span id="cb24-29"><a href="#cb24-29" aria-hidden="true"></a><span class="co">## - Run GO analysis</span></span>
+<span id="cb24-30"><a href="#cb24-30" aria-hidden="true"></a>goa &lt;-<span class="st"> </span>gprofiler2<span class="op">::</span><span class="kw">gost</span>(microglia_genes, <span class="dt">organism =</span> <span class="st">&#39;mmusculus&#39;</span>)</span>
+<span id="cb24-31"><a href="#cb24-31" aria-hidden="true"></a>goa<span class="op">$</span>result <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(p_value <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>, <span class="kw">grepl</span>(<span class="st">&#39;GO:&#39;</span>, source)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(p_value) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">40</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a>cov_plot &lt;-<span class="st"> </span><span class="kw">CoveragePlot</span>(</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>  <span class="dt">object =</span> pbmc,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>  <span class="dt">region =</span> <span class="st">&quot;chr2-87011729-87035519&quot;</span>,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a>  <span class="dt">annotation =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true"></a>  <span class="dt">peaks =</span> <span class="ot">FALSE</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true"></a>)</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true"></a>cov_plot</span></code></pre></div>
+</div>
+</div>
+<div id="optional-compare-signac-and-singlecellexperiment-workflows" class="section level2">
+<h2>4. [Optional] Compare Signac and SingleCellExperiment workflows</h2>
+<p>You will need several packages which may not be already installed.</p>
+<ul>
+<li>DropletUtils</li>
+</ul>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="co"># Import data</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a>brain_sce &lt;-<span class="st"> </span>DropletUtils<span class="op">::</span><span class="kw">read10xCounts</span>(<span class="st">&#39;data/Homework_2/scATAC/atac_v1_E18_brain_fresh_5k_filtered_peak_bc_matrix.h5&#39;</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a><span class="co"># QC data </span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true"></a><span class="co"># Subset data</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true"></a><span class="co"># Normalize data </span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true"></a><span class="co"># Reduce dimensionality</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true"></a><span class="co"># Clustering </span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true"></a></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true"></a><span class="co"># Visualization </span></span></code></pre></div>
 </div>

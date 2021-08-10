@@ -31,7 +31,7 @@ conda install -c conda-forge -c bioconda \
 conda install -c anaconda hdf5
 ```
 
-- The following R packages have also been installed (along with their many dependencies, of course!): 
+- The following R packages have also been installed (along with their many dependencies, of course!):  
 
 ```
 Rscript -e "
@@ -50,6 +50,8 @@ install.packages('Seurat', repos = 'https://cran.irsn.fr')
 install.packages('BiocManager', repos = 'https://cran.irsn.fr')
 
 ## Bioconductor Packages
+BiocManager::install('scRNAseq', update = FALSE)
+BiocManager::install('SingleR', update = FALSE)
 BiocManager::install('SingleCellExperiment', update = FALSE)
 BiocManager::install('scran', update = FALSE)
 BiocManager::install('scater', update = FALSE)

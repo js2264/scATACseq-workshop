@@ -262,6 +262,17 @@ da_peaks <- Seurat::FindMarkers(
 )
 ```
 
+### Exercises session 3
+
+- Inspect genes closest to the most DA peaks (in DA analysis between clusters 10+16 and 4+5). Propose a function for cells in these groups.
+
+```{txt}
+da_peaks <- readRDS('data/MouseBrain/da_peaks_10-16_vs_4-5.rds')
+peaks <- rownames(da_peaks)[da_peaks$?...? <= 0.01 & da_peaks$?...? >= 1.5]
+peaks <- GenomicRanges::GRanges(str_replace(peaks, '-', ':'))
+Annotation(brain)[nearest(?...?, Annotation(?...?))]$?...?
+```
+
 ## Hands-on session 4: Peaks differential accessibility analysis
 
 ### Processing raw ATAC data
@@ -458,3 +469,13 @@ p <- pheatmap::pheatmap(
 )
 ```
 
+### Exercises session 4
+
+- Compare clustering to provided cell type activity for ce11 promoters. Comment. 
+
+```{txt}
+dds <- readRDS('data/ATAC_worm/quantif.rds')
+rlogs <- readRDS('?...?')
+clusts <- cluster::pam(select(rlogs, -?...?), k = 9)
+table(rowData(dds)$which.tissues[!rowData(dds)$allZero], clusts$?...?)
+```

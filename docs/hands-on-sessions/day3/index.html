@@ -12,21 +12,21 @@
     <title>Day 03 :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
-    <link href="/scATACseq-workshop/css/nucleus.css?1628600323" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628600323" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hybrid.css?1628600323" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/featherlight.min.css?1628600323" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628600323" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/auto-complete.css?1628600323" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628600323" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/theme.css?1628600323" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hugo-theme.css?1628600323" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/nucleus.css?1628625291" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628625291" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1628625291" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1628625291" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628625291" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1628625291" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628625291" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1628625291" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1628625291" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/theme-red.css?1628600323" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme-red.css?1628625291" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/custom_css.css?1628600323" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/custom_css.css?1628625291" rel="stylesheet">
 
-    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628600323"></script>
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628625291"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -244,37 +244,13 @@
  
   
     
-    <li data-nav-id="/scATACseq-workshop/exercises/" title="2. Exercises" class="dd-item
-        
-        
-        
-        ">
-      <a href="/scATACseq-workshop/exercises/">
-          2. Exercises
-          
-      </a>
-      
-      
-    </li>
-  
- 
-
-          
-          
-
-
-
-
- 
-  
-    
-    <li data-nav-id="/scATACseq-workshop/homeworks/" title="3. Homeworks" class="dd-item
+    <li data-nav-id="/scATACseq-workshop/homeworks/" title="2. Homeworks" class="dd-item
         
         
         
         ">
       <a href="/scATACseq-workshop/homeworks/">
-          3. Homeworks
+          2. Homeworks
           
       </a>
       
@@ -298,6 +274,27 @@
       <li data-nav-id="/scATACseq-workshop/homeworks/homework_1/" title="Homework 1" class="dd-item ">
         <a href="/scATACseq-workshop/homeworks/homework_1/">
         Homework 1
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_2/" title="Homework 2" class="dd-item ">
+        <a href="/scATACseq-workshop/homeworks/homework_2/">
+        Homework 2
         
         </a>
     </li>
@@ -717,6 +714,20 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a>    chromVAR<span class="op">::</span><span class="kw">plotDeviationsTsne</span>(dev, tsne_results, <span class="dt">annotation_name =</span> <span class="st">&quot;HIF1A&quot;</span>, <span class="dt">shiny =</span> <span class="ot">FALSE</span>)[[<span class="dv">1</span>]]</span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a>)</span></code></pre></div>
 </div>
+<div id="exercises-session-6" class="section level3">
+<h3>Exercises session 6</h3>
+<ul>
+<li>Try different thresholds for tSNE embeddings. Comment.</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>set.seed(2021)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>dev &lt;- readRDS(&#39;data/scATAC_LSC-LMPP-mono/dev.rds&#39;)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a>p &lt;- cowplot::plot_grid(</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a>    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]],</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a>    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.25, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]],</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a>    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.5, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]],</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a>    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.75, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]]</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a>)</span></code></pre></div>
+</div>
 </div>
 
 
@@ -886,9 +897,6 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
                     
 
                     
-            
-        
-                    
                         
             
             
@@ -901,6 +909,9 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
                     
                     
 
+                    
+            
+        
                     
                         
             
@@ -965,7 +976,7 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
 			<a class="nav nav-prev" href="/scATACseq-workshop/hands-on-sessions/day2/" title="Day 02"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/scATACseq-workshop/exercises/" title="2. Exercises" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/scATACseq-workshop/homeworks/" title="2. Homeworks" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -975,19 +986,19 @@ code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warni
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/scATACseq-workshop/js/clipboard.min.js?1628600323"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628600323"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628600323"></script>
-    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628600323"></script>
-    <script src="/scATACseq-workshop/js/featherlight.min.js?1628600323"></script>
-    <script src="/scATACseq-workshop/js/highlight.pack.js?1628600323"></script>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1628625291"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628625291"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628625291"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628625291"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1628625291"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1628625291"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628600323"></script>
-    <script src="/scATACseq-workshop/js/learn.js?1628600323"></script>
-    <script src="/scATACseq-workshop/js/hugo-learn.js?1628600323"></script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628625291"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1628625291"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1628625291"></script>
     
         
-            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628600323"></script>
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628625291"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });
