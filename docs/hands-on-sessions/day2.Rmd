@@ -262,7 +262,7 @@ da_peaks <- Seurat::FindMarkers(
 )
 ```
 
-### Exercises session 3
+### Exercise session 3
 
 - Inspect genes closest to the most DA peaks (in DA analysis between clusters 10+16 and 4+5). Propose a function for cells in these groups.
 
@@ -469,7 +469,7 @@ p <- pheatmap::pheatmap(
 )
 ```
 
-### Exercises session 4
+### Exercise session 4
 
 - Compare clustering to provided cell type activity for ce11 promoters. Comment. 
 

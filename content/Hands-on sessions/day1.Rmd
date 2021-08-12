@@ -222,7 +222,7 @@ p <- cowplot::plot_grid(
 ggsave('ATACseq_QC.pdf', w = 15, h = 10)
 ```
 
-### Exercises session 1
+### Exercise session 1
 
 - Check fragment size distribution in bulk ATAC-seq 
 
@@ -319,7 +319,7 @@ Our QC report file is in:
 data/PBMCs_10X/atac_pbmc_1k_v1_web_summary.html
 ```
 
-### Exercises session 2
+### Exercise session 2
 
 - Check coverage of each cluster in `Loupe` at relevant loci to propose an annotation for each cluster. 
 

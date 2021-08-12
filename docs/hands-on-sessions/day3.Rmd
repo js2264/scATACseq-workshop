@@ -14,6 +14,9 @@ knitr::opts_chunk$set(eval = FALSE)
 ### Scan genome for JASPAR motifs
 
 ```{r}
+library(tidyverse)
+library(BiocParallel)
+register(MulticoreParam(workers = 12, progressbar = TRUE))
 motifs <- TFBSTools::getMatrixSet(
     JASPAR2020::JASPAR2020,
     list(species = 6239, all_versions = FALSE)
@@ -21,12 +24,11 @@ motifs <- TFBSTools::getMatrixSet(
 ce11_seq <- Biostrings::getSeq(BSgenome.Celegans.UCSC.ce11::BSgenome.Celegans.UCSC.ce11)
 motifs_hits <- BiocParallel::bplapply(motifs, function(motif) {
     TF <- TFBSTools::name(motif)
-    message(TF)
     TFBSTools::searchSeq(as(motif, 'PWMatrix'), ce11_seq, min.score = 0.95) %>% 
         lapply(as, 'GRanges') %>% 
         GenomicRanges::GRangesList() %>% 
         unlist()
-}) %>% purrr::set_names(TFBSTools::name(motifs)) %>% GenomicRanges::GRangesList()
+}) %>% purrr::set_names(TFBSTools::name(motifs))
 ```
 
 ### For each set of promoters, check the enrichment of each TF motif in it
@@ -100,6 +102,18 @@ enrichments <- BiocParallel::bplapply(names(TF_peaks), function(TF) {
 enrichments %>% filter(pval < 1e-5, odd > 3) %>% arrange(tissue) %>% print(n = 'all')
 ```
 
+### Exercise session 5 
+
+Recover the TFs enriched over Intestine promoters. Check their potential interaction using [STRING web-based network analysis](https://string-preview.org/ ). 
+
+```{txt}
+enrichments %>% 
+    filter(pval < 1e-5, odd > 3, grepl('Intest', ?...?)) %>% 
+    pull(?...?) %>% 
+    unique() %>% 
+    writeLines()
+```
+
 ## Hands-on session 6: chromVAR on single-cell ATAC-seq from human hematopoiesis
 
 Data is obtained from `Corces et al., Nat. Genet. 2018` (DOI: [10.1038/ng.3646](https://doi.org/10.1038/ng.3646))
@@ -154,7 +168,7 @@ bamCoverage \
     --extendReads
 ```
 
-### Get a SummarizedExperiment of scATACseq counts over DHS sites
+### Get a SummarizedExperiment of scATACseq counts over peaks
 
 ```{r}
 library(tidyverse)
@@ -276,7 +290,7 @@ p <- cowplot::plot_grid(
 )
 ```
 
-### Exercises session 6
+### Exercise session 6
 
 - Try different thresholds for tSNE embeddings. Comment. 
 

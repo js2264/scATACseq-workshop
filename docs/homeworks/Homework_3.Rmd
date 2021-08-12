@@ -11,13 +11,402 @@ knitr::opts_chunk$set(eval = FALSE)
 
 ## Goals
 
-1. Import, filter, normalize and cluster cells from the T-cell exhaustion dataset  
+1. Import, filter, normalize and plot cells from human hematopoiesis scATACseq dataset
 
-2. Run chromVAR to identify TF activity in each cell cluster  
+2. Compute gene activity scores and check known markers  
 
-3. Using knowledge on TFs used in different cell types, suggest cell cluster annotation of the dataset  
+4. Run chromVAR to identify TF activity in each cell cluster  
 
-4. Confirm this by computing gene activity scores and check known markers  
+## 1. Process human hematopoiesis dataset
 
-5. Integrate scRNAseq and scATACseq to validate cluster annotations
+### Download data 
 
+The data comes from Satpathy et al., Nat. Biotechnol. 2019 ([DOI: 10.1038/s41587-019-0206-z](https://doi.org/10.1038/s41587-019-0206-z)). 
+Counts data is available from GEO (GSE: `GSE129785`). 
+
+Download the files related to scATACseq of all human hematopoiesis cells. 
+
+```{sh}
+mkdir -p data/Homework_3/scATAC/
+curl https://ftp.ncbi.nlm.nih.gov/geo/series/GSE129nnn/GSE129785/suppl/GSE129785_scATAC-Hematopoiesis-All.cell_barcodes.txt.gz -o data/Homework_3/scATAC/barcodes.tsv.gz
+curl https://ftp.ncbi.nlm.nih.gov/geo/series/GSE129nnn/GSE129785/suppl/GSE129785_scATAC-Hematopoiesis-All.mtx.gz -o data/Homework_3/scATAC/matrix.mtx.gz
+curl https://ftp.ncbi.nlm.nih.gov/geo/series/GSE129nnn/GSE129785/suppl/GSE129785_scATAC-Hematopoiesis-All.peaks.txt.gz -o data/Homework_3/scATAC/features.tsv.gz
+```
+
+### Process data wih Signac
+
+#### Import data 
+
+Notice how the count matrix is in a different format than previously seen. 
+You will frequently encounter this type of situation. Analysis packages often provide 
+import functions for the different input formats. Check `Seurat` documentation if needed, 
+to identify which function can be used to import a `mtx` format. 
+
+```{r}
+cnts <- Seurat::Read10X('data/Homework_3/scATAC/')
+```
+
+Does it work? Why? The most likely reason is that the count matrix is not 
+structured exactly like the one which comes straight out of a `cellranger count` 
+pipeline. It is a very frequent issue occurring when one attempts to analyse 
+public data. 
+
+The alternative, longer route is to import each file separately, 
+make sure they are compatible with each other, and merge them 
+manually into a `SeuratChromatinAssay`. 
+
+```{r}
+## - Load required libraries 
+library(tidyverse)
+library(plyranges)
+library(Seurat)
+library(Signac)
+
+## - Import counts, barcodes and features separately
+barcode <- file.path('data/Homework_3/scATAC/', "barcodes.tsv.gz")
+features <- file.path('data/Homework_3/scATAC/', "features.tsv.gz")
+matrix <- file.path('data/Homework_3/scATAC/', "matrix.mtx.gz")
+cnts <- Matrix::readMM('data/Homework_3/scATAC/matrix.mtx.gz')
+barcodes <- vroom::vroom('data/Homework_3/scATAC/barcodes.tsv.gz') %>% as.data.frame()
+features <- readLines('data/Homework_3/scATAC/features.tsv.gz')[-1] %>% 
+    str_replace('_', ':') %>% 
+    str_replace('_', '-') %>% 
+    GRanges() %>% 
+    mutate(peak = as.character(.) %>% str_replace(':', '-'))
+
+## - Make sure that the row/colnames for the count matrix match those of 
+#       barcodes and features
+colnames(cnts) <- rownames(barcodes) <- barcodes$Group_Barcode
+rownames(cnts) <- names(features) <- features$peak
+
+## - Get human gene annotations (hg19/GRCh37) to feed it into the future `SeuratChromatinAssay`
+annotations <- GetGRangesFromEnsDb(ensdb = EnsDb.Hsapiens.v75::EnsDb.Hsapiens.v75)
+seqlevelsStyle(annotations) <- 'UCSC'
+genome(annotations) <- "hg19"
+
+## - Create Chromatin Assay
+assay <- Signac::CreateChromatinAssay(
+    counts = cnts,
+    ranges = features,
+    genome = "hg19",
+    min.cells = 10, 
+    min.features = 10, 
+    annotation = annotations
+)
+hemato <- Seurat::CreateSeuratObject(
+    counts = assay,
+    assay = 'ATAC',
+    meta.data = barcodes
+)
+```
+
+You will find that `CreateChromatinAssay()` function takes a long time to run. 
+This is because it internally computes metrics from the count matrix. You can 
+check the cell metadata to see which ones were calculated (on top of the ones 
+which come from the `barcodes` data frame). 
+
+```{r}
+head(hemato[[]])
+colnames(hemato[[]])[!colnames(hemato[[]]) %in% colnames(barcodes)]
+```
+
+#### Process data 
+
+Is the `fragments` file (which should exist for any scATACseq experiment) available 
+for this experiment? Check the related GEO webpage. 
+
+For which analysis are the `fragments` essential, exactly? Can we still 
+perform normalization/clustering/annotation without them? And motif enrichment analysis? 
+
+Since we don't have the `fragments` file at hand, most of the QC steps are not 
+available (e.g. `TSSEnrichment`, `NucleosomeSignal` or fragment size distribution). 
+
+(Note that the `fragments` file is actually available as raw data from GEO. 
+Feel free to download it and perform further QC).
+
+Still, we do have other pre-computed metrics (e.g. `FRIP` and `depth`). 
+Check these metrics and filter the `Seurat` object (cells and features) 
+as deemed appropriate. 
+
+```{r}
+## - Filter data 
+quantile(hemato$depth, seq(0, 1, 0.1))
+quantile(hemato$nFeature_ATAC, seq(0, 1, 0.1))
+quantile(hemato$nCount_ATAC, seq(0, 1, 0.1))
+quantile(hemato$FRIP, seq(0, 1, 0.1))
+hemato <- subset(hemato, subset = depth > 5000 & depth < 200000) 
+hemato <- subset(hemato, subset = nCount_ATAC > 3000 & nCount_ATAC < 100000) 
+hemato <- subset(hemato, subset = nFeature_ATAC > 1000 & nFeature_ATAC < 20000) 
+hemato <- subset(hemato, subset = FRIP > 0.30 & FRIP < 20000) 
+
+## - Remove peaks with low coverage
+hemato <- hemato[rowSums(GetAssayData(hemato, slot = "counts")) > 10, ]
+hemato <- hemato[rowSums(GetAssayData(hemato, slot = "counts") > 0) > 10, ]
+```
+
+Now that the dataset is filtered, one can normalize (by using TF-IDF 
+approach) then further reduce the dimensionality for visualization purposes. 
+
+```{r}
+## - Normalize data 
+hemato <- Signac::RunTFIDF(hemato) 
+
+## - Reduce dimensionality
+hemato <- Signac::FindTopFeatures(hemato, min.cutoff = 'q50') 
+hemato <- Signac::RunSVD(hemato) 
+
+## - Label clusters according to the original publication
+clusters <- c(
+    'Cluster1' = 'HSC',
+    'Cluster2' = 'MEP',
+    'Cluster3' = 'CMP',
+    'Cluster4' = 'LMPP',
+    'Cluster5' = 'CLP',
+    'Cluster6' = 'Pro-B',
+    'Cluster7' = 'Pre-B',
+    'Cluster8' = 'GMP',
+    'Cluster9' = 'MDP',
+    'Cluster10' = 'pDC',
+    'Cluster11' = 'cDC',
+    'Cluster12' = 'Mono.',
+    'Cluster13' = 'Mono.',
+    'Cluster14' = 'Nai. B',
+    'Cluster15' = 'Mem. B',
+    'Cluster16' = 'Plasma',
+    'Cluster17' = 'Baso.',
+    'Cluster18' = 'Imm. NK',
+    'Cluster19' = 'Mat. NK',
+    'Cluster20' = 'Mat. NK',
+    'Cluster21' = 'Nai. CD4',
+    'Cluster22' = 'Nai. CD4',
+    'Cluster23' = 'Nai. Treg',
+    'Cluster24' = 'Mem. CD4',
+    'Cluster25' = 'Treg',
+    'Cluster26' = 'Nai. CD8',
+    'Cluster27' = 'Nai. CD8',
+    'Cluster28' = 'Nai. CD8',
+    'Cluster29' = 'Mem. CD8',
+    'Cluster30' = 'Mem. CD8',
+    'Cluster31' = 'Gamm. Del. T'
+)
+hemato$renamed_clusters <- clusters[hemato$Clusters]
+
+## - Visualize data 
+hemato <- Seurat::RunUMAP(hemato, reduction = 'lsi', dims = 2:30)
+p <- DimPlot(hemato, group.by = 'renamed_clusters') + coord_fixed(ratio = 1)
+```
+
+What can you observe in the `UMAP` projection of the dataset? Comment on the 
+separation of some cell types into different spatially-resolved clusters. 
+
+## 2. Compute gene activity scores
+
+Here again, the absence of `fragments` complicates the computation of gene activity scores. 
+Indeed, Signac's `GeneActivity()` function does require scATACseq fragment information. 
+
+Without actual fragments, can you think of a way to still compute a 'gene activity'-like score, 
+approximating ~ the sum of scATACseq fragments overlapping a gene? 
+
+One way to do this is to: 
+
+1. Extend gene annotations to cover 2000bp upstream of TSS
+2. For each gene, link it to all the peaks overlapping it to create a gene <-> peak relationship table
+3. Create a joint data table containing [ gene | peak | cell | count ]
+4. Group the data table by `cell + gene` and sum up the peak counts for each pair
+5. Transform this count table into a SparseMatrix
+6. Create the new `Seurat` assay containing "gene activity"-like scores and normalize it
+
+- Step 1: 
+
+```{r}
+## - Extend all the genes in hg19 so that it covers 1000 bp upstream of the genebody 
+hg_genes_extended <- ensembldb::genes(EnsDb.Hsapiens.v75::EnsDb.Hsapiens.v75) %>% 
+    filter(gene_biotype == 'protein_coding') %>% 
+    keepStandardChromosomes(pruning.mode = 'coarse') %>% 
+    filter(seqnames != 'MT') %>% 
+    resize(width = width(.) + 2000, fix = 'start') %>% 
+    shift(1000 * ifelse(strand(.) == '+', -1, 1)) %>%
+    mutate(id = 1:length(.)) %>% 
+    mutate(gene_name = make.unique(gene_name))
+seqlevelsStyle(hg_genes_extended) <- 'UCSC'
+```
+
+- Step 2: 
+
+```{r}
+## - Find overlaps between all the scATAC peaks and the extended genes
+ov <- findOverlaps(query = granges(hemato), subject = hg_genes_extended)
+
+## - For each peak-gene pair, add peak name and gene name
+ov <- as_tibble(ov) %>% 
+    dplyr::rename(peaknb = queryHits, genenb = subjectHits) %>% 
+    mutate(gene_name = hg_genes_extended$gene_name[genenb]) %>% 
+    mutate(row = granges(hemato)$peak[peaknb])
+```
+
+- Step 3: 
+
+This step requires to transform the original `counts` SparseMatrix into a tidy 
+`data.table`, to enable fast `left_join` between (1) peak counts / cell and 
+(2) gene <-> peak relationship table (`ov`)
+
+```{r}
+## - Extract counts for the gene-associated peaks
+cnts <- GetAssayData(hemato, 'counts')[unique(ov$peaknb), ]
+
+## - Transform the cnts SparseMatrix into a tidy dense long data.frame
+tidy_cnts <- broom::tidy(cnts) 
+
+## - Transform the dense long data.frame into a data.table for faster computation
+tidy_cnts <- dtplyr::lazy_dt(tidy_cnts)
+
+## - For each peak/cell count value, associate the corresponding gene
+joint_data <- left_join(tidy_cnts, ov, by = 'row')
+class(joint_data)
+## WATCH OUT: You cannot see what is stored into `joint_data` as it 
+## is a deferred data.table, i.e. it will only execute once you pipe it to 
+## `as_tibble()`. Once you pipe it, the computation starts and takes a lot of time.
+```
+
+- Step 4: 
+
+```{r}
+## - Group the joint_table by gene + cell and sum up all the counts
+gene_averaged_cnts <- group_by(joint_data, column, gene_name) %>% 
+    summarize(n = sum(value)) %>% 
+    as_tibble()
+```
+
+- Step 5: 
+
+```{r}
+## - To transform the data.table into SparseMatrix, it needs to be numerical
+gene_averaged_cnts_num <- data.matrix(gene_averaged_cnts)
+
+## - Transform into sparse matrix 
+gene_averaged_cnts_sparse <- Matrix::sparseMatrix(
+    i = gene_averaged_cnts_num[, 'gene_name'],
+    j = gene_averaged_cnts_num[, 'column'],
+    x = gene_averaged_cnts_num[, 'n'],
+)
+
+## - Add back the actual cell and genes names
+colnames(gene_averaged_cnts_sparse) <- sort(unique(gene_averaged_cnts$column))
+rownames(gene_averaged_cnts_sparse) <- sort(unique(gene_averaged_cnts$gene_name))
+```
+
+- Step 6: 
+
+```{r}
+## - Create new assay in hemato
+hemato[['GENE']] <- CreateAssayObject(counts = gene_averaged_cnts_sparse)
+
+## - Normalize this new assay with SCTransform
+hemato <- SCTransform(hemato, assay = 'GENE')
+
+## - Save the resulting object!
+saveRDS(hemato, 'data/Homework_3/scATAC/hemato.rds')
+```
+
+Now the `Seurat` object contains 3 assays, the first one corresponding to the original scATACseq counts, 
+and the second one containing gene activity pseudocounts, and the third one containing `SCT`-normalized 
+data. One can now perform "gene differential expression"-like analysis using the `SCT` assay!
+
+```{r}
+## - Reduce dimensionality and visualize
+hemato <- RunPCA(hemato) %>% RunUMAP(reduction = 'pca', dims = 1:50)
+p <- FeaturePlot(hemato, features = 'CD14', reduction = "umap") # Or NCR1 (NKp46), CD8A, CD14, MS4A1
+
+## - Find gene markers for Basophils
+DefaultAssay(hemato) <- "SCT"
+Idents(hemato) <- hemato$renamed_clusters
+basophils_genes <- Seurat::FindMarkers(
+    object = hemato,
+    assay = 'GENE', 
+    ident.1 = 'Baso.',
+    ident.2 = unique(Idents(hemato)[Idents(hemato) != 'Baso.']),
+    min.pct = 0.15, 
+    only.pos = TRUE
+)
+```
+
+## 3. chromVAR analysis
+
+### Downsample data to 10,000 random cells and a subset of variable features
+
+```{r}
+DefaultAssay(hemato) <- 'ATAC'
+hemato_sub <- hemato[, sample(colnames(hemato), size = 10000, replace = FALSE)]
+hemato_sub <- FindVariableFeatures(hemato_sub, nfeatures = 20000)
+```
+
+### Get a SummarizedExperiment of scATACseq counts over peaks
+
+```{r}
+library(SummarizedExperiment)
+sumExp <- SummarizedExperiment(
+    assays = list('counts' = GetAssayData(hemato, assay = 'ATAC', slot = 'counts')), 
+    rowRanges = GetAssayData(hemato, assay = 'ATAC', slot = 'ranges'), 
+    colData = hemato[[]]
+)
+```
+
+### Add GC bias to peaks 
+
+```{r}
+sumExp <- chromVAR::addGCBias(sumExp, genome = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19)
+```
+
+### Search for motifs with high deviation from background distribution 
+
+```{r}
+library(BiocParallel)
+register(MulticoreParam(workers = 16, progressbar = TRUE))
+motifs <- TFBSTools::getMatrixSet(
+    JASPAR2020::JASPAR2020,
+    list(species = 9606, all_versions = FALSE)
+)
+motif_ix <- motifmatchr::matchMotifs(motifs, sumExp, genome = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19)
+bg <- chromVAR::getBackgroundPeaks(object = sumExp)
+dev <- chromVAR::computeDeviations(object = sumExp, annotations = motif_ix, background_peaks = bg)
+```
+
+### Check TF enrichment in different cell types 
+
+The `dev` `SummarizedExperiment` object can be added as a fourth assay to the 
+original `hemato` `Seurat` object. This way, one can rely on `Seurat`-based 
+plotting functions to plot cells in their preferred dimensional space, and color 
+them using TF deviation scores computed with `chromVAR`. 
+
+```{r}
+
+```
+
+One can also embed cells in a 2D-space based on the TF deviation scores themselves! 
+
+```{r}
+variability <- chromVAR::computeVariability(dev)
+p <- chromVAR::plotVariability(variability, use_plotly = FALSE) 
+tsne_results <- chromVAR::deviationsTsne(dev, threshold = 1.5)
+p <- cowplot::plot_grid(
+    chromVAR::plotDeviationsTsne(dev, tsne_results, sample_column = "celltype", shiny = FALSE)[[1]], 
+    chromVAR::plotDeviationsTsne(dev, tsne_results, annotation_name = "PAX5", shiny = FALSE)[[1]], 
+    chromVAR::plotDeviationsTsne(dev, tsne_results, annotation_name = "TCF7", shiny = FALSE)[[1]], 
+    chromVAR::plotDeviationsTsne(dev, tsne_results, annotation_name = "CEBPA", shiny = FALSE)[[1]]
+)
+```
+
+### Exercise session 6
+
+- Try different thresholds for tSNE embeddings. Comment. 
+
+```{txt}
+set.seed(2021)
+dev <- readRDS('data/scATAC_LSC-LMPP-mono/dev.rds')
+p <- cowplot::plot_grid(
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]],
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.25, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]],
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.5, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]],
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.75, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]]
+)
+```

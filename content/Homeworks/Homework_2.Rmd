@@ -21,8 +21,6 @@ knitr::opts_chunk$set(eval = FALSE)
 
 3. Find genes associated to DA peaks and run GO over-enrichment / gene set enrichment analysis  
 
-4. Compare `Signac` processing and `SingleCellExperiment` processing
-
 ## 1. Process mouse E18 brain 5K scATACseq data
 
 ### Download data 
@@ -247,7 +245,7 @@ brain <- brain[
 ]
 ```
 
-### Normalizing and reduce dimensionality data 
+### Latent semantic indexing: normalizing and reduce dimensionality data with 'TF-IDF' and 'SVD'
 
 Normalization is done using a TF-IDF approach, rather than traditional log-normalization, 
 due to excessive sparsity of the scATAC data. 
@@ -261,6 +259,8 @@ GetAssayData(brain, 'data')[1:10, 1:10]
 ```
 
 Dimensionality reduction can then be performed using the normalized data. 
+By using a `singular value decomposition` approach, one effectively recapitulates the 
+[`latent semantic indexing`](https://en.wikipedia.org/wiki/Latent_semantic_analysis) approach. 
 
 ```{r}
 brain <- Signac::FindTopFeatures(brain, min.cutoff = 'q50') # Find variable features
@@ -269,19 +269,40 @@ brain <- Signac::RunSVD(object = brain)
 
 ### Clustering 
 
-Now that cells are embedded in a lower dimensional space, they can be graph-clustered just like "regular" cells from scRNAseq. 
+Now that cells are embedded in a lower dimensional space, they can be graph-clustered 
+just like "regular" cells from scRNAseq. 
+
+Try to perform graph-based clustering on the `Seurat` object, using the `lsi` embedded space 
+(skipping the first dimension). 
 
 ```{r}
 brain <- FindNeighbors(object = brain, reduction = 'lsi', dims = 2:30)
 brain <- FindClusters(object = brain, algorithm = 3, resolution = 1.2, verbose = FALSE)
 ```
 
+Why was the first dimension skipped here? It appears that in `LSI`, the first dimension 
+is frequently (anti-)correlated with depth, so we exclude it in further analysis. 
+
 ### Visualization 
+
+Now that the data has been normalized and dimensionality is linearly reduced (through `SVD`), 
+we can attempt to visualize the cluster locations in 2D. 
+
+Try computing tSNE and UMAP embeddings of the normalized `LSI` data, using `Seurat`-based 
+functions. 
 
 ```{r}
 brain <- RunTSNE(brain, reduction = 'lsi', dims = 2:30)
 brain <- RunUMAP(brain, reduction = 'lsi', dims = 2:30)
 p1 <- Seurat::DimPlot(brain, reduction = 'tsne')
+```
+
+One can also leverage `Signac`-based functions for visualization. Notably, the 
+`CoveragePlot()` function is quite useful: it can plot in R the coverage signal 
+over a genomic region, aggregated per cell cluster. Try and plot the aggregated 
+signal over individual markers known to be specific to certain brain cell types. 
+
+```{r}
 p2 <- CoveragePlot(
     object = brain,
     region = "Tjp1", # Or Gad2 (interneurons), Cq1a (Microglia), Gfap (astrocytes), Tubb3 (neurons)
@@ -313,6 +334,9 @@ curl https://cf.10xgenomics.com/samples/cell-exp/6.0.0/SC3_v3_NextGem_DI_Neurons
 
 ### Process data 
 
+Process the scRNAseq data with `Seurat` using a pipeline approach to limit the 
+generation of intermediate objects. Why is such approach sometimes useful in R? 
+
 ```{r}
 library(tidyverse)
 library(Seurat)
@@ -322,15 +346,40 @@ brain_rna <- Read10X_h5("data/Homework_2/scRNA/SC3_v3_Neurons_5K_count_sample_fe
     RunPCA() %>% 
     FindNeighbors() %>% 
     FindClusters() %>% 
-    RunTSNE()
-brain_rna <- RunUMAP(brain_rna, reduction = 'pca', dims = 1:50)
+    RunTSNE(reduction = 'pca', dims = 1:50) %>% 
+    RunUMAP(reduction = 'pca', dims = 1:50)
 p <- DimPlot(brain_rna, reduction = "umap")
 ```
 
 ### Annotate scRNAseq data with public databases
 
+Leverage the `scRNAseq` package to recover pre-processed and annotated scRNAseq 
+data from Zeisel et al., 2018. We will use this to annotate cell identity of the 
+mouse E18 5K brain scRNAseq unlabelled data from 10X Genomics. 
+
+Which class is the newly created object? How different from a `Seurat` object this one is? 
+
 ```{r}
-ref <- scRNAseq::ZeiselBrainData() %>% scuttle::logNormCounts()
+ref <- scRNAseq::ZeiselBrainData()
+class(ref)
+```
+
+Don't forget to normalize the new counts in `R`! This can be achieved using 
+the `scuttle` package. One could also coerce the `ref` object as a `Seurat` object
+to apply `SCT` normalization!
+
+```{r}
+ref <- scuttle::logNormCounts(ref)
+```
+
+With the `SingleR` package, we can annotate cells using (1) the normalized 
+`count` `SparseMatrix` from the mouse E18 5K brain scRNAseq and (2) the 
+`SingleCellExperiment` `ref` object and its annotations. 
+Check `SingleR` documentation to see how this can be done. 
+
+Are the scRNAseq new annotations corroborating with the clusters found in the scRNAseq data? 
+
+```{r}
 ref$level1class[ref$level1class %in% c('pyramidal CA1', 'pyramidal SS')] <- 'pyramidal'
 pred <- SingleR::SingleR(
     test = GetAssayData(brain_rna, 'data'), 
@@ -339,21 +388,47 @@ pred <- SingleR::SingleR(
     BPPARAM = BiocParallel::MulticoreParam(workers = 12)
 )
 brain_rna$annotation <- pred$pruned.labels
-p <- DimPlot(brain_rna, reduction = "umap", group.by = 'annotation')
+p1 <- DimPlot(brain_rna, reduction = "umap", group.by = 'annotation')
+p2 <- DimPlot(brain_rna, reduction = "umap", group.by = 'annotation')
 ```
 
 ### Transfer annotations from scRNAseq to scATACseq datasets
+
+A commonly used trick to transfer annotation from scRNAseq to scATACseq is to 
+process the scATACseq data so that it recapitulates "gene activity". 
+With `Signac`, this can be done with the `GeneActivity()` function. Read its documentation 
+to understand what it does!
+
+Using this function, we can create a second assay, containing "gene activity" metrics
+for eeach gene in each cell. Now, the features are not accessible peaks anymore, but 
+"gene activity". 
 
 ```{r}
 ## - Compute an "activity score" for each gene in each cell (based on ATAC counts) and store it as a new assay
 gene_activities <- GeneActivity(brain, features = VariableFeatures(brain_rna))
 brain@assays["gene_activity"] <- CreateAssayObject(counts = gene_activities)
+```
 
+Don't forget that these "gene activity" scores are obtained from raw scATACseq
+counts. One needs to normalize them! In scRNAseq processed in `Seurat`, the `SCT` method is 
+typically used to normalize data. 
+
+Once you have ran `SCTransform()`, check the number of assays for the `brain` 
+object. How many are they? What does each assay contain exactly? Which one is the 
+default one now? 
+
+```{r}
 ## - Normalize this new assay with SCTransform
 GetAssayData(brain, 'counts')[1:10, 1:10]
 brain <- SCTransform(brain, assay = 'gene_activity')
+```
 
-## - Normalize this new assay with SCTransform
+Using `Seurat`-based `FindTransferAnchors()` and `TransferData()` functions, 
+find anchors between scRNAseq and scATACseq data, then transfer the annotations from 
+scRNAseq to scATACseq. 
+
+```{r}
+## - Find anchors between scRNAseq and "gene activity" from scATACseq. 
 anchors <- FindTransferAnchors(
     reference = brain_rna, 
     query = brain, 
@@ -374,8 +449,18 @@ pred_labels <- TransferData(
 ## - Save transferred annotations
 brain$transferred_annotation <- pred_labels$predicted.id
 brain$transferred_annotation[pred_labels$prediction.score.max < 0.8] <- NA
+```
+
+Check the transferred annotations: do they overlap what you would have thought from 
+earlier exploration of known markers? 
+
+```{r}
 p <- Seurat::DimPlot(brain, reduction = 'tsne', group.by = 'transferred_annotation')
 ```
+
+BONUS QUESTION: have we already used a non-`Seurat` approach to transfer annotations from 
+one dataset to another? Try and apply it to transfer annotations from scRNAseq to scATACseq 
+data. Does this work? 
 
 ## 3. Functional analysis of DA peaks
 
@@ -464,25 +549,3 @@ cov_plot <- CoveragePlot(
 cov_plot
 ```
 
-## 4. [Optional] Compare Signac and SingleCellExperiment workflows
-
-You will need several packages which may not be already installed. 
-
-- DropletUtils
-
-```{r}
-# Import data
-brain_sce <- DropletUtils::read10xCounts('data/Homework_2/scATAC/atac_v1_E18_brain_fresh_5k_filtered_peak_bc_matrix.h5')
-# QC data 
-
-# Subset data
-
-# Normalize data 
-
-# Reduce dimensionality
-
-# Clustering 
-
-# Visualization 
-
-```
