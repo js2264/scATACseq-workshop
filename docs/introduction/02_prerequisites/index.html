@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/scATACseq-workshop/images/favicon.png" type="image/png">
 
-    <title>2. Homeworks :: Analysis of bulk and single-cell ATAC-seq datasets</title>
+    <title>2. Prerequisites and required machine configuration :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
     <link href="/scATACseq-workshop/css/nucleus.css?1628787916" rel="stylesheet">
@@ -40,7 +40,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/scATACseq-workshop/homeworks/">
+  <body class="" data-url="/scATACseq-workshop/introduction/02_prerequisites/">
     <nav id="sidebar" class="">
 
 
@@ -72,7 +72,7 @@
   
     
     <li data-nav-id="/scATACseq-workshop/introduction/" title=" Bulk and single-cell ATAC-seq analysis" class="dd-item
-        
+        parent
         
         
         ">
@@ -119,7 +119,7 @@
  
   
     
-      <li data-nav-id="/scATACseq-workshop/introduction/02_prerequisites/" title="2. Prerequisites and required machine configuration" class="dd-item ">
+      <li data-nav-id="/scATACseq-workshop/introduction/02_prerequisites/" title="2. Prerequisites and required machine configuration" class="dd-item active">
         <a href="/scATACseq-workshop/introduction/02_prerequisites/">
         2. Prerequisites and required machine configuration
         
@@ -245,8 +245,8 @@
   
     
     <li data-nav-id="/scATACseq-workshop/homeworks/" title="2. Homeworks" class="dd-item
-        parent
-        active
+        
+        
         
         ">
       <a href="/scATACseq-workshop/homeworks/">
@@ -393,7 +393,7 @@
           
             <h1>
               
-              2. Homeworks
+              2. Prerequisites and required machine configuration
             </h1>
           
 
@@ -401,71 +401,87 @@
 
 
 
-	
 <script src="/scATACseq-workshop/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
-<div id="homeworks-day-1" class="section level2">
-<h2>Homeworks: day 1</h2>
-<p><a href="homework_1">Instructions</a></p>
+<div id="prerequisites" class="section level2">
+<h2>Prerequisites</h2>
+<p>The course is intended for those who have basic familiarity with <code>Unix</code> and the <code>R</code> scripting language.</p>
 <ul>
-<li>Process bulk ATAC-seq for PBMCs (GSE111013), perform QCs and compare them to single-cell QCs<br />
-</li>
-<li>Split bam file from mouse PBMCs scATACseq into bams / cell type using <code>sinto</code><br />
-</li>
-<li>Make some celltype-specific pseudo-bulk bigwig tracks<br />
-</li>
-<li>Compare bulk and pseudo-bulk tracks in IGV; try to infer cell type for some of the cell clusters in scATACseq</li>
-</ul>
-<blockquote>
-<p>Links:</p>
-</blockquote>
-<ul>
-<li><a href="https://doi.org/10.1038/s41467-019-14081-6">Bulk ATAC-seq paper</a></li>
-<li><a href="https://support.10xgenomics.com/single-cell-atac/datasets/2.0.0/atac_pbmc_5k_nextgem">5K human PBMCs, 10X Genomics scATACseq dataset</a></li>
+<li>If a refresher is needed for Unix command line (hopefully not), please go over <a href="https://ryanstutorials.net/linuxtutorial/">this tutorial</a> and its <a href="https://ryanstutorials.net/linuxtutorial/cheatsheet.php">companion cheatsheet</a>.</li>
+<li>Getting down to basics: an introduction to the fundamentals of R (<a href="markravinet.github.io/Introduction.html">courtesy of Mark Ravinet</a>).</li>
+<li>Gentle introduction to <code>R/Biocondutor</code>: <a href="https://bioconductor.github.io/BiocWorkshops/introduction-to-bioconductor-annotation-resources.html">here</a></li>
+<li>For a full in-depth guide of <code>Bioconductor</code> ecosystem: read the comprehensive <code>R/Bioconductor</code> book from Kasper D. Hansen available under the CC BY-NC-SA 4.0 license <a href="/%7B%7B%3CmyPackageUrl%3E%7D%7Ddocs/bioconductor.pdf">[PDF]</a></li>
 </ul>
 </div>
-<div id="homeworks-day-2" class="section level2">
-<h2>Homeworks: day 2</h2>
+<div id="local-configuration" class="section level2">
+<h2>Local configuration</h2>
 <ul>
-<li>Import counts from mouse E18 brain scATACseq (5K) (provided by 10X Genomics) in R and process them<br />
-</li>
-<li>Transfer annotations from PBMC 10X scRNAseq to PBMC 10X scATACseq (pre-processed scRNAseq available in <code>data/MouseBrain/mPBMC_scRNAseq.rds</code>)<br />
-</li>
-<li>Find genes associated to DA peaks and run GO over-enrichment / gene set enrichment analysis</li>
+<li>Install R and other important softwares</li>
 </ul>
-<blockquote>
-<p>Links:</p>
-</blockquote>
+<pre><code>conda create --name scatac
+conda activate scatac
+conda install -c conda-forge -c bioconda \
+    r-base r-essentials r-devtools r-tidyverse r-biocmanager r-polyclip r-rcpparmadillo \
+    trim-galore bowtie2 samtools deeptools meme macs2 igv sinto yapc htseq subread ucsc-bedgraphtobigwig bedtools
+conda install -c anaconda hdf5</code></pre>
 <ul>
-<li><a href="https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k" class="uri">https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k</a></li>
-<li><a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K" class="uri">https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K</a></li>
+<li>The following R packages have also been installed (along with their many dependencies, of course!):</li>
+</ul>
+<pre><code>Rscript -e &quot;
+## CRAN packages
+install.packages(&#39;vroom&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;hdf5r&#39;, dependencies=TRUE, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;umap&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;corrplot&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;gam&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;ggbeeswarm&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;ggthemes&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;Matrix&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;rgl&#39;, dependencies=TRUE, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;Signac&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;Seurat&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;BiocManager&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+
+## Bioconductor Packages
+BiocManager::install(&#39;scRNAseq&#39;, update = FALSE)
+BiocManager::install(&#39;SingleR&#39;, update = FALSE)
+BiocManager::install(&#39;SingleCellExperiment&#39;, update = FALSE)
+BiocManager::install(&#39;scran&#39;, update = FALSE)
+BiocManager::install(&#39;scater&#39;, update = FALSE)
+BiocManager::install(&#39;DESeq2&#39;, update = FALSE)
+BiocManager::install(&#39;chromVAR&#39;, update = FALSE)
+BiocManager::install(&#39;pheatmap&#39;, update = FALSE)
+BiocManager::install(&#39;JASPAR2020&#39;, update = FALSE)
+BiocManager::install(&#39;motifmatchr&#39;, update = FALSE)
+BiocManager::install(&#39;AnnotationHub&#39;, update = FALSE)
+BiocManager::install(&#39;plyranges&#39;, update = FALSE)
+BiocManager::install(&#39;VplotR&#39;, update = FALSE)
+BiocManager::install(&#39;annotatr&#39;, update = FALSE)
+BiocManager::install(&#39;rtracklayer&#39;, update = FALSE)
+BiocManager::install(&#39;biovizBase&#39;, update = FALSE)
+BiocManager::install(&#39;gprofiler2&#39;, update = FALSE)
+BiocManager::install(&#39;DOSE&#39;, update = FALSE)
+BiocManager::install(&#39;clusterProfiler&#39;, update = FALSE)
+BiocManager::install(&#39;EnsDb.Mmusculus.v79&#39;, update = FALSE)
+BiocManager::install(&#39;EnsDb.Hsapiens.v79&#39;, update = FALSE)
+BiocManager::install(&#39;TxDb.Hsapiens.UCSC.hg38.knownGene&#39;, update = FALSE)
+BiocManager::install(&#39;TxDb.Mmusculus.UCSC.mm10.knownGene&#39;, update = FALSE)
+BiocManager::install(&#39;org.Hs.eg.db&#39;, update = FALSE)
+BiocManager::install(&#39;org.Mm.eg.db&#39;, update = FALSE)
+BiocManager::install(&#39;BSgenome.Celegans.UCSC.ce11&#39;, update = FALSE)
+&quot;</code></pre>
+<ul>
+<li><p>Additional dependencies:</p>
+<ul>
+<li>cellranger-atac</li>
+<li>Loupe</li>
+</ul></li>
 </ul>
 </div>
-<div id="homeworks-day-3" class="section level2">
-<h2>Homeworks: day 3</h2>
-<ul>
-<li>Import, filter, normalize and cluster cells from the T-cell exhaustion dataset<br />
-</li>
-<li>Run chromVAR to identify TF activity in each cell cluster<br />
-</li>
-<li>Using knowledge on TFs used in different cell types, suggest cell cluster annotation of the dataset<br />
-</li>
-<li>Confirm this by computing gene activity scores and check known markers</li>
-</ul>
-<blockquote>
-<p>Links:</p>
-</blockquote>
-<ul>
-<li>DOI: <a href="https://doi.org/10.1038/s41587-019-0206-z">10.1038/s41587-019-0206-z</a></li>
-</ul>
-</div>
 
 
-
-
-
-<footer class=" footline" >
+<footer class="footline">
 	
 </footer>
 
@@ -500,6 +516,59 @@
             
                 
                     
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
                         
                         
                     
@@ -543,54 +612,6 @@
             
         
                     
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
                         
             
             
@@ -615,7 +636,6 @@
             
                 
                     
-                    
                 
                 
 
@@ -628,9 +648,6 @@
             
             
                 
-                    
-                        
-                        
                     
                 
                 
@@ -703,10 +720,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/scATACseq-workshop/hands_on_sessions/day3/" title="Day 03"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/scATACseq-workshop/introduction/01_program/" title="1. Program"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/scATACseq-workshop/homeworks/homework_1/" title="Homework 1" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/scATACseq-workshop/hands_on_sessions/" title="1. Hands-on sessions" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>
@@ -747,3 +764,4 @@
 
   </body>
 </html>
+

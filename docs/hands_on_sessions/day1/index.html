@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en" class="js csstransforms3d">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.81.0" />
+    <meta name="description" content="Analysis of bulk and single-cell ATAC-seq datasets">
+<meta name="author" content="Jacques Serizay">
+
+    <link rel="icon" href="/scATACseq-workshop/images/favicon.png" type="image/png">
+
+    <title>Day 01 :: Analysis of bulk and single-cell ATAC-seq datasets</title>
+
+    
+    <link href="/scATACseq-workshop/css/nucleus.css?1628787916" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628787916" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1628787916" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1628787916" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628787916" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1628787916" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628787916" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1628787916" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1628787916" rel="stylesheet">
+    
+    <link href="/scATACseq-workshop/css/theme-red.css?1628787916" rel="stylesheet">
+    
+    <link href="/scATACseq-workshop/css/custom_css.css?1628787916" rel="stylesheet">
+
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628787916"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+        :not(pre) > code + span.copy-to-clipboard {
+            display: none;
+        }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/scATACseq-workshop/hands_on_sessions/day1/">
+    <nav id="sidebar" class="">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo">
+
+
+
+</a>
+
+    </div>
+    
+  </div>
+  
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/introduction/" title=" Bulk and single-cell ATAC-seq analysis" class="dd-item
+        
+        
+        
+        ">
+      <a href="/scATACseq-workshop/introduction/">
+           Bulk and single-cell ATAC-seq analysis
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/introduction/01_program/" title="1. Program" class="dd-item ">
+        <a href="/scATACseq-workshop/introduction/01_program/">
+        1. Program
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/introduction/02_prerequisites/" title="2. Prerequisites and required machine configuration" class="dd-item ">
+        <a href="/scATACseq-workshop/introduction/02_prerequisites/">
+        2. Prerequisites and required machine configuration
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/hands_on_sessions/" title="1. Hands-on sessions" class="dd-item
+        parent
+        
+        
+        ">
+      <a href="/scATACseq-workshop/hands_on_sessions/">
+          1. Hands-on sessions
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands_on_sessions/day1/" title="Day 01" class="dd-item active">
+        <a href="/scATACseq-workshop/hands_on_sessions/day1/">
+        Day 01
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands_on_sessions/day2/" title="Day 02" class="dd-item ">
+        <a href="/scATACseq-workshop/hands_on_sessions/day2/">
+        Day 02
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/hands_on_sessions/day3/" title="Day 03" class="dd-item ">
+        <a href="/scATACseq-workshop/hands_on_sessions/day3/">
+        Day 03
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/homeworks/" title="2. Homeworks" class="dd-item
+        
+        
+        
+        ">
+      <a href="/scATACseq-workshop/homeworks/">
+          2. Homeworks
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+          
+
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_1/" title="Homework 1" class="dd-item ">
+        <a href="/scATACseq-workshop/homeworks/homework_1/">
+        Homework 1
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_2/" title="Homework 2" class="dd-item ">
+        <a href="/scATACseq-workshop/homeworks/homework_2/">
+        Homework 2
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+      <li data-nav-id="/scATACseq-workshop/homeworks/homework_3/" title="Homework 3" class="dd-item ">
+        <a href="/scATACseq-workshop/homeworks/homework_3/">
+        Homework 3
+        
+        </a>
+    </li>
+     
+  
+ 
+
+            
+          
+        
+        </ul>
+      
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/scATACseq-workshop/extra_resources/" title="Extra resources" class="dd-item
+        
+        
+        
+        ">
+      <a href="/scATACseq-workshop/extra_resources/">
+          Extra resources
+          
+      </a>
+      
+      
+    </li>
+  
+ 
+
+          
+        
+    </ul>
+
+    
+    
+
+    
+    <section id="footer">
+      <center>
+
+    <a href="https://github.com/js2264/scATACseq-workshop">Check this website source on Github</a>
+    <p>Created by J. Serizay</p>
+    <p>Copyright 2021</p>
+
+</center>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Day 01
+            </h1>
+          
+
+        
+
+
+
+<script src="/scATACseq-workshop/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  background-color: #f8f8f8; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<div id="hands-on-session-1-processing-bulk-atac-seq" class="section level2">
+<h2>Hands-on session 1: Processing bulk ATAC-seq</h2>
+<div id="download-fastq" class="section level3">
+<h3>Download fastq</h3>
+<p>Here we will process one of the first samples generated by ATAC-seq, from <a href="https://doi.org/10.1038/nmeth.2688">doi: 10.1038/nmeth.2688</a>.
+This is an ATAC-seq sample from GM12878 cells. Let’s first download the raw fastqs.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="fu">mkdir</span> -p data/GM12878/fastq</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="fu">wget</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR891/SRR891269/SRR891269_1.fastq.gz -O data/GM12878/fastq/GM12878_R1.fq.gz</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="fu">wget</span> ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR891/SRR891269/SRR891269_2.fastq.gz -O data/GM12878/fastq/GM12878_R2.fq.gz</span></code></pre></div>
+</div>
+<div id="process-gm12878-data" class="section level3">
+<h3>Process GM12878 data</h3>
+<p>The processing steps for ATAC-seq are:</p>
+<ol style="list-style-type: decimal">
+<li>Adapter trimming</li>
+<li>Read pairs mapping</li>
+<li>Read pairs filtering</li>
+<li>Track generation</li>
+<li>Peak calling</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="bu">cd</span> data/GM12878</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="va">SAMPLE=</span>GM12878</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="va">R1=</span>fastq/GM12878_R1.fq.gz</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="va">R2=</span>fastq/GM12878_R2.fq.gz</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="va">GENOME=</span>~/genomes/hg38/hg38.fa</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true"></a><span class="va">SAMFILE=</span>GM12878.sam</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true"></a><span class="va">FILTEREDBAM=</span>GM12878_filtered.bam</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true"></a><span class="va">TRACK=</span>GM12878.bw</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true"></a><span class="va">PEAKFOLDER=</span>peaks/GM12878</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true"></a><span class="va">GENOMESIZE=</span>2600000000</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true"></a><span class="va">CPU=</span>2</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true"></a><span class="co">## -- Trim reads and run QC</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true"></a><span class="ex">trim_galore</span> <span class="kw">\</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true"></a>    <span class="ex">--paired</span> <span class="kw">\</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true"></a>    <span class="ex">--fastqc</span> <span class="kw">\</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true"></a>    <span class="ex">--cores</span> 1 <span class="kw">\</span></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true"></a>    <span class="st">&quot;</span><span class="va">${R1}</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">${R2}</span><span class="st">&quot;</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true"></a></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true"></a><span class="co">## -- Map reads </span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true"></a><span class="ex">bowtie2</span> <span class="kw">\</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true"></a>    <span class="ex">--threads</span> <span class="st">&quot;</span><span class="va">${CPU}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true"></a>    <span class="ex">-x</span> <span class="st">&quot;</span><span class="va">${GENOME}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true"></a>    <span class="ex">--maxins</span> 2000 <span class="kw">\</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true"></a>    <span class="ex">-1</span> <span class="kw">`</span><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">${R1}</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s,.fastq.gz,_val_1.fq.gz,&#39;</span><span class="kw">`</span> <span class="kw">\</span></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true"></a>    <span class="ex">-2</span> <span class="kw">`</span><span class="bu">echo</span> <span class="st">&quot;</span><span class="va">${R2}</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s,.fastq.gz,_val_2.fq.gz,&#39;</span><span class="kw">`</span> <span class="op">&gt;</span> <span class="st">&quot;</span><span class="va">${SAMFILE}</span><span class="st">&quot;</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true"></a></span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true"></a><span class="co">## -- Filter reads </span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true"></a><span class="ex">samtools</span> fixmate -@ <span class="st">&quot;</span><span class="va">${CPU}</span><span class="st">&quot;</span> --output-fmt bam -m <span class="st">&quot;</span><span class="va">${SAMFILE}</span><span class="st">&quot;</span> - <span class="kw">|</span> <span class="kw">\</span></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true"></a><span class="ex">samtools</span> sort -@ <span class="st">&quot;</span><span class="va">${CPU}</span><span class="st">&quot;</span> --output-fmt bam -T <span class="st">&quot;</span><span class="va">${SAMFILE}</span><span class="st">&quot;</span>_sorting - <span class="kw">|</span> <span class="kw">\</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true"></a><span class="ex">samtools</span> markdup -@ <span class="st">&quot;</span><span class="va">${CPU}</span><span class="st">&quot;</span> --output-fmt bam -r -T <span class="st">&quot;</span><span class="va">${SAMFILE}</span><span class="st">&quot;</span>_markdup - - <span class="kw">|</span> <span class="kw">\</span></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true"></a><span class="ex">samtools</span> view -@ <span class="st">&quot;</span><span class="va">${CPU}</span><span class="st">&quot;</span> --output-fmt bam -f 2 -q 10 -1 -b - <span class="kw">|</span> <span class="kw">\</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true"></a><span class="ex">samtools</span> sort -@ <span class="st">&quot;</span><span class="va">${CPU}</span><span class="st">&quot;</span> --output-fmt bam -l 9 -T <span class="st">&quot;</span><span class="va">${SAMFILE}</span><span class="st">&quot;</span>_sorting2 -o <span class="st">&quot;</span><span class="va">${FILTEREDBAM}</span><span class="st">&quot;</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true"></a><span class="ex">samtools</span> index -@ <span class="st">&quot;</span><span class="va">${CPU}</span><span class="st">&quot;</span> <span class="st">&quot;</span><span class="va">${FILTEREDBAM}</span><span class="st">&quot;</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true"></a><span class="co">## -- Generate track</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true"></a><span class="ex">bamCoverage</span> <span class="kw">\</span></span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true"></a>    <span class="ex">--bam</span> <span class="st">&quot;</span><span class="va">${FILTEREDBAM}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true"></a>    <span class="ex">--outFileName</span> <span class="st">&quot;</span><span class="va">${TRACK}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true"></a>    <span class="ex">--binSize</span> 1 <span class="kw">\</span></span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true"></a>    <span class="ex">--numberOfProcessors</span> <span class="st">&quot;</span><span class="va">${CPU}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true"></a>    <span class="ex">--normalizeUsing</span> CPM <span class="kw">\</span></span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true"></a>    <span class="ex">--skipNonCoveredRegions</span> <span class="kw">\</span></span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true"></a>    <span class="ex">--extendReads</span> <span class="kw">\</span></span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true"></a>    <span class="ex">--ignoreDuplicates</span></span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true"></a></span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true"></a><span class="co">## -- Call peaks</span></span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true"></a><span class="ex">macs2</span> callpeak <span class="kw">\</span></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true"></a>    <span class="ex">-t</span> <span class="st">&quot;</span><span class="va">${FILTEREDBAM}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true"></a>    <span class="ex">--format</span> BAMPE <span class="kw">\</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true"></a>    <span class="ex">--gsize</span> <span class="st">&quot;</span><span class="va">${GENOMESIZE}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true"></a>    <span class="ex">--outdir</span> <span class="st">&quot;</span><span class="va">${PEAKFOLDER}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true"></a>    <span class="ex">--name</span> <span class="st">&quot;</span><span class="va">${SAMPLE}</span><span class="st">&quot;</span></span></code></pre></div>
+</div>
+<div id="qc-of-gm12878-data" class="section level3">
+<h3>QC of GM12878 data</h3>
+<p>To check the quality of an ATAC-seq sample, one can check the following metrics:</p>
+<ol style="list-style-type: decimal">
+<li>Fragment size distribution</li>
+<li>Distance from fragment to TSS</li>
+<li>1+2 combined: Vplots</li>
+<li>TSS enrichment score (coverage enrichment at TSSs)</li>
+<li>Location of peaks vs. genomic features</li>
+<li>Fraction of fragments within peaks</li>
+</ol>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">library</span>(AnnotationDbi)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="kw">library</span>(plyranges)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="kw">library</span>(annotatr)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="kw">library</span>(VplotR)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="co">## -- Import genomic features</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>hg_genes &lt;-<span class="st"> </span>AnnotationHub<span class="op">::</span><span class="kw">AnnotationHub</span>()[[<span class="st">&#39;AH92109&#39;</span>]] <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(type <span class="op">==</span><span class="st"> &#39;gene&#39;</span>, gene_biotype <span class="op">==</span><span class="st"> &#39;protein_coding&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span>(<span class="kw">grepl</span>(<span class="st">&#39;GL|KI&#39;</span>, seqnames)))</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a><span class="kw">seqlevelsStyle</span>(hg_genes) &lt;-<span class="st"> &#39;UCSC&#39;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true"></a>hg_TSSs &lt;-<span class="st"> </span>hg_genes <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true"></a><span class="st">    </span><span class="kw">anchor_start</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true"></a><span class="st">    </span><span class="kw">resize</span>(<span class="dt">width =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true"></a><span class="st">    </span><span class="kw">unanchor</span>()</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true"></a>hg_promoters &lt;-<span class="st"> </span>hg_TSSs <span class="op">%&gt;%</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true"></a><span class="st">    </span><span class="kw">flank_upstream</span>(<span class="dv">4000</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true"></a><span class="st">    </span><span class="kw">shift_downstream</span>(<span class="dv">2000</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">ID =</span> <span class="kw">paste0</span>(<span class="st">&#39;prom_&#39;</span>, <span class="dv">1</span><span class="op">:</span><span class="kw">n</span>()))</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true"></a>hg_features &lt;-<span class="st"> </span><span class="kw">build_annotations</span>(</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true"></a>    <span class="dt">genome =</span> <span class="st">&#39;hg38&#39;</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true"></a>    <span class="dt">annotations =</span> <span class="st">&#39;hg38_basicgenes&#39;</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true"></a>)</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true"></a><span class="co">## -- Import fragments and peaks as GRanges</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true"></a>fragments &lt;-<span class="st"> </span><span class="kw">importPEBamFiles</span>(</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true"></a>    <span class="st">&#39;GM12878_filtered.bam&#39;</span>, </span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true"></a>    <span class="dt">shift_ATAC_fragments =</span> <span class="ot">TRUE</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true"></a>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true"></a>peaks &lt;-<span class="st"> </span><span class="kw">import</span>(<span class="st">&#39;peaks/GM12878/GM12878_peaks.narrowPeak&#39;</span>)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true"></a>peak_summits &lt;-<span class="st"> </span><span class="kw">import</span>(<span class="st">&#39;peaks/GM12878/GM12878_summits.bed&#39;</span>)</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true"></a></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true"></a><span class="co">## -- Check fragment size distribution</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true"></a>df&lt;-<span class="kw">...</span>(fragments) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true"></a><span class="st">    </span><span class="kw">group_by</span>(...) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true"></a><span class="st">    </span><span class="kw">count</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true"></a><span class="st">    </span><span class="kw">ungroup</span>() </span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true"></a>p1&lt;-<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x =</span> ..., <span class="dt">y =</span> ...)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true"></a><span class="st">    </span><span class="kw">...</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&#39;...&#39;</span>, <span class="dt">x =</span> <span class="st">&#39;...&#39;</span>, <span class="dt">y =</span> <span class="st">&#39;...&#39;</span>)</span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true"></a><span class="co">## -- Check distance to TSS</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true"></a>df&lt;-<span class="kw">add_nearest_distance</span>(fragments, hg_TSSs) <span class="op">%&gt;%</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true"></a><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">distance =</span> <span class="kw">cut</span>(distance, <span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="fl">5e5</span>, <span class="dt">by =</span> <span class="dv">10</span>), <span class="dt">include.lowest =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as.numeric</span>() <span class="op">%&gt;%</span><span class="st"> `</span><span class="dt">*</span><span class="st">`</span>(<span class="dv">10</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true"></a><span class="st">    </span><span class="kw">group_by</span>(distance) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true"></a><span class="st">    </span><span class="kw">count</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true"></a><span class="st">    </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">cumsum =</span> <span class="kw">cumsum</span>(n), <span class="dt">pct =</span> cumsum<span class="op">/</span><span class="kw">max</span>(cumsum))</span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true"></a>p2&lt;-<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x =</span> distance, <span class="dt">y =</span> pct)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true"></a><span class="st">    </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true"></a><span class="st">    </span><span class="kw">scale_x_log10</span>() <span class="op">+</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&#39;none&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">title =</span> <span class="st">&#39;Cumulative distribution of ATAC-seq fragments&#39;</span>, <span class="dt">x =</span> <span class="st">&#39;Distance from TSS&#39;</span>, <span class="dt">y =</span> <span class="st">&#39;Cum. %&#39;</span>)</span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true"></a></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true"></a><span class="co">## -- Check Vplot</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true"></a>p3&lt;-<span class="kw">plotVmat</span>(</span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true"></a>    fragments, </span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true"></a>    hg_TSSs, </span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true"></a>    <span class="dt">normFun =</span> <span class="st">&#39;zscore&#39;</span>, </span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true"></a>    <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">800</span>), </span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true"></a>    <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">500</span>, <span class="dv">500</span>)</span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true"></a>)</span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true"></a></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true"></a><span class="co">## -- Compute promoter (TSS) Enrichment Score</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true"></a>df&lt;-<span class="kw">resize</span>(fragments, <span class="dt">width =</span> <span class="dv">1</span>, <span class="dt">fix =</span> <span class="st">&#39;center&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true"></a><span class="st">    </span><span class="kw">join_overlap_left</span>(hg_promoters) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true"></a><span class="st">    </span>plyranges<span class="op">::</span><span class="kw">select</span>(ID) <span class="op">%&gt;%</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true"></a><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(ID)) <span class="op">%&gt;%</span></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true"></a><span class="st">    </span><span class="kw">left_join</span>(<span class="kw">as_tibble</span>(hg_promoters) <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(start, end, ID), <span class="dt">by =</span> <span class="st">&#39;ID&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(</span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true"></a>        <span class="dt">prom_mid =</span> start.y <span class="op">+</span><span class="st"> </span>(end.y <span class="op">-</span><span class="st"> </span>start.y) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>, </span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true"></a>        <span class="dt">distance =</span> start.x <span class="op">-</span><span class="st"> </span>prom_mid, </span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true"></a>        <span class="dt">binned_distance =</span> <span class="kw">round</span>(distance<span class="op">/</span><span class="dv">100</span>, <span class="dv">0</span>)<span class="op">*</span><span class="dv">100</span></span>
+<span id="cb3-77"><a href="#cb3-77" aria-hidden="true"></a>    ) <span class="op">%&gt;%</span></span>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true"></a><span class="st">    </span><span class="kw">count</span>(binned_distance) <span class="op">%&gt;%</span></span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(</span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true"></a>        <span class="dt">bg =</span> <span class="kw">mean</span>(.data<span class="op">$</span>n[<span class="kw">abs</span>(.data<span class="op">$</span>binned_distance) <span class="op">==</span><span class="st"> </span><span class="dv">2000</span>]), </span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true"></a>        <span class="dt">enrich_score =</span> n<span class="op">/</span>bg</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true"></a>    )</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true"></a>TSSES &lt;-<span class="st"> </span><span class="kw">round</span>(df[df<span class="op">$</span>binned_distance <span class="op">==</span><span class="st"> </span><span class="dv">0</span>, <span class="st">&#39;enrich_score&#39;</span>], <span class="dv">2</span>)</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true"></a>p4&lt;-<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x =</span> binned_distance, <span class="dt">y =</span> enrich_score)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true"></a><span class="st">    </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&#39;none&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">title =</span> glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&#39;TSS enrichment score (Signal-to-noise ratio): {TSSES}&#39;</span>), <span class="dt">x =</span> <span class="st">&#39;Distance from TSS&#39;</span>, <span class="dt">y =</span> <span class="st">&#39;Enrich. score&#39;</span>)</span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true"></a></span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true"></a><span class="co">## -- Check location of peaks vs genomic features</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true"></a>peaks_annotated &lt;-<span class="st"> </span><span class="kw">annotate_regions</span>(</span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true"></a>    peak_summits, </span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true"></a>    <span class="dt">annotations =</span> hg_features,</span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true"></a>    <span class="dt">ignore.strand =</span> <span class="ot">TRUE</span></span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true"></a>)</span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true"></a>p5&lt;-<span class="kw">plot_annotation</span>(</span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true"></a>    <span class="dt">annotated_regions =</span> peaks_annotated,</span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true"></a>    <span class="dt">annotation_order =</span> <span class="kw">paste0</span>(<span class="st">&#39;hg38_genes_&#39;</span>, <span class="kw">c</span>(<span class="st">&#39;promoters&#39;</span>, <span class="st">&#39;1to5kb&#39;</span>, <span class="st">&#39;5UTRs&#39;</span>, <span class="st">&#39;exons&#39;</span>, <span class="st">&#39;introns&#39;</span>, <span class="st">&#39;3UTRs&#39;</span>)),</span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true"></a>    <span class="dt">plot_title =</span> <span class="st">&#39;ATAC peaks&#39;</span>,</span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true"></a>    <span class="dt">x_label =</span> <span class="st">&#39;Genomic features&#39;</span>,</span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true"></a>    <span class="dt">y_label =</span> <span class="st">&#39;Count&#39;</span></span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true"></a>) <span class="op">+</span><span class="st"> </span><span class="kw">theme_minimal</span>()</span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true"></a></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true"></a><span class="co">## -- Compute FRiP </span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true"></a>df&lt;-<span class="kw">add_nearest_distance</span>(fragments, peaks) <span class="op">%&gt;%</span></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true"></a><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">isInPeak =</span> distance <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true"></a>pct &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">sum</span>(df<span class="op">$</span>isInPeak <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">/</span><span class="st"> </span><span class="kw">nrow</span>(df) <span class="op">*</span><span class="st"> </span><span class="dv">100</span>, <span class="dv">2</span>)</span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true"></a>p6&lt;-<span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">y =</span> isInPeak)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true"></a><span class="st">    </span><span class="kw">geom_bar</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme_minimal</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&#39;none&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">title =</span> glue<span class="op">::</span><span class="kw">glue</span>(<span class="st">&#39;Fraction of reads in peaks (FRiP): {pct}&#39;</span>), <span class="dt">x =</span> <span class="st">&#39;# of fragments&#39;</span>, <span class="dt">y =</span> <span class="st">&#39;Fragment within peak&#39;</span>)</span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true"></a></span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true"></a><span class="co">## -- All plots together</span></span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true"></a>p &lt;-<span class="st"> </span>cowplot<span class="op">::</span><span class="kw">plot_grid</span>(</span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true"></a>    p1, p2, p3, p4, p5, p6, </span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true"></a>    <span class="dt">nrow =</span> <span class="dv">2</span></span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true"></a>)</span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true"></a><span class="kw">ggsave</span>(<span class="st">&#39;ATACseq_QC.pdf&#39;</span>, <span class="dt">w =</span> <span class="dv">15</span>, <span class="dt">h =</span> <span class="dv">10</span>)</span></code></pre></div>
+</div>
+<div id="exercise-session-1" class="section level3">
+<h3>Exercise session 1</h3>
+<ul>
+<li>Check fragment size distribution in bulk ATAC-seq</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a>library(tidyverse)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>library(plyranges)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>fragments &lt;- VplotR::importPEBamFiles(</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>    &#39;?...?&#39;, </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>    shift_ATAC_fragments = TRUE</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>df&lt;-?...?(fragments) %&gt;% </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>    group_by(?...?) %&gt;% </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>    count() %&gt;% </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a>    ungroup() </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true"></a>p1&lt;-ggplot(df, aes(x = ?...?, y = ?...?)) + </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true"></a>    ?...?() + </span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true"></a>    labs(title = &#39;?...?&#39;, x = &#39;?...?&#39;, y = &#39;?...?&#39;)</span></code></pre></div>
+</div>
+</div>
+<div id="hands-on-session-2-processing-single-cell-atac-seq" class="section level2">
+<h2>Hands-on session 2: Processing single-cell ATAC-seq</h2>
+<p>Single-cell ATAC-seq data processing can be performed just like bulk ATAC-seq, as long as the
+sequencing strategy is similar (e.g. in ATAC-seq from individually sorted cells).
+However, 10X genomics does not follow the regular sequencing strategy used for standard
+Illumina libraries, as it needs to sequenced internal barcodes. 10X genomics has come up
+with a toolkit to process 10X scATACseq data into a single <code>bam</code> file, to identify peaks of
+chromatin accessibility in the entire set of single cells, and to count fragments overlapping
+with each peak in each cell.</p>
+<div id="download-fastq-of-10x-provided-1000-human-pbmcs" class="section level3">
+<h3>Download fastq of 10X-provided ~ 1,000 human PBMCs</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="fu">mkdir</span> -p data/PBMCs_10X/</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="fu">wget</span> https://cf.10xgenomics.com/samples/cell-atac/1.2.0/atac_pbmc_1k_v1/atac_pbmc_1k_v1_fastqs.tar -O data/PBMCs_10X/atac_pbmc_1k_v1_fastqs.tar.gz</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="fu">tar</span> -xf data/PBMCs_10X/atac_pbmc_1k_v1_fastqs.tar.gz</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="fu">mv</span> atac_pbmc_1k_v1_fastqs data/PBMCs_10X/fastqs</span></code></pre></div>
+</div>
+<div id="perform-cellranger-atac-count-job-on-a-hpc-slurm" class="section level3">
+<h3>Perform cellranger-atac count job on a HPC (Slurm)</h3>
+<p>It is (most likely) necessary to run <code>cellranger-atac count</code> workflow from an HPC node. Requirements are
+very high (see here for more details: <a href="https://support.10xgenomics.com/single-cell-atac/software/overview/system-requirements" class="uri">https://support.10xgenomics.com/single-cell-atac/software/overview/system-requirements</a>)
+and processing times can be quite long. It is a completely different workflow than the one used for 10X scRNAseq!!</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="va">CPU=</span>48</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="va">MEM=</span>256G</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="ex">salloc</span> <span class="kw">\</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>    <span class="ex">-J</span> cellranger_atac_count <span class="kw">\</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>    <span class="ex">--cpus-per-task</span> <span class="st">&quot;</span><span class="va">${CPU}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>    <span class="ex">--mem</span> <span class="st">&quot;</span><span class="va">${MEM}</span><span class="st">&quot;</span> </span></code></pre></div>
+<p>Once the allocated node is ready:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="va">CPU=</span>48</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="va">MEM=</span>256G</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="va">ID=</span>PBMCs_10X</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="va">REF=</span>~/genomes/refdata-cellranger-arc-hg19-2020-A-2.0.0/</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a><span class="va">FASTQS=</span>data/PBMCs_10X/fastqs</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a><span class="ex">module</span> load cellranger-atac</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a><span class="ex">cellranger-atac</span> count <span class="kw">\</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>    <span class="ex">--id</span> <span class="st">&quot;</span><span class="va">${ID}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>    <span class="ex">--reference</span> <span class="st">&quot;</span><span class="va">${REF}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a>    <span class="ex">--fastqs</span> <span class="st">&quot;</span><span class="va">${FASTQS}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a>    <span class="ex">--localcores</span> <span class="st">&quot;</span><span class="va">${CPU}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a>    <span class="ex">--localmem</span> <span class="st">&quot;</span><span class="va">${MEM}</span><span class="st">&quot;</span></span></code></pre></div>
+<p>Or, to submit the job itself from main server:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="va">CPU=</span>48</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="va">MEM=</span>256G</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a><span class="va">ID=</span>PBMCs_10X</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a><span class="va">REF=</span>~/genomes/refdata-cellranger-arc-hg19-2020-A-2.0.0/</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a><span class="va">FASTQS=</span>data/PBMCs_10X/fastqs</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a><span class="ex">sbatch</span> <span class="kw">\</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a>    <span class="ex">-J</span> cellranger_atac_count <span class="kw">\</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true"></a>    <span class="ex">-o</span> cellranger_atac_count.pbmc.out <span class="kw">\</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true"></a>    <span class="ex">-e</span> cellranger_atac_count.pbmc.err <span class="kw">\</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true"></a>    <span class="ex">--cpus-per-task</span> <span class="st">&quot;</span><span class="va">${CPU}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true"></a>    <span class="ex">--mem</span> <span class="st">&quot;</span><span class="va">${MEM}</span><span class="st">&quot;</span> <span class="kw">\</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true"></a>    <span class="ex">--export</span>=ALL <span class="kw">\</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true"></a>    <span class="ex">bin/submit_cellranger-atac-count.sh</span></span></code></pre></div>
+<p>Once the analysis is done, you can check the generated files and QC reports.
+See here for more details: <a href="https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/using/count/" class="uri">https://support.10xgenomics.com/single-cell-atac/software/pipelines/latest/using/count/</a>.
+Our QC report file is in:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="ex">data/PBMCs_10X/atac_pbmc_1k_v1_web_summary.html</span></span></code></pre></div>
+</div>
+<div id="exercise-session-2" class="section level3">
+<h3>Exercise session 2</h3>
+<ul>
+<li>Check coverage of each cluster in <code>Loupe</code> at relevant loci to propose an annotation for each cluster.</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a># Check e.g. `CD19`, `CD8`, `CD4`, `CD3`</span></code></pre></div>
+</div>
+</div>
+
+
+<footer class="footline">
+	
+</footer>
+
+        
+        </div>
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/scATACseq-workshop/hands_on_sessions/" title="1. Hands-on sessions"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/scATACseq-workshop/hands_on_sessions/day2/" title="Day 02" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1628787916"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628787916"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628787916"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628787916"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1628787916"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1628787916"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628787916"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1628787916"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1628787916"></script>
+    
+        
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628787916"></script>
+        
+        <script>
+            mermaid.initialize({ startOnLoad: true });
+        </script>
+    
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-105947713-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </body>
+</html>
+

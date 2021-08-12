@@ -436,7 +436,7 @@ list_p[[length(list_p) + 1]] <- DimPlot(hemato, group.by = 'renamed_clusters', r
 p <- cowplot::plot_grid(plotlist = list_p)
 ```
 
-### Exercise session 6
+### Compare gene activity and TF activity
 
 Plot side-by-side: 
 

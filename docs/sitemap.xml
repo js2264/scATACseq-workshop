@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
+    <loc>https://js2264.github.io/scATACseq-workshop/introduction/</loc>
+  </url><url>
+    <loc>https://js2264.github.io/scATACseq-workshop/hands_on_sessions/</loc>
+  </url><url>
+    <loc>https://js2264.github.io/scATACseq-workshop/introduction/01_program/</loc>
+  </url><url>
+    <loc>https://js2264.github.io/scATACseq-workshop/homeworks/</loc>
+  </url><url>
+    <loc>https://js2264.github.io/scATACseq-workshop/introduction/02_prerequisites/</loc>
+  </url><url>
     <loc>https://js2264.github.io/scATACseq-workshop/categories/</loc>
-  </url>
-  
-  <url>
-    <loc>https://js2264.github.io/scATACseq-workshop/extra-resources/</loc>
-  </url>
-  
-  <url>
+  </url><url>
+    <loc>https://js2264.github.io/scATACseq-workshop/hands_on_sessions/day1/</loc>
+  </url><url>
+    <loc>https://js2264.github.io/scATACseq-workshop/hands_on_sessions/day2/</loc>
+  </url><url>
+    <loc>https://js2264.github.io/scATACseq-workshop/hands_on_sessions/day3/</loc>
+  </url><url>
+    <loc>https://js2264.github.io/scATACseq-workshop/extra_resources/</loc>
+  </url><url>
     <loc>https://js2264.github.io/scATACseq-workshop/</loc>
-  </url>
-  
-  <url>
+  </url><url>
+    <loc>https://js2264.github.io/scATACseq-workshop/homeworks/homework_1/</loc>
+  </url><url>
+    <loc>https://js2264.github.io/scATACseq-workshop/homeworks/homework_2/</loc>
+  </url><url>
+    <loc>https://js2264.github.io/scATACseq-workshop/homeworks/homework_3/</loc>
+  </url><url>
     <loc>https://js2264.github.io/scATACseq-workshop/tags/</loc>
   </url>
-  
 </urlset>

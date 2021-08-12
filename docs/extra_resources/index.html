@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/scATACseq-workshop/images/favicon.png" type="image/png">
 
-    <title>2. Homeworks :: Analysis of bulk and single-cell ATAC-seq datasets</title>
+    <title>Extra resources :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
     <link href="/scATACseq-workshop/css/nucleus.css?1628787916" rel="stylesheet">
@@ -40,7 +40,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/scATACseq-workshop/homeworks/">
+  <body class="" data-url="/scATACseq-workshop/extra_resources/">
     <nav id="sidebar" class="">
 
 
@@ -245,8 +245,8 @@
   
     
     <li data-nav-id="/scATACseq-workshop/homeworks/" title="2. Homeworks" class="dd-item
-        parent
-        active
+        
+        
         
         ">
       <a href="/scATACseq-workshop/homeworks/">
@@ -342,8 +342,8 @@
   
     
     <li data-nav-id="/scATACseq-workshop/extra_resources/" title="Extra resources" class="dd-item
-        
-        
+        parent
+        active
         
         ">
       <a href="/scATACseq-workshop/extra_resources/">
@@ -393,7 +393,7 @@
           
             <h1>
               
-              2. Homeworks
+              Extra resources
             </h1>
           
 
@@ -401,65 +401,30 @@
 
 
 
-	
-<script src="/scATACseq-workshop/rmarkdown-libs/header-attrs/header-attrs.js"></script>
-
-
-<div id="homeworks-day-1" class="section level2">
-<h2>Homeworks: day 1</h2>
-<p><a href="homework_1">Instructions</a></p>
+	<p>Analyzing NGS data can be a complex process, especially with the rise of multi-omics approaches.<br>
+Here is a list of resources we thought would be useful for people interested in going deeper in the analysis of NGS data.</p>
+<h2 id="general-bioinformatics">General bioinformatics</h2>
 <ul>
-<li>Process bulk ATAC-seq for PBMCs (GSE111013), perform QCs and compare them to single-cell QCs<br />
+<li>A general and comprehensive overview of the different types of bioinformatic analyses, divided in 4 fundamental modules: <a href="https://liulab-dfci.github.io/bioinfo-combio/" target="_blank">LINK</a>
 </li>
-<li>Split bam file from mouse PBMCs scATACseq into bams / cell type using <code>sinto</code><br />
-</li>
-<li>Make some celltype-specific pseudo-bulk bigwig tracks<br />
-</li>
-<li>Compare bulk and pseudo-bulk tracks in IGV; try to infer cell type for some of the cell clusters in scATACseq</li>
 </ul>
-<blockquote>
-<p>Links:</p>
-</blockquote>
+<h2 id="rbioconductor">R/Bioconductor</h2>
 <ul>
-<li><a href="https://doi.org/10.1038/s41467-019-14081-6">Bulk ATAC-seq paper</a></li>
-<li><a href="https://support.10xgenomics.com/single-cell-atac/datasets/2.0.0/atac_pbmc_5k_nextgem">5K human PBMCs, 10X Genomics scATACseq dataset</a></li>
+<li><em><strong>The</strong></em> excellent R guide for beginners, by Emmanuel Paradis: <a href="https://cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf" target="_blank">PDF</a>
+</li>
+<li><em><strong>The</strong></em> 150+ pages comprehensive book to learn everything about Bioconductor. This ebook has been published by <a href="https://www.ashansenlab.com/" target="_blank">Kasper D. Hansen</a>
+ and is freely available under the <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en_US" target="_blank">CC BY-NC-SA 4.0 license</a>
+: <a href="/scATACseq-workshop/
+docs/bioconductor.pdf">PDF</a>
+</li>
 </ul>
-</div>
-<div id="homeworks-day-2" class="section level2">
-<h2>Homeworks: day 2</h2>
+<h2 id="scientific-readings">Scientific readings</h2>
 <ul>
-<li>Import counts from mouse E18 brain scATACseq (5K) (provided by 10X Genomics) in R and process them<br />
+<li><a href="https://www.nature.com/articles/nmeth.3252" target="_blank">2014 Nat. Methods paper from Bioconductor core team describing important object classes</a>
 </li>
-<li>Transfer annotations from PBMC 10X scRNAseq to PBMC 10X scATACseq (pre-processed scRNAseq available in <code>data/MouseBrain/mPBMC_scRNAseq.rds</code>)<br />
+<li><a href="https://genomebiology.biomedcentral.com/articles/10.1186/gb-2004-5-10-r80" target="_blank">To see from how Bioc originally started...</a>
 </li>
-<li>Find genes associated to DA peaks and run GO over-enrichment / gene set enrichment analysis</li>
 </ul>
-<blockquote>
-<p>Links:</p>
-</blockquote>
-<ul>
-<li><a href="https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k" class="uri">https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k</a></li>
-<li><a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K" class="uri">https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K</a></li>
-</ul>
-</div>
-<div id="homeworks-day-3" class="section level2">
-<h2>Homeworks: day 3</h2>
-<ul>
-<li>Import, filter, normalize and cluster cells from the T-cell exhaustion dataset<br />
-</li>
-<li>Run chromVAR to identify TF activity in each cell cluster<br />
-</li>
-<li>Using knowledge on TFs used in different cell types, suggest cell cluster annotation of the dataset<br />
-</li>
-<li>Confirm this by computing gene activity scores and check known markers</li>
-</ul>
-<blockquote>
-<p>Links:</p>
-</blockquote>
-<ul>
-<li>DOI: <a href="https://doi.org/10.1038/s41587-019-0206-z">10.1038/s41587-019-0206-z</a></li>
-</ul>
-</div>
 
 
 
@@ -615,7 +580,6 @@
             
                 
                     
-                    
                 
                 
 
@@ -628,9 +592,6 @@
             
             
                 
-                    
-                        
-                        
                     
                 
                 
@@ -682,6 +643,7 @@
             
             
                 
+                    
                     
                 
                 
@@ -703,10 +665,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/scATACseq-workshop/hands_on_sessions/day3/" title="Day 03"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/scATACseq-workshop/homeworks/homework_3/" title="Homework 3"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/scATACseq-workshop/homeworks/homework_1/" title="Homework 1" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/scATACseq-workshop/introduction/" title=" Bulk and single-cell ATAC-seq analysis" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

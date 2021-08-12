@@ -9,7 +9,7 @@
 
     <link rel="icon" href="/scATACseq-workshop/images/favicon.png" type="image/png">
 
-    <title>2. Homeworks :: Analysis of bulk and single-cell ATAC-seq datasets</title>
+    <title>1. Hands-on sessions :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
     <link href="/scATACseq-workshop/css/nucleus.css?1628787916" rel="stylesheet">
@@ -40,7 +40,7 @@
     </style>
     
   </head>
-  <body class="" data-url="/scATACseq-workshop/homeworks/">
+  <body class="" data-url="/scATACseq-workshop/hands_on_sessions/">
     <nav id="sidebar" class="">
 
 
@@ -148,8 +148,8 @@
   
     
     <li data-nav-id="/scATACseq-workshop/hands_on_sessions/" title="1. Hands-on sessions" class="dd-item
-        
-        
+        parent
+        active
         
         ">
       <a href="/scATACseq-workshop/hands_on_sessions/">
@@ -245,8 +245,8 @@
   
     
     <li data-nav-id="/scATACseq-workshop/homeworks/" title="2. Homeworks" class="dd-item
-        parent
-        active
+        
+        
         
         ">
       <a href="/scATACseq-workshop/homeworks/">
@@ -393,7 +393,7 @@
           
             <h1>
               
-              2. Homeworks
+              1. Hands-on sessions
             </h1>
           
 
@@ -405,60 +405,50 @@
 <script src="/scATACseq-workshop/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 
 
-<div id="homeworks-day-1" class="section level2">
-<h2>Homeworks: day 1</h2>
-<p><a href="homework_1">Instructions</a></p>
+<div id="day-1" class="section level2">
+<h2>Day 1</h2>
+<div id="hands-on-session-1" class="section level3">
+<h3>Hands-on session 1</h3>
 <ul>
-<li>Process bulk ATAC-seq for PBMCs (GSE111013), perform QCs and compare them to single-cell QCs<br />
-</li>
-<li>Split bam file from mouse PBMCs scATACseq into bams / cell type using <code>sinto</code><br />
-</li>
-<li>Make some celltype-specific pseudo-bulk bigwig tracks<br />
-</li>
-<li>Compare bulk and pseudo-bulk tracks in IGV; try to infer cell type for some of the cell clusters in scATACseq</li>
-</ul>
-<blockquote>
-<p>Links:</p>
-</blockquote>
-<ul>
-<li><a href="https://doi.org/10.1038/s41467-019-14081-6">Bulk ATAC-seq paper</a></li>
-<li><a href="https://support.10xgenomics.com/single-cell-atac/datasets/2.0.0/atac_pbmc_5k_nextgem">5K human PBMCs, 10X Genomics scATACseq dataset</a></li>
+<li><a href="day1/#hands-on-session-1-processing-bulk-atac-seq">Link to session file</a></li>
 </ul>
 </div>
-<div id="homeworks-day-2" class="section level2">
-<h2>Homeworks: day 2</h2>
+<div id="hands-on-session-2" class="section level3">
+<h3>Hands-on session 2</h3>
 <ul>
-<li>Import counts from mouse E18 brain scATACseq (5K) (provided by 10X Genomics) in R and process them<br />
-</li>
-<li>Transfer annotations from PBMC 10X scRNAseq to PBMC 10X scATACseq (pre-processed scRNAseq available in <code>data/MouseBrain/mPBMC_scRNAseq.rds</code>)<br />
-</li>
-<li>Find genes associated to DA peaks and run GO over-enrichment / gene set enrichment analysis</li>
-</ul>
-<blockquote>
-<p>Links:</p>
-</blockquote>
-<ul>
-<li><a href="https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k" class="uri">https://support.10xgenomics.com/single-cell-atac/datasets/1.2.0/atac_v1_E18_brain_fresh_5k</a></li>
-<li><a href="https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K" class="uri">https://support.10xgenomics.com/single-cell-gene-expression/datasets/6.0.0/SC3_v3_NextGem_DI_Neurons_5K_SC3_v3_NextGem_DI_Neurons_5K</a></li>
+<li><a href="day1/#hands-on-session-2-processing-single-cell-atac-seq">Link to session file</a></li>
 </ul>
 </div>
-<div id="homeworks-day-3" class="section level2">
-<h2>Homeworks: day 3</h2>
+</div>
+<div id="day-2" class="section level2">
+<h2>Day 2</h2>
+<div id="hands-on-session-3" class="section level3">
+<h3>Hands-on session 3</h3>
 <ul>
-<li>Import, filter, normalize and cluster cells from the T-cell exhaustion dataset<br />
-</li>
-<li>Run chromVAR to identify TF activity in each cell cluster<br />
-</li>
-<li>Using knowledge on TFs used in different cell types, suggest cell cluster annotation of the dataset<br />
-</li>
-<li>Confirm this by computing gene activity scores and check known markers</li>
+<li><a href="day2/#hands-on-session-3-analysing-scatacseq-with-signac">Link to session file</a></li>
 </ul>
-<blockquote>
-<p>Links:</p>
-</blockquote>
+</div>
+<div id="hands-on-session-4" class="section level3">
+<h3>Hands-on session 4</h3>
 <ul>
-<li>DOI: <a href="https://doi.org/10.1038/s41587-019-0206-z">10.1038/s41587-019-0206-z</a></li>
+<li><a href="day2/#hands-on-session-4-peaks-differential-accessibility-analysis">Link to session file</a></li>
 </ul>
+</div>
+</div>
+<div id="day-3" class="section level2">
+<h2>Day 3</h2>
+<div id="hands-on-session-5" class="section level3">
+<h3>Hands-on session 5</h3>
+<ul>
+<li><a href="day3/#hands-on-session-5-motif-and-tf-analysis-of-peak-clusters">Link to session file</a></li>
+</ul>
+</div>
+<div id="hands-on-session-6" class="section level3">
+<h3>Hands-on session 6</h3>
+<ul>
+<li><a href="day3/#hands-on-session-6-chromvar-on-human-single-cell-atac-seq">Link to session file</a></li>
+</ul>
+</div>
 </div>
 
 
@@ -551,6 +541,7 @@
             
                 
                     
+                    
                 
                 
 
@@ -563,6 +554,9 @@
             
             
                 
+                    
+                        
+                        
                     
                 
                 
@@ -615,7 +609,6 @@
             
                 
                     
-                    
                 
                 
 
@@ -628,9 +621,6 @@
             
             
                 
-                    
-                        
-                        
                     
                 
                 
@@ -703,10 +693,10 @@
 	 
 	 
 		
-			<a class="nav nav-prev" href="/scATACseq-workshop/hands_on_sessions/day3/" title="Day 03"> <i class="fa fa-chevron-left"></i></a>
+			<a class="nav nav-prev" href="/scATACseq-workshop/introduction/02_prerequisites/" title="2. Prerequisites and required machine configuration"> <i class="fa fa-chevron-left"></i></a>
 		
 		
-			<a class="nav nav-next" href="/scATACseq-workshop/homeworks/homework_1/" title="Homework 1" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+			<a class="nav nav-next" href="/scATACseq-workshop/hands_on_sessions/day1/" title="Day 01" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
 		
 	
     </div>

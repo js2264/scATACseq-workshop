@@ -1,4 +1,11 @@
-<script src="Homework_3_files/header-attrs-2.8/header-attrs.js"></script>
+---
+title: "Homework 3"
+output:
+  blogdown::html_page:
+    highlight: tango
+---
+
+<script src="/scATACseq-workshop/rmarkdown-libs/header-attrs/header-attrs.js"></script>
 <style type="text/css">
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
@@ -420,8 +427,8 @@ them using motif deviation scores computed with <code>chromVAR</code>.</p>
 <span id="cb20-11"><a href="#cb20-11" aria-hidden="true"></a>list_p[[<span class="kw">length</span>(list_p) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>]] &lt;-<span class="st"> </span><span class="kw">DimPlot</span>(hemato, <span class="dt">group.by =</span> <span class="st">&#39;renamed_clusters&#39;</span>, <span class="dt">reduction =</span> <span class="st">&quot;umap&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">aspect.ratio =</span> <span class="dv">1</span>)</span>
 <span id="cb20-12"><a href="#cb20-12" aria-hidden="true"></a>p &lt;-<span class="st"> </span>cowplot<span class="op">::</span><span class="kw">plot_grid</span>(<span class="dt">plotlist =</span> list_p)</span></code></pre></div>
 </div>
-<div id="exercise-session-6" class="section level3">
-<h3>Exercise session 6</h3>
+<div id="compare-gene-activity-and-tf-activity" class="section level3">
+<h3>Compare gene activity and TF activity</h3>
 <p>Plot side-by-side:</p>
 <ul>
 <li>A UMAP projection showing where cells along the B lineage are located</li>

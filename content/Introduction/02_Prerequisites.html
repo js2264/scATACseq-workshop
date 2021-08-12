@@ -1,0 +1,85 @@
+---
+title: "2. Prerequisites and required machine configuration"
+output:
+  blogdown::html_page:
+    highlight: tango
+---
+
+<script src="/scATACseq-workshop/rmarkdown-libs/header-attrs/header-attrs.js"></script>
+
+
+<div id="prerequisites" class="section level2">
+<h2>Prerequisites</h2>
+<p>The course is intended for those who have basic familiarity with <code>Unix</code> and the <code>R</code> scripting language.</p>
+<ul>
+<li>If a refresher is needed for Unix command line (hopefully not), please go over <a href="https://ryanstutorials.net/linuxtutorial/">this tutorial</a> and its <a href="https://ryanstutorials.net/linuxtutorial/cheatsheet.php">companion cheatsheet</a>.</li>
+<li>Getting down to basics: an introduction to the fundamentals of R (<a href="markravinet.github.io/Introduction.html">courtesy of Mark Ravinet</a>).</li>
+<li>Gentle introduction to <code>R/Biocondutor</code>: <a href="https://bioconductor.github.io/BiocWorkshops/introduction-to-bioconductor-annotation-resources.html">here</a></li>
+<li>For a full in-depth guide of <code>Bioconductor</code> ecosystem: read the comprehensive <code>R/Bioconductor</code> book from Kasper D. Hansen available under the CC BY-NC-SA 4.0 license <a href="/%7B%7B%3CmyPackageUrl%3E%7D%7Ddocs/bioconductor.pdf">[PDF]</a></li>
+</ul>
+</div>
+<div id="local-configuration" class="section level2">
+<h2>Local configuration</h2>
+<ul>
+<li>Install R and other important softwares</li>
+</ul>
+<pre><code>conda create --name scatac
+conda activate scatac
+conda install -c conda-forge -c bioconda \
+    r-base r-essentials r-devtools r-tidyverse r-biocmanager r-polyclip r-rcpparmadillo \
+    trim-galore bowtie2 samtools deeptools meme macs2 igv sinto yapc htseq subread ucsc-bedgraphtobigwig bedtools
+conda install -c anaconda hdf5</code></pre>
+<ul>
+<li>The following R packages have also been installed (along with their many dependencies, of course!):</li>
+</ul>
+<pre><code>Rscript -e &quot;
+## CRAN packages
+install.packages(&#39;vroom&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;hdf5r&#39;, dependencies=TRUE, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;umap&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;corrplot&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;gam&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;ggbeeswarm&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;ggthemes&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;Matrix&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;rgl&#39;, dependencies=TRUE, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;Signac&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;Seurat&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+install.packages(&#39;BiocManager&#39;, repos = &#39;https://cran.irsn.fr&#39;)
+
+## Bioconductor Packages
+BiocManager::install(&#39;scRNAseq&#39;, update = FALSE)
+BiocManager::install(&#39;SingleR&#39;, update = FALSE)
+BiocManager::install(&#39;SingleCellExperiment&#39;, update = FALSE)
+BiocManager::install(&#39;scran&#39;, update = FALSE)
+BiocManager::install(&#39;scater&#39;, update = FALSE)
+BiocManager::install(&#39;DESeq2&#39;, update = FALSE)
+BiocManager::install(&#39;chromVAR&#39;, update = FALSE)
+BiocManager::install(&#39;pheatmap&#39;, update = FALSE)
+BiocManager::install(&#39;JASPAR2020&#39;, update = FALSE)
+BiocManager::install(&#39;motifmatchr&#39;, update = FALSE)
+BiocManager::install(&#39;AnnotationHub&#39;, update = FALSE)
+BiocManager::install(&#39;plyranges&#39;, update = FALSE)
+BiocManager::install(&#39;VplotR&#39;, update = FALSE)
+BiocManager::install(&#39;annotatr&#39;, update = FALSE)
+BiocManager::install(&#39;rtracklayer&#39;, update = FALSE)
+BiocManager::install(&#39;biovizBase&#39;, update = FALSE)
+BiocManager::install(&#39;gprofiler2&#39;, update = FALSE)
+BiocManager::install(&#39;DOSE&#39;, update = FALSE)
+BiocManager::install(&#39;clusterProfiler&#39;, update = FALSE)
+BiocManager::install(&#39;EnsDb.Mmusculus.v79&#39;, update = FALSE)
+BiocManager::install(&#39;EnsDb.Hsapiens.v79&#39;, update = FALSE)
+BiocManager::install(&#39;TxDb.Hsapiens.UCSC.hg38.knownGene&#39;, update = FALSE)
+BiocManager::install(&#39;TxDb.Mmusculus.UCSC.mm10.knownGene&#39;, update = FALSE)
+BiocManager::install(&#39;org.Hs.eg.db&#39;, update = FALSE)
+BiocManager::install(&#39;org.Mm.eg.db&#39;, update = FALSE)
+BiocManager::install(&#39;BSgenome.Celegans.UCSC.ce11&#39;, update = FALSE)
+&quot;</code></pre>
+<ul>
+<li><p>Additional dependencies:</p>
+<ul>
+<li>cellranger-atac</li>
+<li>Loupe</li>
+</ul></li>
+</ul>
+</div>
