@@ -444,7 +444,7 @@ Plot side-by-side:
 - A UMAP projection showing `EBF1` gene activity per cell
 - A UMAP projection showing `EBF1` motif enrichment (i.e. TF activity) per cell
 
-```{txt}
+```{r}
 labels <- c(
     'HSC', 
     'MPP',
@@ -456,17 +456,17 @@ labels <- c(
     'Mem. B', 
     'Plasma'
 )
-hemato$b_cells_annots <- ifelse(hemato$renamed_clusters %in% labels, hemato$?...?, NA)
-p1 <- DimPlot(hemato, group.by = '?...?', reduction = "umap") + theme(aspect.ratio = 1) + scale_colour_discrete(na.value = '#aaaaaa')
+hemato$b_cells_annots <- ifelse(hemato$renamed_clusters %in% labels, hemato$renamed_clusters, NA)
+p1 <- DimPlot(hemato, group.by = 'b_cells_annots', reduction = "umap") + theme(aspect.ratio = 1) + scale_colour_discrete(na.value = '#aaaaaa')
 DefaultAssay(hemato) <- 'SCT'
-p2 <- FeaturePlot(hemato, features = ?...?, reduction = "umap") + 
+p2 <- FeaturePlot(hemato, features = 'EBF1', reduction = "umap") + 
         scale_colour_gradientn(
             colors = c('#dadad8', '#f1eca3', '#e0c067', '#db8035', '#a3160c'),
             limits = c(0, 3), oob = scales::squish
         ) + 
         theme(aspect.ratio = 1)
 DefaultAssay(hemato) <- 'MOTIF'
-p3 <- FeaturePlot(hemato, features = ?...?, reduction = "umap") + 
+p3 <- FeaturePlot(hemato, features = 'EBF1', reduction = "umap") + 
         scale_colour_gradientn(
             colors = c('#190886', '#6F07F8', '#F954A5', '#FF9D66', '#edf118'),
             limits = c(-5, 5), oob = scales::squish
