@@ -1,0 +1,306 @@
+---
+title: "Day 03"
+output:
+  blogdown::html_page:
+    highlight: tango
+---
+
+```{r echo = FALSE}
+knitr::opts_chunk$set(eval = FALSE)
+```
+
+## Hands-on session 5: Motif and TF analysis of peak clusters 
+
+### Scan genome for JASPAR motifs
+
+```{r}
+library(tidyverse)
+library(BiocParallel)
+register(MulticoreParam(workers = 12, progressbar = TRUE))
+motifs <- TFBSTools::getMatrixSet(
+    JASPAR2020::JASPAR2020,
+    list(species = 6239, all_versions = FALSE)
+)
+ce11_seq <- Biostrings::getSeq(BSgenome.Celegans.UCSC.ce11::BSgenome.Celegans.UCSC.ce11)
+motifs_hits <- BiocParallel::bplapply(motifs, function(motif) {
+    TF <- TFBSTools::name(motif)
+    TFBSTools::searchSeq(as(motif, 'PWMatrix'), ce11_seq, min.score = 0.95) %>% 
+        lapply(as, 'GRanges') %>% 
+        GenomicRanges::GRangesList() %>% 
+        unlist()
+}) %>% purrr::set_names(TFBSTools::name(motifs))
+```
+
+### For each set of promoters, check the enrichment of each TF motif in it
+
+```{r}
+library(plyranges)
+ce11_proms <- SummarizedExperiment::rowRanges(readRDS('data/ATAC_worm/quantif.rds'))
+enrichments <- BiocParallel::bplapply(names(motifs_hits), function(TF) {
+    tibble::tibble(
+        isprom = TRUE,
+        overlap = ce11_proms %over% motifs_hits[[TF]], 
+        tissue = ce11_proms$which.tissues
+    ) %>% 
+        group_by(tissue) %>% 
+        summarize(
+            TF = TF,
+            nProms = sum(isprom), 
+            nTF = sum(overlap), 
+            nProms_tot = length(ce11_proms)
+        )
+}) %>% 
+    bind_rows() %>% 
+    left_join(tibble(TF = names(motifs_hits), nTF_tot = sapply(motifs_hits, function(x) sum(x %over% ce11_proms)))) %>%
+    mutate(
+        a = nTF,
+        b = nTF_tot - nTF,
+        c = nProms - nTF,
+        d = nProms_tot - nTF_tot - nProms + nTF
+    ) %>% 
+    rowwise() %>% 
+    mutate(
+        pval = fisher.test(matrix(c(a, b, c, d), ncol = 2))$p.value,
+        odd = fisher.test(matrix(c(a, b, c, d), ncol = 2))$estimate
+    ) %>% select(-a, -b, -c, -d)
+enrichments %>% filter(pval < 0.01, odd > 3) %>% arrange(tissue)
+```
+
+### Check promoter groups against a list of TF binding locations (by ChIP)
+
+```{r}
+beds <- list.files('data/ATAC_worm/ChIP', full.names = TRUE)
+TF_peaks <- lapply(beds, rtracklayer::import)
+names(TF_peaks) <- basename(beds) %>% str_replace_all('.bed|', '')
+enrichments <- BiocParallel::bplapply(names(TF_peaks), function(TF) {
+    tibble::tibble(
+        isprom = TRUE,
+        overlap = ce11_proms %over% TF_peaks[[TF]], 
+        tissue = ce11_proms$which.tissues
+    ) %>% 
+        group_by(tissue) %>% 
+        summarize(
+            TF = TF,
+            nProms = sum(isprom), 
+            nTF = sum(overlap), 
+            nProms_tot = length(ce11_proms)
+        )
+}) %>% 
+    bind_rows() %>% 
+    left_join(tibble(TF = names(TF_peaks), nTF_tot = sapply(TF_peaks, function(x) sum(x %over% ce11_proms)))) %>%
+    mutate(
+        a = nTF,
+        b = nTF_tot - nTF,
+        c = nProms - nTF,
+        d = nProms_tot - nTF_tot - nProms + nTF
+    ) %>% 
+    rowwise() %>% 
+    mutate(
+        pval = fisher.test(matrix(c(a, b, c, d), ncol = 2))$p.value,
+        odd = fisher.test(matrix(c(a, b, c, d), ncol = 2))$estimate
+    ) %>% select(-a, -b, -c, -d)
+enrichments %>% filter(pval < 1e-5, odd > 3) %>% arrange(tissue) %>% print(n = 'all')
+```
+
+### Exercise session 5 
+
+Recover the TFs enriched over Intestine promoters. Check their potential interaction using [STRING web-based network analysis](https://string-preview.org/ ). 
+
+```{txt}
+enrichments %>% 
+    filter(pval < 1e-5, odd > 3, grepl('Intest', ?...?)) %>% 
+    pull(?...?) %>% 
+    unique() %>% 
+    writeLines()
+```
+
+## Hands-on session 6: chromVAR on single-cell ATAC-seq from human hematopoiesis
+
+Data is obtained from `Corces et al., Nat. Genet. 2018` (DOI: [10.1038/ng.3646](https://doi.org/10.1038/ng.3646))
+
+### Download raw data 
+
+```{sh}
+## -- Downloading tracks 
+mkdir data/scATAC_LSC-LMPP-mono
+cd data/scATAC_LSC-LMPP-mono
+cat download.txt | parallel --bar -j 16 {}
+mv SRR* fastq/
+cd ../..
+```
+
+### Process raw data 
+
+```{sh}
+## -- Process data 
+GENOME=~/genomes/hg38/hg38.fa
+CPU=16
+
+for SAMPLE in `ls data/scATAC_LSC-LMPP-mono/fastq/SRR* | sed 's,_Homo_.*,,' | sed 's,data/scATAC_LSC-LMPP-mono/fastq/,,' | uniq`
+do
+    R1=data/scATAC_LSC-LMPP-mono/fastq/"${SAMPLE}"_Homo_sapiens_OTHER_1.fastq.gz
+    R2=data/scATAC_LSC-LMPP-mono/fastq/"${SAMPLE}"_Homo_sapiens_OTHER_2.fastq.gz
+    bowtie2 --threads "${CPU}" -x "${GENOME}" --maxins 1000 -1 "${R1}" -2 "${R2}" | \
+        samtools fixmate -@ "${CPU}" --output-fmt bam -m - - | \
+        samtools sort -@ "${CPU}" --output-fmt bam -T data/scATAC_LSC-LMPP-mono/"${SAMPLE}".sam_sorting - | \
+        samtools markdup -@ "${CPU}" --output-fmt bam -r -T data/scATAC_LSC-LMPP-mono/"${SAMPLE}".sam_markdup - - | \
+        samtools view -@ "${CPU}" --output-fmt bam -f 2 -q 10 -1 -b - | \
+        samtools sort -@ "${CPU}" --output-fmt bam -l 9 -T data/scATAC_LSC-LMPP-mono/"${SAMPLE}".sam_sorting2 -o data/scATAC_LSC-LMPP-mono/bam/"${SAMPLE}"_filtered.bam
+    samtools index -@ "${CPU}" data/scATAC_LSC-LMPP-mono/bam/"${SAMPLE}"_filtered.bam
+done
+
+## -- Merge all bams
+samtools merge -@ 12 -r -p `ls data/scATAC_LSC-LMPP-mono/bam/*bam` -o data/scATAC_LSC-LMPP-mono/384_cells.bam
+samtools sort -@ 12 --output-fmt bam -l 9 -T data/scATAC_LSC-LMPP-mono/384_cells_sorting -o data/scATAC_LSC-LMPP-mono/384_cells_sorted.bam data/scATAC_LSC-LMPP-mono/384_cells.bam
+samtools index data/scATAC_LSC-LMPP-mono/384_cells_sorted.bam
+
+## -- Call peaks
+macs2 callpeak -t data/scATAC_LSC-LMPP-mono/384_cells_sorted.bam --format BAMPE --gsize 2900000000 --outdir data/scATAC_LSC-LMPP-mono/peaks --name 384_cells
+
+## -- Make track
+bamCoverage \
+    --bam data/scATAC_LSC-LMPP-mono/384_cells_sorted.bam \
+    --outFileName data/scATAC_LSC-LMPP-mono/384_cells_sorted.bw \
+    --binSize 10 \
+    --numberOfProcessors 12 \
+    --normalizeUsing CPM \
+    --skipNonCoveredRegions \
+    --extendReads
+```
+
+### Get a SummarizedExperiment of scATACseq counts over peaks
+
+```{r}
+library(tidyverse)
+library(SummarizedExperiment)
+library(plyranges)
+BiocParallel::register(BiocParallel::MulticoreParam(16, progressbar = TRUE))
+
+## -- Get peaks 
+peaks <- rtracklayer::import('data/scATAC_LSC-LMPP-mono/peaks/384_cells_peaks.narrowPeak') %>% 
+    mutate(start = start + peak) %>% 
+    resize(width = 1, fix = 'start') %>% 
+    resize(width = 200, fix = 'center')
+
+## -- Import scATACseq fragments 
+ga <- GenomicAlignments::readGAlignmentPairs(
+    'data/scATAC_LSC-LMPP-mono/384_cells_sorted.bam', 
+    use.names = TRUE, 
+    param = Rsamtools::ScanBamParam(tag = "RG")
+)
+mcols(ga)$RG <- GRanges(first(ga))$RG
+ga <- ga %>% 
+    GRanges() %>%
+    mutate(
+        cellid = as_tibble(.) %>% separate(RG, into = c(NA, NA, 'cellID', NA), sep = '_') %>% pull(cellID)
+    )
+   
+## -- Find overlaps between fragments and peaks
+ovPEAK <- GenomicRanges::findOverlaps(peaks, ga)
+
+## -- List cell barcodes
+uniqueBarcodes <- unique(ga$cellid)
+id <- factor(ga$cellid, levels = uniqueBarcodes)
+
+## -- Assemble counts as a Sparse matrix
+countdf <- data.frame(
+    peaks = queryHits(ovPEAK),
+    sample = id[subjectHits(ovPEAK)],
+    read = names(ga)[subjectHits(ovPEAK)]
+) %>%
+    distinct() %>%
+    select(-one_of("read")) %>% 
+    group_by(peaks, sample) %>% 
+    tally() %>% 
+    data.matrix()
+cnts <- Matrix::sparseMatrix(
+    i = c(countdf[,1], length(peaks)),
+    j = c(countdf[,2], length(uniqueBarcodes)),
+    x = c(countdf[,3],0)
+)
+colnames(cnts) <- uniqueBarcodes
+
+## -- Generate colData
+depth <- data.frame(
+    sample = as.numeric(id),
+    read = names(ga)
+) %>%
+    distinct() %>% 
+    group_by(sample) %>% 
+    tally() %>% 
+    data.matrix()
+colData <- data.frame(
+    sample = uniqueBarcodes,
+    depth = depth[,2],
+    FRIP = Matrix::colSums(cnts)/depth[,2], 
+    celltype = str_replace_all(uniqueBarcodes, "singles-SU070-|singles-SU353-|singles-PB1022-|BM1077-", '') %>% str_replace_all('-.*', '')
+)
+
+## -- Make summarized Experiment
+sumExp <- SummarizedExperiment::SummarizedExperiment(
+    rowRanges = peaks, 
+    assays = list(counts = cnts),
+    colData = colData
+)
+saveRDS(sumExp, 'data/scATAC_LSC-LMPP-mono/sumExp.rds')
+```
+
+### Filter cells and promoters
+
+```{r}
+sumExp <- chromVAR::filterSamples(
+    sumExp,
+    min_depth = 1000, 
+    min_in_peaks = 0.10, 
+    shiny = FALSE
+)
+sumExp <- sumExp[rowSums(assay(sumExp)) > 10, ]
+```
+
+### Add GC bias to promoters 
+
+```{r}
+sumExp <- chromVAR::addGCBias(sumExp, genome = BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38)
+```
+
+### Search for motifs with high deviation from background distribution 
+
+```{r}
+motifs <- TFBSTools::getMatrixSet(
+    JASPAR2020::JASPAR2020,
+    list(species = 9606, all_versions = FALSE)
+)
+motif_ix <- motifmatchr::matchMotifs(motifs, sumExp, genome = BSgenome.Hsapiens.UCSC.hg38::BSgenome.Hsapiens.UCSC.hg38)
+bg <- chromVAR::getBackgroundPeaks(object = sumExp)
+dev <- chromVAR::computeDeviations(object = sumExp, annotations = motif_ix, background_peaks = bg)
+saveRDS(dev, 'data/scATAC_LSC-LMPP-mono/dev.rds')
+```
+
+### Check TF enrichment in different cell types 
+
+```{r}
+variability <- chromVAR::computeVariability(dev)
+p <- chromVAR::plotVariability(variability, use_plotly = FALSE) 
+tsne_results <- chromVAR::deviationsTsne(dev, threshold = 1.5)
+p <- cowplot::plot_grid(
+    chromVAR::plotDeviationsTsne(dev, tsne_results, sample_column = "celltype", shiny = FALSE)[[1]], 
+    chromVAR::plotDeviationsTsne(dev, tsne_results, annotation_name = "FOS", shiny = FALSE)[[1]], 
+    chromVAR::plotDeviationsTsne(dev, tsne_results, annotation_name = "CEBPA", shiny = FALSE)[[1]], 
+    chromVAR::plotDeviationsTsne(dev, tsne_results, annotation_name = "HIF1A", shiny = FALSE)[[1]]
+)
+```
+
+### Exercise session 6
+
+- Try different thresholds for tSNE embeddings. Comment. 
+
+```{txt}
+set.seed(2021)
+dev <- readRDS('data/scATAC_LSC-LMPP-mono/dev.rds')
+p <- cowplot::plot_grid(
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]],
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.25, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]],
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.5, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]],
+    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.75, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]]
+)
+```

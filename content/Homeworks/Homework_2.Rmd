@@ -464,28 +464,38 @@ data. Does this work?
 
 ## 3. Functional analysis of DA peaks
 
-### Extract peaks enriched in astrocytes vs. others 
+### Extract peaks enriched in microglia vs. others 
+
+`Seurat` implements differential abundance statistical tests for stored assays. 
+Try to use `FindMarkers()` to find peaks that are over-accessible in microglia 
+cells compared to the rest of the cells. 
 
 ```{r}
-## - Find astrocyte-specific peaks 
+## - Find microglia-specific peaks 
 Idents(brain) <- brain$transferred_annotation
-astrocyte_peaks <- Seurat::FindMarkers(
+microglia_peaks <- Seurat::FindMarkers(
     object = brain,
     assay = 'peaks', 
-    ident.1 = 'astrocytes_ependymal',
-    ident.2 = unique(Idents(brain)[Idents(brain) != 'astrocytes_ependymal']),
+    ident.1 = 'microglia',
+    ident.2 = unique(Idents(brain)[Idents(brain) != 'microglia']),
     min.pct = 0.15, 
     only.pos = TRUE
 )
 ```
 
-### Find nearest gene for each astrocyte-specific peak
+### Find nearest gene for each microglia-specific peak
+
+A key step in scATACseq analysis is to link each peak to the gene it regulates. 
+The most basic way to do this is to associate a peak to the nearest gene. 
+Although this is a rather crude way of doing, it works reasonably well as a 
+"quick-and-dirty" first step to identify genes which are potentially undergoing 
+differential regulation between cell clusters. 
 
 ```{r}
-## - Link astrocyte peaks to nearest genes
+## - Link microglia peaks to nearest genes
 mm_genes <- ensembldb::genes(EnsDb.Mmusculus.v79::EnsDb.Mmusculus.v79) %>% filter(gene_biotype == 'protein_coding')
 seqlevelsStyle(mm_genes) <- 'UCSC'
-astrocyte_genes <- astrocyte_peaks %>% 
+microglia_genes <- microglia_peaks %>% 
     filter(p_val_adj <= 0.05, avg_log2FC > 1, pct.1 > 0.2) %>% 
     rownames() %>% 
     str_replace('-', ':') %>% 
@@ -497,55 +507,14 @@ astrocyte_genes <- astrocyte_peaks %>%
 
 ### Perform GO over-representation analysis
 
-```{r}
-## - Run GO analysis
-goa <- gprofiler2::gost(astrocyte_genes, organism = 'mmusculus')
-goa$result %>% as_tibble() %>% filter(p_value <= 0.05, grepl('GO:', source)) %>% arrange(p_value) %>% print(n = 40)
-```
+The easiest way to perform GO over-representation analysis in `R` is to use 
+`gprofiler2` package. It sends the query to the [web-based application](https://biit.cs.ut.ee/gprofiler/gost), 
+which is well maintained, frequently updated and supports a large number of species. 
 
-### Repeat for microgli-annotated cluster
+Check whether there are enriched GO annotations associated with the genes undergoing microglia-specific regulation. 
 
 ```{r}
-## - Find microglia-specific peaks 
-microglia_peaks <- Seurat::FindMarkers(
-    object = brain,
-    assay = 'peaks', 
-    ident.1 = 'microglia',
-    ident.2 = unique(Idents(brain)[Idents(brain) != 'microglia']),
-    min.pct = 0.15, 
-    only.pos = TRUE
-)
-
-## - Link microglia peaks to nearest genes
-microglia_genes <- microglia_peaks %>% 
-    arrange(desc(avg_log2FC)) %>% 
-    filter(p_val_adj <= 0.05, avg_log2FC > 1, pct.1 > 0.2) %>% 
-    rownames() %>% 
-    str_replace('-', ':') %>% 
-    GRanges() %>% 
-    join_nearest(mm_genes) %>% 
-    as_tibble() %>% pull(symbol) %>% 
-    unique()
-
-all_genes <- rownames(brain) %>% 
-    str_replace('-', ':') %>% 
-    GRanges() %>% 
-    join_nearest(mm_genes) %>% 
-    as_tibble() %>% pull(symbol) %>% 
-    unique()
-
 ## - Run GO analysis
 goa <- gprofiler2::gost(microglia_genes, organism = 'mmusculus')
 goa$result %>% as_tibble() %>% filter(p_value <= 0.05, grepl('GO:', source)) %>% arrange(p_value) %>% print(n = 40)
 ```
-
-```{r}
-cov_plot <- CoveragePlot(
-  object = pbmc,
-  region = "chr2-87011729-87035519",
-  annotation = FALSE,
-  peaks = FALSE
-)
-cov_plot
-```
-

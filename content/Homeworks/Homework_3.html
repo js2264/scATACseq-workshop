@@ -325,12 +325,12 @@ approximating ~ the sum of scATACseq fragments overlapping a gene?</p>
 <p>Now the <code>Seurat</code> object contains 3 assays, the first one corresponding to the original scATACseq counts,
 and the second one containing gene activity pseudocounts, and the third one containing <code>SCT</code>-normalized
 data. One can now perform “gene differential expression”-like analysis using the <code>SCT</code> assay!</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="co">## - Reduce dimensionality and visualize</span></span>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="co">## - Reduce dimensionality to visualize cells in 2D</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>hemato &lt;-<span class="st"> </span><span class="kw">RunPCA</span>(hemato) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">RunUMAP</span>(<span class="dt">reduction =</span> <span class="st">&#39;pca&#39;</span>, <span class="dt">dims =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">50</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a>p &lt;-<span class="st"> </span><span class="kw">FeaturePlot</span>(hemato, <span class="dt">features =</span> <span class="st">&#39;CD14&#39;</span>, <span class="dt">reduction =</span> <span class="st">&quot;umap&quot;</span>) <span class="co"># Or NCR1 (NKp46), CD8A, CD14, MS4A1</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a><span class="co">## - Find gene markers for Basophils</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a><span class="kw">DefaultAssay</span>(hemato) &lt;-<span class="st"> &quot;SCT&quot;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="co">## - Find gene markers for Basophils</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a><span class="kw">DefaultAssay</span>(hemato) &lt;-<span class="st"> &quot;SCT&quot;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a>p &lt;-<span class="st"> </span><span class="kw">FeaturePlot</span>(hemato, <span class="dt">features =</span> <span class="st">&#39;CD14&#39;</span>, <span class="dt">reduction =</span> <span class="st">&quot;umap&quot;</span>) <span class="co"># Or NCR1 (NKp46), CD8A, CD14, MS4A1</span></span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a><span class="kw">Idents</span>(hemato) &lt;-<span class="st"> </span>hemato<span class="op">$</span>renamed_clusters</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a>basophils_genes &lt;-<span class="st"> </span>Seurat<span class="op">::</span><span class="kw">FindMarkers</span>(</span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a>    <span class="dt">object =</span> hemato,</span>
@@ -343,66 +343,118 @@ data. One can now perform “gene differential expression”-like analysis using
 </div>
 <div id="chromvar-analysis" class="section level2">
 <h2>3. chromVAR analysis</h2>
-<div id="downsample-data-to-10000-random-cells-and-a-subset-of-variable-features" class="section level3">
-<h3>Downsample data to 10,000 random cells and a subset of variable features</h3>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="kw">DefaultAssay</span>(hemato) &lt;-<span class="st"> &#39;ATAC&#39;</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>hemato_sub &lt;-<span class="st"> </span>hemato[, <span class="kw">sample</span>(<span class="kw">colnames</span>(hemato), <span class="dt">size =</span> <span class="dv">10000</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)]</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>hemato_sub &lt;-<span class="st"> </span><span class="kw">FindVariableFeatures</span>(hemato_sub, <span class="dt">nfeatures =</span> <span class="dv">20000</span>)</span></code></pre></div>
-</div>
 <div id="get-a-summarizedexperiment-of-scatacseq-counts-over-peaks" class="section level3">
 <h3>Get a SummarizedExperiment of scATACseq counts over peaks</h3>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="kw">library</span>(SummarizedExperiment)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>sumExp &lt;-<span class="st"> </span><span class="kw">SummarizedExperiment</span>(</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a>    <span class="dt">assays =</span> <span class="kw">list</span>(<span class="st">&#39;counts&#39;</span> =<span class="st"> </span><span class="kw">GetAssayData</span>(hemato, <span class="dt">assay =</span> <span class="st">&#39;ATAC&#39;</span>, <span class="dt">slot =</span> <span class="st">&#39;counts&#39;</span>)), </span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a>    <span class="dt">rowRanges =</span> <span class="kw">GetAssayData</span>(hemato, <span class="dt">assay =</span> <span class="st">&#39;ATAC&#39;</span>, <span class="dt">slot =</span> <span class="st">&#39;ranges&#39;</span>), </span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a>    <span class="dt">colData =</span> hemato[[]]</span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a>)</span></code></pre></div>
+<p><code>chromVAR</code> works with raw counts stored as a <code>RangedSummarizedExperiment</code>. By now, you should be able to
+easily extract the raw counts from a specific <code>Seurat</code> assay. Store it in a <code>RangedSummarizedExperiment</code>
+(~ equivalent to <code>Seurat</code> assay but in <code>Bioconductor</code>).</p>
+<p>What are the dimensions of the <code>RangedSummarizedExperiment</code> generated? What are the features and what are the columns?</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="kw">library</span>(SummarizedExperiment)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>sumExp &lt;-<span class="st"> </span><span class="kw">SummarizedExperiment</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>    <span class="dt">assays =</span> <span class="kw">list</span>(<span class="st">&#39;counts&#39;</span> =<span class="st"> </span><span class="kw">GetAssayData</span>(hemato, <span class="dt">assay =</span> <span class="st">&#39;ATAC&#39;</span>, <span class="dt">slot =</span> <span class="st">&#39;counts&#39;</span>)), </span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a>    <span class="dt">rowRanges =</span> <span class="kw">GetAssayData</span>(hemato, <span class="dt">assay =</span> <span class="st">&#39;ATAC&#39;</span>, <span class="dt">slot =</span> <span class="st">&#39;ranges&#39;</span>), </span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>    <span class="dt">colData =</span> hemato[[]]</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a>)</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true"></a><span class="kw">dim</span>(sumExp)</span></code></pre></div>
 </div>
 <div id="add-gc-bias-to-peaks" class="section level3">
 <h3>Add GC bias to peaks</h3>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a>sumExp &lt;-<span class="st"> </span>chromVAR<span class="op">::</span><span class="kw">addGCBias</span>(sumExp, <span class="dt">genome =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19)</span></code></pre></div>
+<p>This step is important to correct GC bias associated with each peak.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a>sumExp &lt;-<span class="st"> </span>chromVAR<span class="op">::</span><span class="kw">addGCBias</span>(sumExp, <span class="dt">genome =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19)</span></code></pre></div>
 </div>
-<div id="search-for-motifs-with-high-deviation-from-background-distribution" class="section level3">
-<h3>Search for motifs with high deviation from background distribution</h3>
+<div id="map-motifs-over-peaks" class="section level3">
+<h3>Map motifs over peaks</h3>
+<p>Using <code>motifmatchr</code> package, one can map a list of motifs (e.g. from JASPAR database)
+over a <code>RangedSummarizedExperiment</code> (or anything which can be coerced to a <code>GRanges</code>, actually).</p>
+<p>First, you need to import motifs from a public database in <code>R</code>. This can be done
+(among other ways) with the <code>TFBSTools</code> pacakge.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="co">## - Import motifs from JASPAR database</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>motifs &lt;-<span class="st"> </span>TFBSTools<span class="op">::</span><span class="kw">getMatrixSet</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a>    JASPAR2020<span class="op">::</span>JASPAR2020,</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a>    <span class="kw">list</span>(<span class="dt">species =</span> <span class="dv">9606</span>, <span class="dt">all_versions =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true"></a>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true"></a><span class="kw">names</span>(motifs) &lt;-<span class="st"> </span>TFBSTools<span class="op">::</span><span class="kw">name</span>(motifs)</span></code></pre></div>
+<p>Now map the subset of motifs of interest to the filtered peaks, using <code>motifmatchr::matchMotifs()</code>.</p>
+<p>Read <code>matchMotifs()</code> documentation and run it on your <code>sumExp</code>. What is the class of the generated
+object? Its dimensions? What are the features and what are the columns?</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="kw">library</span>(BiocParallel)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a><span class="kw">register</span>(<span class="kw">MulticoreParam</span>(<span class="dt">workers =</span> <span class="dv">16</span>, <span class="dt">progressbar =</span> <span class="ot">TRUE</span>))</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a>motifs &lt;-<span class="st"> </span>TFBSTools<span class="op">::</span><span class="kw">getMatrixSet</span>(</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a>    JASPAR2020<span class="op">::</span>JASPAR2020,</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a>    <span class="kw">list</span>(<span class="dt">species =</span> <span class="dv">9606</span>, <span class="dt">all_versions =</span> <span class="ot">FALSE</span>)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a>)</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true"></a>motif_ix &lt;-<span class="st"> </span>motifmatchr<span class="op">::</span><span class="kw">matchMotifs</span>(motifs, sumExp, <span class="dt">genome =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19)</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true"></a>bg &lt;-<span class="st"> </span>chromVAR<span class="op">::</span><span class="kw">getBackgroundPeaks</span>(<span class="dt">object =</span> sumExp)</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true"></a>dev &lt;-<span class="st"> </span>chromVAR<span class="op">::</span><span class="kw">computeDeviations</span>(<span class="dt">object =</span> sumExp, <span class="dt">annotations =</span> motif_ix, <span class="dt">background_peaks =</span> bg)</span></code></pre></div>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a>motif_mappings &lt;-<span class="st"> </span>motifmatchr<span class="op">::</span><span class="kw">matchMotifs</span>(motifs, sumExp, <span class="dt">genome =</span> BSgenome.Hsapiens.UCSC.hg19<span class="op">::</span>BSgenome.Hsapiens.UCSC.hg19)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a><span class="kw">class</span>(motif_mappingss)</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a><span class="kw">dim</span>(motif_mappings)</span></code></pre></div>
+<p>Because there are so many motifs and so many peaks, and in interest of time,
+we will perform <code>chromVAR</code> analysis on a subset of motifs only. You can manually filter the motifs
+list to motifs that may be relevant in our context (e.g. <code>EOMES</code>, or <code>GATA2</code>, …).</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="co">## - Filter to interesting motifs to keep analysis relatively quick</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a><span class="co">#       Feel free to select any TF of interest!</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a>motif_mappings_sub &lt;-<span class="st"> </span>motif_mappings[, <span class="kw">c</span>(<span class="st">&#39;EOMES&#39;</span>, <span class="st">&#39;GATA2&#39;</span>, <span class="st">&#39;IRF8&#39;</span>, <span class="st">&#39;EBF1&#39;</span>, <span class="st">&#39;SPI1&#39;</span>, <span class="st">&#39;TCF3&#39;</span>, <span class="st">&#39;CEBPA&#39;</span>)]</span></code></pre></div>
 </div>
-<div id="check-tf-enrichment-in-different-cell-types" class="section level3">
-<h3>Check TF enrichment in different cell types</h3>
-<p>The <code>dev</code> <code>SummarizedExperiment</code> object can be added as a fourth assay to the
-original <code>hemato</code> <code>Seurat</code> object. This way, one can rely on <code>Seurat</code>-based
+<div id="search-for-motifs-with-high-deviation-of-mapping-compared-to-background" class="section level3">
+<h3>Search for motifs with high deviation of mapping compared to background</h3>
+<p><code>chromVAR</code>’s <code>computeDeviations()</code> function combines (1) the peak counts / cell (stored here in <code>sumExp</code>) and
+(2) the TF mapping over each peak (stored here in <code>motif_mappings</code>).
+to assess the mapping deviation for each TF over each cell compared to other cells.</p>
+<p>Run <code>computeDeviations()</code> on the set of peaks and motifs. What is the class of the generated
+object? Its dimensions? What are the features and what are the columns?</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="co">## - Find background signal</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>bg &lt;-<span class="st"> </span>chromVAR<span class="op">::</span><span class="kw">getBackgroundPeaks</span>(<span class="dt">object =</span> sumExp)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a><span class="co">## - For each motif, compute its mapping deviation over the filtered peaks</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a>motif_deviations &lt;-<span class="st"> </span>chromVAR<span class="op">::</span><span class="kw">computeDeviations</span>(<span class="dt">object =</span> sumExp, <span class="dt">annotations =</span> motif_mappings_sub, <span class="dt">background_peaks =</span> bg)</span></code></pre></div>
+</div>
+<div id="check-tf-motif-enrichment-in-different-cell-types" class="section level3">
+<h3>Check TF motif enrichment in different cell types</h3>
+<p>The <code>motif_deviations</code> object can be added as a new assay to the
+<code>hemato</code> <code>Seurat</code> object. This way, one can rely on <code>Seurat</code>-based
 plotting functions to plot cells in their preferred dimensional space, and color
-them using TF deviation scores computed with <code>chromVAR</code>.</p>
-<p>One can also embed cells in a 2D-space based on the TF deviation scores themselves!</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a>variability &lt;-<span class="st"> </span>chromVAR<span class="op">::</span><span class="kw">computeVariability</span>(dev)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a>p &lt;-<span class="st"> </span>chromVAR<span class="op">::</span><span class="kw">plotVariability</span>(variability, <span class="dt">use_plotly =</span> <span class="ot">FALSE</span>) </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a>tsne_results &lt;-<span class="st"> </span>chromVAR<span class="op">::</span><span class="kw">deviationsTsne</span>(dev, <span class="dt">threshold =</span> <span class="fl">1.5</span>)</span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a>p &lt;-<span class="st"> </span>cowplot<span class="op">::</span><span class="kw">plot_grid</span>(</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a>    chromVAR<span class="op">::</span><span class="kw">plotDeviationsTsne</span>(dev, tsne_results, <span class="dt">sample_column =</span> <span class="st">&quot;celltype&quot;</span>, <span class="dt">shiny =</span> <span class="ot">FALSE</span>)[[<span class="dv">1</span>]], </span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a>    chromVAR<span class="op">::</span><span class="kw">plotDeviationsTsne</span>(dev, tsne_results, <span class="dt">annotation_name =</span> <span class="st">&quot;PAX5&quot;</span>, <span class="dt">shiny =</span> <span class="ot">FALSE</span>)[[<span class="dv">1</span>]], </span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a>    chromVAR<span class="op">::</span><span class="kw">plotDeviationsTsne</span>(dev, tsne_results, <span class="dt">annotation_name =</span> <span class="st">&quot;TCF7&quot;</span>, <span class="dt">shiny =</span> <span class="ot">FALSE</span>)[[<span class="dv">1</span>]], </span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a>    chromVAR<span class="op">::</span><span class="kw">plotDeviationsTsne</span>(dev, tsne_results, <span class="dt">annotation_name =</span> <span class="st">&quot;CEBPA&quot;</span>, <span class="dt">shiny =</span> <span class="ot">FALSE</span>)[[<span class="dv">1</span>]]</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a>)</span></code></pre></div>
+them using motif deviation scores computed with <code>chromVAR</code>.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a>hemato[[<span class="st">&#39;MOTIF&#39;</span>]] &lt;-<span class="st"> </span>Seurat<span class="op">::</span><span class="kw">CreateAssayObject</span>(<span class="dt">counts =</span> chromVAR<span class="op">::</span><span class="kw">deviationScores</span>(motif_deviations))</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a><span class="kw">DefaultAssay</span>(hemato) &lt;-<span class="st"> &#39;MOTIF&#39;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>list_p &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">rownames</span>(hemato), <span class="cf">function</span>(motif) {</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>    <span class="kw">FeaturePlot</span>(hemato, <span class="dt">features =</span> motif, <span class="dt">reduction =</span> <span class="st">&quot;umap&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a><span class="st">        </span><span class="kw">scale_colour_gradientn</span>(</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true"></a>            <span class="dt">colors =</span> <span class="kw">c</span>(<span class="st">&#39;#190886&#39;</span>, <span class="st">&#39;#6F07F8&#39;</span>, <span class="st">&#39;#F954A5&#39;</span>, <span class="st">&#39;#FF9D66&#39;</span>, <span class="st">&#39;#edf118&#39;</span>),</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true"></a>            <span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>), <span class="dt">oob =</span> scales<span class="op">::</span>squish</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true"></a>        ) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true"></a><span class="st">        </span><span class="kw">theme</span>(<span class="dt">aspect.ratio =</span> <span class="dv">1</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true"></a>})</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true"></a>list_p[[<span class="kw">length</span>(list_p) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>]] &lt;-<span class="st"> </span><span class="kw">DimPlot</span>(hemato, <span class="dt">group.by =</span> <span class="st">&#39;renamed_clusters&#39;</span>, <span class="dt">reduction =</span> <span class="st">&quot;umap&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">aspect.ratio =</span> <span class="dv">1</span>)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true"></a>p &lt;-<span class="st"> </span>cowplot<span class="op">::</span><span class="kw">plot_grid</span>(<span class="dt">plotlist =</span> list_p)</span></code></pre></div>
 </div>
 <div id="exercise-session-6" class="section level3">
 <h3>Exercise session 6</h3>
+<p>Plot side-by-side:</p>
 <ul>
-<li>Try different thresholds for tSNE embeddings. Comment.</li>
+<li>A UMAP projection showing where cells along the B lineage are located</li>
+<li>A UMAP projection showing <code>EBF1</code> gene activity per cell</li>
+<li>A UMAP projection showing <code>EBF1</code> motif enrichment (i.e. TF activity) per cell</li>
 </ul>
-<div class="sourceCode" id="cb19"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a>set.seed(2021)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>dev &lt;- readRDS(&#39;data/scATAC_LSC-LMPP-mono/dev.rds&#39;)</span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>p &lt;- cowplot::plot_grid(</span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a>    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]],</span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a>    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.25, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]],</span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a>    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.5, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]],</span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true"></a>    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.75, perplexity = 20), annotation_name = &quot;FOS&quot;, shiny = FALSE)[[1]]</span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a>labels &lt;- c(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a>    &#39;HSC&#39;, </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a>    &#39;MPP&#39;,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a>    &#39;LMPP&#39;, </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a>    &#39;CLP&#39;, </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a>    &#39;Pro-B&#39;, </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true"></a>    &#39;Pre-B&#39;, </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true"></a>    &#39;Nai. B&#39;, </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true"></a>    &#39;Mem. B&#39;, </span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true"></a>    &#39;Plasma&#39;</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true"></a>)</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true"></a>hemato$b_cells_annots &lt;- ifelse(hemato$renamed_clusters %in% labels, hemato$?...?, NA)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true"></a>p1 &lt;- DimPlot(hemato, group.by = &#39;?...?&#39;, reduction = &quot;umap&quot;) + theme(aspect.ratio = 1) + scale_colour_discrete(na.value = &#39;#aaaaaa&#39;)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true"></a>DefaultAssay(hemato) &lt;- &#39;SCT&#39;</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true"></a>p2 &lt;- FeaturePlot(hemato, features = ?...?, reduction = &quot;umap&quot;) + </span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true"></a>        scale_colour_gradientn(</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true"></a>            colors = c(&#39;#dadad8&#39;, &#39;#f1eca3&#39;, &#39;#e0c067&#39;, &#39;#db8035&#39;, &#39;#a3160c&#39;),</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true"></a>            limits = c(0, 3), oob = scales::squish</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true"></a>        ) + </span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true"></a>        theme(aspect.ratio = 1)</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true"></a>DefaultAssay(hemato) &lt;- &#39;MOTIF&#39;</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true"></a>p3 &lt;- FeaturePlot(hemato, features = ?...?, reduction = &quot;umap&quot;) + </span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true"></a>        scale_colour_gradientn(</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true"></a>            colors = c(&#39;#190886&#39;, &#39;#6F07F8&#39;, &#39;#F954A5&#39;, &#39;#FF9D66&#39;, &#39;#edf118&#39;),</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true"></a>            limits = c(-5, 5), oob = scales::squish</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true"></a>        ) + </span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true"></a>        theme(aspect.ratio = 1)</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true"></a>p &lt;- cowplot::plot_grid(p1, p2, p3, ncol = 3)</span></code></pre></div>
 </div>
 </div>

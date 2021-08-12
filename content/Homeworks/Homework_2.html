@@ -426,25 +426,33 @@ data. Does this work?</p>
 </div>
 <div id="functional-analysis-of-da-peaks" class="section level2">
 <h2>3. Functional analysis of DA peaks</h2>
-<div id="extract-peaks-enriched-in-astrocytes-vs.-others" class="section level3">
-<h3>Extract peaks enriched in astrocytes vs. others</h3>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="co">## - Find astrocyte-specific peaks </span></span>
+<div id="extract-peaks-enriched-in-microglia-vs.-others" class="section level3">
+<h3>Extract peaks enriched in microglia vs. others</h3>
+<p><code>Seurat</code> implements differential abundance statistical tests for stored assays.
+Try to use <code>FindMarkers()</code> to find peaks that are over-accessible in microglia
+cells compared to the rest of the cells.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="co">## - Find microglia-specific peaks </span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a><span class="kw">Idents</span>(brain) &lt;-<span class="st"> </span>brain<span class="op">$</span>transferred_annotation</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>astrocyte_peaks &lt;-<span class="st"> </span>Seurat<span class="op">::</span><span class="kw">FindMarkers</span>(</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>microglia_peaks &lt;-<span class="st"> </span>Seurat<span class="op">::</span><span class="kw">FindMarkers</span>(</span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a>    <span class="dt">object =</span> brain,</span>
 <span id="cb27-5"><a href="#cb27-5" aria-hidden="true"></a>    <span class="dt">assay =</span> <span class="st">&#39;peaks&#39;</span>, </span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true"></a>    <span class="dt">ident.1 =</span> <span class="st">&#39;astrocytes_ependymal&#39;</span>,</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true"></a>    <span class="dt">ident.2 =</span> <span class="kw">unique</span>(<span class="kw">Idents</span>(brain)[<span class="kw">Idents</span>(brain) <span class="op">!=</span><span class="st"> &#39;astrocytes_ependymal&#39;</span>]),</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true"></a>    <span class="dt">ident.1 =</span> <span class="st">&#39;microglia&#39;</span>,</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true"></a>    <span class="dt">ident.2 =</span> <span class="kw">unique</span>(<span class="kw">Idents</span>(brain)[<span class="kw">Idents</span>(brain) <span class="op">!=</span><span class="st"> &#39;microglia&#39;</span>]),</span>
 <span id="cb27-8"><a href="#cb27-8" aria-hidden="true"></a>    <span class="dt">min.pct =</span> <span class="fl">0.15</span>, </span>
 <span id="cb27-9"><a href="#cb27-9" aria-hidden="true"></a>    <span class="dt">only.pos =</span> <span class="ot">TRUE</span></span>
 <span id="cb27-10"><a href="#cb27-10" aria-hidden="true"></a>)</span></code></pre></div>
 </div>
-<div id="find-nearest-gene-for-each-astrocyte-specific-peak" class="section level3">
-<h3>Find nearest gene for each astrocyte-specific peak</h3>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="co">## - Link astrocyte peaks to nearest genes</span></span>
+<div id="find-nearest-gene-for-each-microglia-specific-peak" class="section level3">
+<h3>Find nearest gene for each microglia-specific peak</h3>
+<p>A key step in scATACseq analysis is to link each peak to the gene it regulates.
+The most basic way to do this is to associate a peak to the nearest gene.
+Although this is a rather crude way of doing, it works reasonably well as a
+“quick-and-dirty” first step to identify genes which are potentially undergoing
+differential regulation between cell clusters.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="co">## - Link microglia peaks to nearest genes</span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a>mm_genes &lt;-<span class="st"> </span>ensembldb<span class="op">::</span><span class="kw">genes</span>(EnsDb.Mmusculus.v79<span class="op">::</span>EnsDb.Mmusculus.v79) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(gene_biotype <span class="op">==</span><span class="st"> &#39;protein_coding&#39;</span>)</span>
 <span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a><span class="kw">seqlevelsStyle</span>(mm_genes) &lt;-<span class="st"> &#39;UCSC&#39;</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>astrocyte_genes &lt;-<span class="st"> </span>astrocyte_peaks <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>microglia_genes &lt;-<span class="st"> </span>microglia_peaks <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb28-5"><a href="#cb28-5" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(p_val_adj <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>, avg_log2FC <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>, pct<span class="fl">.1</span> <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb28-6"><a href="#cb28-6" aria-hidden="true"></a><span class="st">    </span><span class="kw">rownames</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb28-7"><a href="#cb28-7" aria-hidden="true"></a><span class="st">    </span><span class="kw">str_replace</span>(<span class="st">&#39;-&#39;</span>, <span class="st">&#39;:&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -455,49 +463,12 @@ data. Does this work?</p>
 </div>
 <div id="perform-go-over-representation-analysis" class="section level3">
 <h3>Perform GO over-representation analysis</h3>
+<p>The easiest way to perform GO over-representation analysis in <code>R</code> is to use
+<code>gprofiler2</code> package. It sends the query to the <a href="https://biit.cs.ut.ee/gprofiler/gost">web-based application</a>,
+which is well maintained, frequently updated and supports a large number of species.</p>
+<p>Check whether there are enriched GO annotations associated with the genes undergoing microglia-specific regulation.</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="co">## - Run GO analysis</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a>goa &lt;-<span class="st"> </span>gprofiler2<span class="op">::</span><span class="kw">gost</span>(astrocyte_genes, <span class="dt">organism =</span> <span class="st">&#39;mmusculus&#39;</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a>goa &lt;-<span class="st"> </span>gprofiler2<span class="op">::</span><span class="kw">gost</span>(microglia_genes, <span class="dt">organism =</span> <span class="st">&#39;mmusculus&#39;</span>)</span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a>goa<span class="op">$</span>result <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(p_value <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>, <span class="kw">grepl</span>(<span class="st">&#39;GO:&#39;</span>, source)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(p_value) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">40</span>)</span></code></pre></div>
-</div>
-<div id="repeat-for-microgli-annotated-cluster" class="section level3">
-<h3>Repeat for microgli-annotated cluster</h3>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="co">## - Find microglia-specific peaks </span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>microglia_peaks &lt;-<span class="st"> </span>Seurat<span class="op">::</span><span class="kw">FindMarkers</span>(</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a>    <span class="dt">object =</span> brain,</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true"></a>    <span class="dt">assay =</span> <span class="st">&#39;peaks&#39;</span>, </span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true"></a>    <span class="dt">ident.1 =</span> <span class="st">&#39;microglia&#39;</span>,</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true"></a>    <span class="dt">ident.2 =</span> <span class="kw">unique</span>(<span class="kw">Idents</span>(brain)[<span class="kw">Idents</span>(brain) <span class="op">!=</span><span class="st"> &#39;microglia&#39;</span>]),</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true"></a>    <span class="dt">min.pct =</span> <span class="fl">0.15</span>, </span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true"></a>    <span class="dt">only.pos =</span> <span class="ot">TRUE</span></span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true"></a>)</span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true"></a></span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true"></a><span class="co">## - Link microglia peaks to nearest genes</span></span>
-<span id="cb30-12"><a href="#cb30-12" aria-hidden="true"></a>microglia_genes &lt;-<span class="st"> </span>microglia_peaks <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true"></a><span class="st">    </span><span class="kw">arrange</span>(<span class="kw">desc</span>(avg_log2FC)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(p_val_adj <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>, avg_log2FC <span class="op">&gt;</span><span class="st"> </span><span class="dv">1</span>, pct<span class="fl">.1</span> <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-15"><a href="#cb30-15" aria-hidden="true"></a><span class="st">    </span><span class="kw">rownames</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-16"><a href="#cb30-16" aria-hidden="true"></a><span class="st">    </span><span class="kw">str_replace</span>(<span class="st">&#39;-&#39;</span>, <span class="st">&#39;:&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-17"><a href="#cb30-17" aria-hidden="true"></a><span class="st">    </span><span class="kw">GRanges</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-18"><a href="#cb30-18" aria-hidden="true"></a><span class="st">    </span><span class="kw">join_nearest</span>(mm_genes) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-19"><a href="#cb30-19" aria-hidden="true"></a><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(symbol) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-20"><a href="#cb30-20" aria-hidden="true"></a><span class="st">    </span><span class="kw">unique</span>()</span>
-<span id="cb30-21"><a href="#cb30-21" aria-hidden="true"></a></span>
-<span id="cb30-22"><a href="#cb30-22" aria-hidden="true"></a>all_genes &lt;-<span class="st"> </span><span class="kw">rownames</span>(brain) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-23"><a href="#cb30-23" aria-hidden="true"></a><span class="st">    </span><span class="kw">str_replace</span>(<span class="st">&#39;-&#39;</span>, <span class="st">&#39;:&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-24"><a href="#cb30-24" aria-hidden="true"></a><span class="st">    </span><span class="kw">GRanges</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-25"><a href="#cb30-25" aria-hidden="true"></a><span class="st">    </span><span class="kw">join_nearest</span>(mm_genes) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-26"><a href="#cb30-26" aria-hidden="true"></a><span class="st">    </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pull</span>(symbol) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb30-27"><a href="#cb30-27" aria-hidden="true"></a><span class="st">    </span><span class="kw">unique</span>()</span>
-<span id="cb30-28"><a href="#cb30-28" aria-hidden="true"></a></span>
-<span id="cb30-29"><a href="#cb30-29" aria-hidden="true"></a><span class="co">## - Run GO analysis</span></span>
-<span id="cb30-30"><a href="#cb30-30" aria-hidden="true"></a>goa &lt;-<span class="st"> </span>gprofiler2<span class="op">::</span><span class="kw">gost</span>(microglia_genes, <span class="dt">organism =</span> <span class="st">&#39;mmusculus&#39;</span>)</span>
-<span id="cb30-31"><a href="#cb30-31" aria-hidden="true"></a>goa<span class="op">$</span>result <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(p_value <span class="op">&lt;=</span><span class="st"> </span><span class="fl">0.05</span>, <span class="kw">grepl</span>(<span class="st">&#39;GO:&#39;</span>, source)) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">arrange</span>(p_value) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>(<span class="dt">n =</span> <span class="dv">40</span>)</span></code></pre></div>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a>cov_plot &lt;-<span class="st"> </span><span class="kw">CoveragePlot</span>(</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a>  <span class="dt">object =</span> pbmc,</span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true"></a>  <span class="dt">region =</span> <span class="st">&quot;chr2-87011729-87035519&quot;</span>,</span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true"></a>  <span class="dt">annotation =</span> <span class="ot">FALSE</span>,</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true"></a>  <span class="dt">peaks =</span> <span class="ot">FALSE</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true"></a>)</span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true"></a>cov_plot</span></code></pre></div>
 </div>
 </div>

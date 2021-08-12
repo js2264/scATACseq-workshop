@@ -1,6 +1,7 @@
 .PHONY: run_local build
 
 build: 
+	find content/ -name *html -delete
 	Rscript -e "blogdown::build_dir('content/')"
 	Rscript -e "blogdown::build_dir('static/Exercises/')"
 	Rscript -e "blogdown::build_dir('static/Presentations/')"

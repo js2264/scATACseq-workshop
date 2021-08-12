@@ -313,12 +313,12 @@ and the second one containing gene activity pseudocounts, and the third one cont
 data. One can now perform "gene differential expression"-like analysis using the `SCT` assay!
 
 ```{r}
-## - Reduce dimensionality and visualize
+## - Reduce dimensionality to visualize cells in 2D
 hemato <- RunPCA(hemato) %>% RunUMAP(reduction = 'pca', dims = 1:50)
-p <- FeaturePlot(hemato, features = 'CD14', reduction = "umap") # Or NCR1 (NKp46), CD8A, CD14, MS4A1
 
 ## - Find gene markers for Basophils
 DefaultAssay(hemato) <- "SCT"
+p <- FeaturePlot(hemato, features = 'CD14', reduction = "umap") # Or NCR1 (NKp46), CD8A, CD14, MS4A1
 Idents(hemato) <- hemato$renamed_clusters
 basophils_genes <- Seurat::FindMarkers(
     object = hemato,
@@ -332,15 +332,13 @@ basophils_genes <- Seurat::FindMarkers(
 
 ## 3. chromVAR analysis
 
-### Downsample data to 10,000 random cells and a subset of variable features
-
-```{r}
-DefaultAssay(hemato) <- 'ATAC'
-hemato_sub <- hemato[, sample(colnames(hemato), size = 10000, replace = FALSE)]
-hemato_sub <- FindVariableFeatures(hemato_sub, nfeatures = 20000)
-```
-
 ### Get a SummarizedExperiment of scATACseq counts over peaks
+
+`chromVAR` works with raw counts stored as a `RangedSummarizedExperiment`. By now, you should be able to 
+easily extract the raw counts from a specific `Seurat` assay. Store it in a `RangedSummarizedExperiment` 
+(~ equivalent to `Seurat` assay but in `Bioconductor`). 
+
+What are the dimensions of the `RangedSummarizedExperiment` generated? What are the features and what are the columns? 
 
 ```{r}
 library(SummarizedExperiment)
@@ -349,64 +347,130 @@ sumExp <- SummarizedExperiment(
     rowRanges = GetAssayData(hemato, assay = 'ATAC', slot = 'ranges'), 
     colData = hemato[[]]
 )
+dim(sumExp)
 ```
 
 ### Add GC bias to peaks 
+
+This step is important to correct GC bias associated with each peak. 
 
 ```{r}
 sumExp <- chromVAR::addGCBias(sumExp, genome = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19)
 ```
 
-### Search for motifs with high deviation from background distribution 
+### Map motifs over peaks
+
+Using `motifmatchr` package, one can map a list of motifs (e.g. from JASPAR database)
+over a `RangedSummarizedExperiment` (or anything which can be coerced to a `GRanges`, actually). 
+
+First, you need to import motifs from a public database in `R`. This can be done 
+(among other ways) with the `TFBSTools` pacakge. 
 
 ```{r}
-library(BiocParallel)
-register(MulticoreParam(workers = 16, progressbar = TRUE))
+## - Import motifs from JASPAR database
 motifs <- TFBSTools::getMatrixSet(
     JASPAR2020::JASPAR2020,
     list(species = 9606, all_versions = FALSE)
 )
-motif_ix <- motifmatchr::matchMotifs(motifs, sumExp, genome = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19)
+names(motifs) <- TFBSTools::name(motifs)
+```
+
+Now map the subset of motifs of interest to the filtered peaks, using `motifmatchr::matchMotifs()`. 
+
+Read `matchMotifs()` documentation and run it on your `sumExp`. What is the class of the generated 
+object? Its dimensions? What are the features and what are the columns? 
+
+```{r}
+library(BiocParallel)
+register(MulticoreParam(workers = 16, progressbar = TRUE))
+motif_mappings <- motifmatchr::matchMotifs(motifs, sumExp, genome = BSgenome.Hsapiens.UCSC.hg19::BSgenome.Hsapiens.UCSC.hg19)
+class(motif_mappingss)
+dim(motif_mappings)
+```
+
+Because there are so many motifs and so many peaks, and in interest of time, 
+we will perform `chromVAR` analysis on a subset of motifs only. You can manually filter the motifs 
+list to motifs that may be relevant in our context (e.g. `EOMES`, or `GATA2`, ...). 
+
+```{r}
+## - Filter to interesting motifs to keep analysis relatively quick
+#       Feel free to select any TF of interest!
+motif_mappings_sub <- motif_mappings[, c('EOMES', 'GATA2', 'IRF8', 'EBF1', 'SPI1', 'TCF3', 'CEBPA')]
+```
+
+### Search for motifs with high deviation of mapping compared to background 
+
+`chromVAR`'s `computeDeviations()` function combines (1) the peak counts / cell (stored here in `sumExp`) and 
+(2) the TF mapping over each peak (stored here in `motif_mappings`). 
+to assess the mapping deviation for each TF over each cell compared to other cells. 
+
+Run `computeDeviations()` on the set of peaks and motifs. What is the class of the generated 
+object? Its dimensions? What are the features and what are the columns? 
+
+```{r}
+## - Find background signal
 bg <- chromVAR::getBackgroundPeaks(object = sumExp)
-dev <- chromVAR::computeDeviations(object = sumExp, annotations = motif_ix, background_peaks = bg)
+## - For each motif, compute its mapping deviation over the filtered peaks
+motif_deviations <- chromVAR::computeDeviations(object = sumExp, annotations = motif_mappings_sub, background_peaks = bg)
 ```
 
-### Check TF enrichment in different cell types 
+### Check TF motif enrichment in different cell types 
 
-The `dev` `SummarizedExperiment` object can be added as a fourth assay to the 
-original `hemato` `Seurat` object. This way, one can rely on `Seurat`-based 
+The `motif_deviations` object can be added as a new assay to the
+`hemato` `Seurat` object. This way, one can rely on `Seurat`-based 
 plotting functions to plot cells in their preferred dimensional space, and color 
-them using TF deviation scores computed with `chromVAR`. 
+them using motif deviation scores computed with `chromVAR`. 
 
 ```{r}
-
-```
-
-One can also embed cells in a 2D-space based on the TF deviation scores themselves! 
-
-```{r}
-variability <- chromVAR::computeVariability(dev)
-p <- chromVAR::plotVariability(variability, use_plotly = FALSE) 
-tsne_results <- chromVAR::deviationsTsne(dev, threshold = 1.5)
-p <- cowplot::plot_grid(
-    chromVAR::plotDeviationsTsne(dev, tsne_results, sample_column = "celltype", shiny = FALSE)[[1]], 
-    chromVAR::plotDeviationsTsne(dev, tsne_results, annotation_name = "PAX5", shiny = FALSE)[[1]], 
-    chromVAR::plotDeviationsTsne(dev, tsne_results, annotation_name = "TCF7", shiny = FALSE)[[1]], 
-    chromVAR::plotDeviationsTsne(dev, tsne_results, annotation_name = "CEBPA", shiny = FALSE)[[1]]
-)
+hemato[['MOTIF']] <- Seurat::CreateAssayObject(counts = chromVAR::deviationScores(motif_deviations))
+DefaultAssay(hemato) <- 'MOTIF'
+list_p <- lapply(rownames(hemato), function(motif) {
+    FeaturePlot(hemato, features = motif, reduction = "umap") + 
+        scale_colour_gradientn(
+            colors = c('#190886', '#6F07F8', '#F954A5', '#FF9D66', '#edf118'),
+            limits = c(-5, 5), oob = scales::squish
+        ) + 
+        theme(aspect.ratio = 1)
+})
+list_p[[length(list_p) + 1]] <- DimPlot(hemato, group.by = 'renamed_clusters', reduction = "umap") + theme(aspect.ratio = 1)
+p <- cowplot::plot_grid(plotlist = list_p)
 ```
 
 ### Exercise session 6
 
-- Try different thresholds for tSNE embeddings. Comment. 
+Plot side-by-side: 
+
+- A UMAP projection showing where cells along the B lineage are located
+- A UMAP projection showing `EBF1` gene activity per cell
+- A UMAP projection showing `EBF1` motif enrichment (i.e. TF activity) per cell
 
 ```{txt}
-set.seed(2021)
-dev <- readRDS('data/scATAC_LSC-LMPP-mono/dev.rds')
-p <- cowplot::plot_grid(
-    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]],
-    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.25, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]],
-    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.5, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]],
-    chromVAR::plotDeviationsTsne(dev, chromVAR::deviationsTsne(dev, threshold = 1.75, perplexity = 20), annotation_name = "FOS", shiny = FALSE)[[1]]
+labels <- c(
+    'HSC', 
+    'MPP',
+    'LMPP', 
+    'CLP', 
+    'Pro-B', 
+    'Pre-B', 
+    'Nai. B', 
+    'Mem. B', 
+    'Plasma'
 )
+hemato$b_cells_annots <- ifelse(hemato$renamed_clusters %in% labels, hemato$?...?, NA)
+p1 <- DimPlot(hemato, group.by = '?...?', reduction = "umap") + theme(aspect.ratio = 1) + scale_colour_discrete(na.value = '#aaaaaa')
+DefaultAssay(hemato) <- 'SCT'
+p2 <- FeaturePlot(hemato, features = ?...?, reduction = "umap") + 
+        scale_colour_gradientn(
+            colors = c('#dadad8', '#f1eca3', '#e0c067', '#db8035', '#a3160c'),
+            limits = c(0, 3), oob = scales::squish
+        ) + 
+        theme(aspect.ratio = 1)
+DefaultAssay(hemato) <- 'MOTIF'
+p3 <- FeaturePlot(hemato, features = ?...?, reduction = "umap") + 
+        scale_colour_gradientn(
+            colors = c('#190886', '#6F07F8', '#F954A5', '#FF9D66', '#edf118'),
+            limits = c(-5, 5), oob = scales::squish
+        ) + 
+        theme(aspect.ratio = 1)
+p <- cowplot::plot_grid(p1, p2, p3, ncol = 3)
 ```
