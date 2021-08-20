@@ -47,14 +47,15 @@ curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/000/SRR6762790/SRR6762790.fast
 curl -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/003/SRR6762793/SRR6762793.fastq.gz -o data/Homework_1/fastq/CD8Tcells.fq.gz
 ```
 
-Yet another approach is to use the recent `ffq` tool. It's quite effective, though it is not very fast... 
+Yet another approach is to use the recent `ffq` tool. It's quite effective, though it is not very fast and one 
+eventually has to manually download each link... 
 
 ```{sh}
 conda install -c conda-forge -c bioconda ffq
 ffq SRR6762787 SRR6762790 SRR6762793 | grep "url"
 ```
 
-### Map raw data onto hg19
+### Map raw data onto GRCh38
 
 Note that in the next step (focusing on scATACseq), the reads were aligned to the `GRCh38` reference. For tracks to be comparable, 
 we will align bulk ATAC-seq data onto `GRCh38` reference as well. 
@@ -150,6 +151,8 @@ done
 We can define TSSs and promoters manually from gene annotations. 
 We recommend you fetch gene annotations using `AnnotationHub`. 
 Keep in mind that you obtained the `GRCh38` reference from Ensembl `v98`!!
+Once the genebodies are defined, you can build `TSSs` and 
+promoters (e.g. -/+ 2000 bp centered around the `TSS`). 
  
 ```{r}
 library(AnnotationDbi)
@@ -206,9 +209,12 @@ names(bams) <- names(peaks) <- samples
 > Compute FRiP 
 
 FRiP is the easiest metric to compute in ATAC QC: one just needs to identify 
-which reads are overlapping with annotated peaks. 
+which reads are overlapping with annotated peaks. To see whether a `GRanges` 
+query overlaps with a `GRanges` subject, the `findOverlaps()` function is 
+very useful is relatively fast!
 
-Careful with reads which may overlap several peaks simultaneously !!
+When counting the total number of reads overlapping peaks, 
+careful with reads which may overlap several peaks simultaneously!!
 
 ```{r}
 Bcells_reads <- bams[['Bcells']]
@@ -226,7 +232,7 @@ and check the cumulative distribution of distances.
 
 Start first by trying to manually compute the distance using the standard 
 `distanceToNearest()` function from `IRanges`, then build a data.frame and 
-plot results manually. 
+plot results manually.
 
 If you feel confident handling `GRanges` objects, try to leverage functions from 
 `plyranges` to perform as much of the computation in a tidy workflow and 

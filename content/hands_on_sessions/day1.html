@@ -182,11 +182,11 @@ This is an ATAC-seq sample from GM12878 cells. Let’s first download the raw fa
 <span id="cb3-24"><a href="#cb3-24" aria-hidden="true"></a></span>
 <span id="cb3-25"><a href="#cb3-25" aria-hidden="true"></a><span class="co">## -- Import fragments and peaks as GRanges</span></span>
 <span id="cb3-26"><a href="#cb3-26" aria-hidden="true"></a>fragments &lt;-<span class="st"> </span><span class="kw">importPEBamFiles</span>(</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true"></a>    <span class="st">&#39;GM12878_filtered.bam&#39;</span>, </span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true"></a>    <span class="st">&#39;data/GM12878/GM12878_filtered.bam&#39;</span>, </span>
 <span id="cb3-28"><a href="#cb3-28" aria-hidden="true"></a>    <span class="dt">shift_ATAC_fragments =</span> <span class="ot">TRUE</span></span>
 <span id="cb3-29"><a href="#cb3-29" aria-hidden="true"></a>)</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true"></a>peaks &lt;-<span class="st"> </span><span class="kw">import</span>(<span class="st">&#39;peaks/GM12878/GM12878_peaks.narrowPeak&#39;</span>)</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true"></a>peak_summits &lt;-<span class="st"> </span><span class="kw">import</span>(<span class="st">&#39;peaks/GM12878/GM12878_summits.bed&#39;</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true"></a>peaks &lt;-<span class="st"> </span><span class="kw">import</span>(<span class="st">&#39;data/GM12878/peaks/GM12878/GM12878_peaks.narrowPeak&#39;</span>)</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true"></a>peak_summits &lt;-<span class="st"> </span><span class="kw">import</span>(<span class="st">&#39;data/GM12878/peaks/GM12878/GM12878_summits.bed&#39;</span>)</span>
 <span id="cb3-32"><a href="#cb3-32" aria-hidden="true"></a></span>
 <span id="cb3-33"><a href="#cb3-33" aria-hidden="true"></a><span class="co">## -- Check fragment size distribution</span></span>
 <span id="cb3-34"><a href="#cb3-34" aria-hidden="true"></a>df&lt;-<span class="kw">...</span>(fragments) <span class="op">%&gt;%</span><span class="st"> </span></span>
@@ -361,6 +361,9 @@ Our QC report file is in:</p>
 <ul>
 <li>Check coverage of each cluster in <code>Loupe</code> at relevant loci to propose an annotation for each cluster.</li>
 </ul>
+<p>The <code>cloupe</code> file is available from 10X genomics
+<a href="https://cf.10xgenomics.com/samples/cell-atac/1.1.0/atac_pbmc_1k_v1/atac_pbmc_1k_v1_cloupe.cloupe">here: https://cf.10xgenomics.com/samples/cell-atac/1.1.0/atac_pbmc_1k_v1/atac_pbmc_1k_v1_cloupe.cloupe</a>:</p>
+<p>Load it in <code>Loupe</code> browser and check coverage for different genes.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a># Check e.g. `CD19`, `CD8`, `CD4`, `CD3`</span></code></pre></div>
 </div>
 </div>

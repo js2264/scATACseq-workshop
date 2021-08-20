@@ -12,21 +12,21 @@
     <title>Homework 1 :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
-    <link href="/scATACseq-workshop/css/nucleus.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hybrid.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/featherlight.min.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/auto-complete.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/theme.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hugo-theme.css?1628788061" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/nucleus.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1629446264" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/theme-red.css?1628788061" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme-red.css?1629446264" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/custom_css.css?1628788061" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/custom_css.css?1629446264" rel="stylesheet">
 
-    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628788061"></script>
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1629446264"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -501,12 +501,13 @@ your samples of interest.</p>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="ex">curl</span> -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/007/SRR6762787/SRR6762787.fastq.gz -o data/Homework_1/fastq/Bcells.fq.gz</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="ex">curl</span> -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/000/SRR6762790/SRR6762790.fastq.gz -o data/Homework_1/fastq/CD4Tcells.fq.gz</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="ex">curl</span> -L ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR676/003/SRR6762793/SRR6762793.fastq.gz -o data/Homework_1/fastq/CD8Tcells.fq.gz</span></code></pre></div>
-<p>Yet another approach is to use the recent <code>ffq</code> tool. It’s quite effective, though it is not very fast…</p>
+<p>Yet another approach is to use the recent <code>ffq</code> tool. It’s quite effective, though it is not very fast and one
+eventually has to manually download each link…</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="ex">conda</span> install -c conda-forge -c bioconda ffq</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="ex">ffq</span> SRR6762787 SRR6762790 SRR6762793 <span class="kw">|</span> <span class="fu">grep</span> <span class="st">&quot;url&quot;</span></span></code></pre></div>
 </div>
-<div id="map-raw-data-onto-hg19" class="section level3">
-<h3>Map raw data onto hg19</h3>
+<div id="map-raw-data-onto-grch38" class="section level3">
+<h3>Map raw data onto GRCh38</h3>
 <p>Note that in the next step (focusing on scATACseq), the reads were aligned to the <code>GRCh38</code> reference. For tracks to be comparable,
 we will align bulk ATAC-seq data onto <code>GRCh38</code> reference as well.</p>
 <blockquote>
@@ -590,7 +591,9 @@ a depth-normalized coverage track.</p>
 </blockquote>
 <p>We can define TSSs and promoters manually from gene annotations.
 We recommend you fetch gene annotations using <code>AnnotationHub</code>.
-Keep in mind that you obtained the <code>GRCh38</code> reference from Ensembl <code>v98</code>!!</p>
+Keep in mind that you obtained the <code>GRCh38</code> reference from Ensembl <code>v98</code>!!
+Once the genebodies are defined, you can build <code>TSSs</code> and
+promoters (e.g. -/+ 2000 bp centered around the <code>TSS</code>).</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">library</span>(AnnotationDbi)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="kw">library</span>(tidyverse)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="kw">library</span>(plyranges)</span>
@@ -640,8 +643,11 @@ Try and import reads “manually”. Search for the right function from <code>Ge
 <p>Compute FRiP</p>
 </blockquote>
 <p>FRiP is the easiest metric to compute in ATAC QC: one just needs to identify
-which reads are overlapping with annotated peaks.</p>
-<p>Careful with reads which may overlap several peaks simultaneously !!</p>
+which reads are overlapping with annotated peaks. To see whether a <code>GRanges</code>
+query overlaps with a <code>GRanges</code> subject, the <code>findOverlaps()</code> function is
+very useful is relatively fast!</p>
+<p>When counting the total number of reads overlapping peaks,
+careful with reads which may overlap several peaks simultaneously!!</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>Bcells_reads &lt;-<span class="st"> </span>bams[[<span class="st">&#39;Bcells&#39;</span>]]</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a><span class="co"># nInPeaks &lt;- length(queryHits(findOverlaps(Bcells_reads, peaks[[&#39;Bcells&#39;]])))</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>nInPeaks &lt;-<span class="st"> </span><span class="kw">length</span>(<span class="kw">unique</span>(<span class="kw">queryHits</span>(<span class="kw">findOverlaps</span>(Bcells_reads, peaks[[<span class="st">&#39;Bcells&#39;</span>]]))))</span>
@@ -1170,19 +1176,19 @@ to B cells? To T cells?</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/scATACseq-workshop/js/clipboard.min.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/featherlight.min.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/highlight.pack.js?1628788061"></script>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1629446264"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/learn.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/hugo-learn.js?1628788061"></script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1629446264"></script>
     
         
-            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628788061"></script>
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1629446264"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

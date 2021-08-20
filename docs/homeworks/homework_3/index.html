@@ -12,21 +12,21 @@
     <title>Homework 3 :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
-    <link href="/scATACseq-workshop/css/nucleus.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hybrid.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/featherlight.min.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/auto-complete.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/theme.css?1628788061" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hugo-theme.css?1628788061" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/nucleus.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1629446264" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/theme-red.css?1628788061" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme-red.css?1629446264" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/custom_css.css?1628788061" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/custom_css.css?1629446264" rel="stylesheet">
 
-    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1628788061"></script>
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1629446264"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -831,34 +831,34 @@ them using motif deviation scores computed with <code>chromVAR</code>.</p>
 <li>A UMAP projection showing <code>EBF1</code> gene activity per cell</li>
 <li>A UMAP projection showing <code>EBF1</code> motif enrichment (i.e. TF activity) per cell</li>
 </ul>
-<div class="sourceCode" id="cb21"><pre class="sourceCode txt"><code class="sourceCode default"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a>labels &lt;- c(</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a>    &#39;HSC&#39;, </span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a>    &#39;MPP&#39;,</span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a>    &#39;LMPP&#39;, </span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a>    &#39;CLP&#39;, </span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a>    &#39;Pro-B&#39;, </span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true"></a>    &#39;Pre-B&#39;, </span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true"></a>    &#39;Nai. B&#39;, </span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true"></a>    &#39;Mem. B&#39;, </span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true"></a>    &#39;Plasma&#39;</span>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a>labels &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a>    <span class="st">&#39;HSC&#39;</span>, </span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a>    <span class="st">&#39;MPP&#39;</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a>    <span class="st">&#39;LMPP&#39;</span>, </span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a>    <span class="st">&#39;CLP&#39;</span>, </span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true"></a>    <span class="st">&#39;Pro-B&#39;</span>, </span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true"></a>    <span class="st">&#39;Pre-B&#39;</span>, </span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true"></a>    <span class="st">&#39;Nai. B&#39;</span>, </span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true"></a>    <span class="st">&#39;Mem. B&#39;</span>, </span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true"></a>    <span class="st">&#39;Plasma&#39;</span></span>
 <span id="cb21-11"><a href="#cb21-11" aria-hidden="true"></a>)</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true"></a>hemato$b_cells_annots &lt;- ifelse(hemato$renamed_clusters %in% labels, hemato$?...?, NA)</span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true"></a>p1 &lt;- DimPlot(hemato, group.by = &#39;?...?&#39;, reduction = &quot;umap&quot;) + theme(aspect.ratio = 1) + scale_colour_discrete(na.value = &#39;#aaaaaa&#39;)</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true"></a>DefaultAssay(hemato) &lt;- &#39;SCT&#39;</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true"></a>p2 &lt;- FeaturePlot(hemato, features = ?...?, reduction = &quot;umap&quot;) + </span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true"></a>        scale_colour_gradientn(</span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true"></a>            colors = c(&#39;#dadad8&#39;, &#39;#f1eca3&#39;, &#39;#e0c067&#39;, &#39;#db8035&#39;, &#39;#a3160c&#39;),</span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true"></a>            limits = c(0, 3), oob = scales::squish</span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true"></a>        ) + </span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true"></a>        theme(aspect.ratio = 1)</span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true"></a>DefaultAssay(hemato) &lt;- &#39;MOTIF&#39;</span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true"></a>p3 &lt;- FeaturePlot(hemato, features = ?...?, reduction = &quot;umap&quot;) + </span>
-<span id="cb21-23"><a href="#cb21-23" aria-hidden="true"></a>        scale_colour_gradientn(</span>
-<span id="cb21-24"><a href="#cb21-24" aria-hidden="true"></a>            colors = c(&#39;#190886&#39;, &#39;#6F07F8&#39;, &#39;#F954A5&#39;, &#39;#FF9D66&#39;, &#39;#edf118&#39;),</span>
-<span id="cb21-25"><a href="#cb21-25" aria-hidden="true"></a>            limits = c(-5, 5), oob = scales::squish</span>
-<span id="cb21-26"><a href="#cb21-26" aria-hidden="true"></a>        ) + </span>
-<span id="cb21-27"><a href="#cb21-27" aria-hidden="true"></a>        theme(aspect.ratio = 1)</span>
-<span id="cb21-28"><a href="#cb21-28" aria-hidden="true"></a>p &lt;- cowplot::plot_grid(p1, p2, p3, ncol = 3)</span></code></pre></div>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true"></a>hemato<span class="op">$</span>b_cells_annots &lt;-<span class="st"> </span><span class="kw">ifelse</span>(hemato<span class="op">$</span>renamed_clusters <span class="op">%in%</span><span class="st"> </span>labels, hemato<span class="op">$</span>renamed_clusters, <span class="ot">NA</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true"></a>p1 &lt;-<span class="st"> </span><span class="kw">DimPlot</span>(hemato, <span class="dt">group.by =</span> <span class="st">&#39;b_cells_annots&#39;</span>, <span class="dt">reduction =</span> <span class="st">&quot;umap&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">aspect.ratio =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span><span class="kw">scale_colour_discrete</span>(<span class="dt">na.value =</span> <span class="st">&#39;#aaaaaa&#39;</span>)</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true"></a><span class="kw">DefaultAssay</span>(hemato) &lt;-<span class="st"> &#39;SCT&#39;</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true"></a>p2 &lt;-<span class="st"> </span><span class="kw">FeaturePlot</span>(hemato, <span class="dt">features =</span> <span class="st">&#39;EBF1&#39;</span>, <span class="dt">reduction =</span> <span class="st">&quot;umap&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true"></a><span class="st">        </span><span class="kw">scale_colour_gradientn</span>(</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true"></a>            <span class="dt">colors =</span> <span class="kw">c</span>(<span class="st">&#39;#dadad8&#39;</span>, <span class="st">&#39;#f1eca3&#39;</span>, <span class="st">&#39;#e0c067&#39;</span>, <span class="st">&#39;#db8035&#39;</span>, <span class="st">&#39;#a3160c&#39;</span>),</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true"></a>            <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">3</span>), <span class="dt">oob =</span> scales<span class="op">::</span>squish</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true"></a>        ) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true"></a><span class="st">        </span><span class="kw">theme</span>(<span class="dt">aspect.ratio =</span> <span class="dv">1</span>)</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true"></a><span class="kw">DefaultAssay</span>(hemato) &lt;-<span class="st"> &#39;MOTIF&#39;</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true"></a>p3 &lt;-<span class="st"> </span><span class="kw">FeaturePlot</span>(hemato, <span class="dt">features =</span> <span class="st">&#39;EBF1&#39;</span>, <span class="dt">reduction =</span> <span class="st">&quot;umap&quot;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true"></a><span class="st">        </span><span class="kw">scale_colour_gradientn</span>(</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true"></a>            <span class="dt">colors =</span> <span class="kw">c</span>(<span class="st">&#39;#190886&#39;</span>, <span class="st">&#39;#6F07F8&#39;</span>, <span class="st">&#39;#F954A5&#39;</span>, <span class="st">&#39;#FF9D66&#39;</span>, <span class="st">&#39;#edf118&#39;</span>),</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true"></a>            <span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">5</span>, <span class="dv">5</span>), <span class="dt">oob =</span> scales<span class="op">::</span>squish</span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true"></a>        ) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true"></a><span class="st">        </span><span class="kw">theme</span>(<span class="dt">aspect.ratio =</span> <span class="dv">1</span>)</span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true"></a>p &lt;-<span class="st"> </span>cowplot<span class="op">::</span><span class="kw">plot_grid</span>(p1, p2, p3, <span class="dt">ncol =</span> <span class="dv">3</span>)</span></code></pre></div>
 </div>
 </div>
 
@@ -1118,19 +1118,19 @@ them using motif deviation scores computed with <code>chromVAR</code>.</p>
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/scATACseq-workshop/js/clipboard.min.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/jquery.sticky.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/featherlight.min.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/highlight.pack.js?1628788061"></script>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1629446264"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/learn.js?1628788061"></script>
-    <script src="/scATACseq-workshop/js/hugo-learn.js?1628788061"></script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1629446264"></script>
     
         
-            <script src="/scATACseq-workshop/mermaid/mermaid.js?1628788061"></script>
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1629446264"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

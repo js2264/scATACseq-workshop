@@ -126,11 +126,11 @@ hg_features <- build_annotations(
 
 ## -- Import fragments and peaks as GRanges
 fragments <- importPEBamFiles(
-    'GM12878_filtered.bam', 
+    'data/GM12878/GM12878_filtered.bam', 
     shift_ATAC_fragments = TRUE
 )
-peaks <- import('peaks/GM12878/GM12878_peaks.narrowPeak')
-peak_summits <- import('peaks/GM12878/GM12878_summits.bed')
+peaks <- import('data/GM12878/peaks/GM12878/GM12878_peaks.narrowPeak')
+peak_summits <- import('data/GM12878/peaks/GM12878/GM12878_summits.bed')
 
 ## -- Check fragment size distribution
 df<-...(fragments) %>% 
@@ -322,6 +322,11 @@ data/PBMCs_10X/atac_pbmc_1k_v1_web_summary.html
 ### Exercise session 2
 
 - Check coverage of each cluster in `Loupe` at relevant loci to propose an annotation for each cluster. 
+
+The `cloupe` file is available from 10X genomics 
+[here: https://cf.10xgenomics.com/samples/cell-atac/1.1.0/atac_pbmc_1k_v1/atac_pbmc_1k_v1_cloupe.cloupe](https://cf.10xgenomics.com/samples/cell-atac/1.1.0/atac_pbmc_1k_v1/atac_pbmc_1k_v1_cloupe.cloupe): 
+
+Load it in `Loupe` browser and check coverage for different genes. 
 
 ```{txt}
 # Check e.g. `CD19`, `CD8`, `CD4`, `CD3`
