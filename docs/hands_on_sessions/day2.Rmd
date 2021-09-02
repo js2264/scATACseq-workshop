@@ -455,7 +455,7 @@ rlogs <- DESeq2::rlog(dds, blind = FALSE) %>%
 saveRDS(rlogs, 'data/ATAC_worm/rlogs.rds')
 ```
 
-Peaks can then be clustered based on these rlog values, using an unsupervised approach 
+Peaks can then be clustered based on these rlog values, using unsupervised or semi-supervised approaches,
 such as `k-means` or `k-medoids` (through the `pam()` function). 
 
 ```{r}

@@ -12,21 +12,21 @@
     <title>Day 02 :: Analysis of bulk and single-cell ATAC-seq datasets</title>
 
     
-    <link href="/scATACseq-workshop/css/nucleus.css?1629446264" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1629446264" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hybrid.css?1629446264" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/featherlight.min.css?1629446264" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1629446264" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/auto-complete.css?1629446264" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1629446264" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/theme.css?1629446264" rel="stylesheet">
-    <link href="/scATACseq-workshop/css/hugo-theme.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/nucleus.css?1630582900" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/fontawesome-all.min.css?1630582900" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hybrid.css?1630582900" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/featherlight.min.css?1630582900" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/perfect-scrollbar.min.css?1630582900" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/auto-complete.css?1630582900" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/atom-one-dark-reasonable.css?1630582900" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme.css?1630582900" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/hugo-theme.css?1630582900" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/theme-red.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/theme-red.css?1630582900" rel="stylesheet">
     
-    <link href="/scATACseq-workshop/css/custom_css.css?1629446264" rel="stylesheet">
+    <link href="/scATACseq-workshop/css/custom_css.css?1630582900" rel="stylesheet">
 
-    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/jquery-3.3.1.min.js?1630582900"></script>
 
     <style>
       :root #header + #content > #left > #rlblock_left{
@@ -868,7 +868,7 @@ accessibility at each peak in each sample.</p>
 <span id="cb15-11"><a href="#cb15-11" aria-hidden="true"></a><span class="st">    </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span></span>
 <span id="cb15-12"><a href="#cb15-12" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(<span class="kw">rowSums</span>(<span class="kw">select</span>(., <span class="op">-</span>id)) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
 <span id="cb15-13"><a href="#cb15-13" aria-hidden="true"></a><span class="kw">saveRDS</span>(rlogs, <span class="st">&#39;data/ATAC_worm/rlogs.rds&#39;</span>)</span></code></pre></div>
-<p>Peaks can then be clustered based on these rlog values, using an unsupervised approach
+<p>Peaks can then be clustered based on these rlog values, using unsupervised or semi-supervised approaches,
 such as <code>k-means</code> or <code>k-medoids</code> (through the <code>pam()</code> function).</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a>clusts &lt;-<span class="st"> </span>cluster<span class="op">::</span><span class="kw">pam</span>(<span class="kw">select</span>(rlogs, <span class="op">-</span>id), <span class="dt">k =</span> <span class="dv">9</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>p &lt;-<span class="st"> </span>pheatmap<span class="op">::</span><span class="kw">pheatmap</span>(</span>
@@ -1147,19 +1147,19 @@ such as <code>k-means</code> or <code>k-medoids</code> (through the <code>pam()<
     <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
       <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
     </div>
-    <script src="/scATACseq-workshop/js/clipboard.min.js?1629446264"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1629446264"></script>
-    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1629446264"></script>
-    <script src="/scATACseq-workshop/js/jquery.sticky.js?1629446264"></script>
-    <script src="/scATACseq-workshop/js/featherlight.min.js?1629446264"></script>
-    <script src="/scATACseq-workshop/js/highlight.pack.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/clipboard.min.js?1630582900"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.min.js?1630582900"></script>
+    <script src="/scATACseq-workshop/js/perfect-scrollbar.jquery.min.js?1630582900"></script>
+    <script src="/scATACseq-workshop/js/jquery.sticky.js?1630582900"></script>
+    <script src="/scATACseq-workshop/js/featherlight.min.js?1630582900"></script>
+    <script src="/scATACseq-workshop/js/highlight.pack.js?1630582900"></script>
     <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1629446264"></script>
-    <script src="/scATACseq-workshop/js/learn.js?1629446264"></script>
-    <script src="/scATACseq-workshop/js/hugo-learn.js?1629446264"></script>
+    <script src="/scATACseq-workshop/js/modernizr.custom-3.6.0.js?1630582900"></script>
+    <script src="/scATACseq-workshop/js/learn.js?1630582900"></script>
+    <script src="/scATACseq-workshop/js/hugo-learn.js?1630582900"></script>
     
         
-            <script src="/scATACseq-workshop/mermaid/mermaid.js?1629446264"></script>
+            <script src="/scATACseq-workshop/mermaid/mermaid.js?1630582900"></script>
         
         <script>
             mermaid.initialize({ startOnLoad: true });

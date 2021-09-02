@@ -472,7 +472,7 @@ accessibility at each peak in each sample.</p>
 <span id="cb15-11"><a href="#cb15-11" aria-hidden="true"></a><span class="st">    </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span></span>
 <span id="cb15-12"><a href="#cb15-12" aria-hidden="true"></a><span class="st">    </span><span class="kw">filter</span>(<span class="kw">rowSums</span>(<span class="kw">select</span>(., <span class="op">-</span>id)) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)</span>
 <span id="cb15-13"><a href="#cb15-13" aria-hidden="true"></a><span class="kw">saveRDS</span>(rlogs, <span class="st">&#39;data/ATAC_worm/rlogs.rds&#39;</span>)</span></code></pre></div>
-<p>Peaks can then be clustered based on these rlog values, using an unsupervised approach
+<p>Peaks can then be clustered based on these rlog values, using unsupervised or semi-supervised approaches,
 such as <code>k-means</code> or <code>k-medoids</code> (through the <code>pam()</code> function).</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a>clusts &lt;-<span class="st"> </span>cluster<span class="op">::</span><span class="kw">pam</span>(<span class="kw">select</span>(rlogs, <span class="op">-</span>id), <span class="dt">k =</span> <span class="dv">9</span>)</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>p &lt;-<span class="st"> </span>pheatmap<span class="op">::</span><span class="kw">pheatmap</span>(</span>
